@@ -11,9 +11,7 @@ export default {
     setButtonName2: String,
   },
   data() {
-    return {
-      Test: 'ture',
-    }
+    return {}
   },
 
   methods: {
@@ -30,10 +28,7 @@ export default {
 
 <template>
   <div>
-    <ButtonAtoms :buttonName="setButtonName1" @click="executeButton1()"></ButtonAtoms>
-    <p>aaaaa</p>
-    <p>APP</p>
-    <p>{{ Test }}</p>
-    <ButtonAtoms :buttonName="setButtonName2()" @click="executeButton2" />
+    <ButtonAtoms :buttonName="setButtonName1" @click="executeButton1"></ButtonAtoms>
+    <ButtonAtoms :buttonName="setButtonName2" @click="executeButton2" />
   </div>
 </template>

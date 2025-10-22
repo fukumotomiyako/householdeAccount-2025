@@ -20,11 +20,11 @@ export default {
 
 <template>
   <span v-if="radioName == '収入'">
-    <input type="radio" name="radioCategory" @change="setRadioButton()" checked />
+    <input type="radio" name="radioCategory" @change="setRadioButton" checked />
     {{ radioName }}
   </span>
   <span v-else>
-    <input type="radio" name="radioCategory" @change="setRadioButton()" />
+    <input type="radio" name="radioCategory" @change="setRadioButton" />
     {{ radioName }}
   </span>
 </template>

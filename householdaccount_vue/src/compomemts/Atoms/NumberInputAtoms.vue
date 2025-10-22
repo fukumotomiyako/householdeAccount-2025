@@ -39,5 +39,6 @@ export default {
 </script>
 
 <template>
-  <input type="number" v-model.number="price" placeholder="8桁以内で入力" @blur="setPrice" />
+  <input type="number" v-model="price" placeholder="8桁以内で入力" @blur="setPrice" />
+  <!-- <input type="number" v-model.number="price" placeholder="8桁以内で入力" @blur="setPrice" /> -->
 </template>

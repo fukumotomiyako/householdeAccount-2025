@@ -39,5 +39,5 @@ export default {
 </script>
 
 <template>
-  <textarea v-model="note" @blur="setNote()" placeholder="200文字以内で入力"> </textarea>
+  <textarea v-model="note" @blur="setNote" placeholder="200文字以内で入力"> </textarea>
 </template>

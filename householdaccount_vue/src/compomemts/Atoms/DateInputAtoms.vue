@@ -14,10 +14,10 @@ export default {
   methods: {
     setDate() {
       this.dateValidate()
-      this.$emit('execute-methods', this.date, this.dateResult)
+      this.$emit('execute-method', this.date, this.dateResult)
     },
 
-    detaValidate() {
+    dateValidate() {
       const date_error_message = this.dateCheckValidate(this.date)
       if (date_error_message != 'true') {
         this.dateResult = date_error_message
@@ -26,7 +26,7 @@ export default {
     },
 
     dateCheckValidate() {
-      if (this.validatedNull == 'ture') {
+      if (this.validatedNull == 'true') {
         if (this.date == null) {
           return '日付を入力してください'
         }
@@ -39,5 +39,5 @@ export default {
 </script>
 
 <template>
-  <input type="date" v-mofel="date" @blur="setDate()" placeholder="YYYY/MM/DD" />
+  <input type="date" v-model="date" @blur="setDate" placeholder="YYYY/MM/DD" />
 </template>

@@ -20,7 +20,7 @@ export default {
 
   data() {
     return {
-      Test: 'ture',
+      Test: 'true',
       setSelectRadio: '収入',
       setRadioName1: '収入',
       setRadioName2: '支出',
@@ -67,11 +67,9 @@ export default {
       },
     }
   },
-  mounted() {
-    this.fetchExpenditureItems()
-  },
+
   methods: {
-    registIncome() {
+    registIncome: function () {
       try {
         // const incomeData =  this.inputCheck
         // radioName: this.inputCheck.setSelectRadio,
@@ -99,9 +97,11 @@ export default {
 
     finalSelectRadio(setRadioName: any, radioButtonResult: any) {
       this.setSelectRadio = setRadioName
+      this.inputCheck.radioName = setRadioName
     },
 
     finalSetDate(date: any, dateResult: any) {
+      this.Test = false
       this.inputCheck.date = date
       this.validation.dateResult = dateResult
       this.validationCheck()
@@ -135,6 +135,7 @@ export default {
     },
 
     executeKeep() {
+      this.registIncome()
       // 保存するよの処理
       this.executeCancel()
     },
@@ -190,6 +191,7 @@ export default {
     <div id="modal-content" class="modal">
       <h6>登録情報</h6>
       <div>
+        <p>{{ inputCheck }}</p>
         <label>{{ '収支区分：' }}</label>
         <RadioButton
           :radioName1="setRadioName1"
@@ -200,22 +202,22 @@ export default {
       </div>
       <div>
         <label>{{ '収支日付：' }}</label>
-        <DateInput @execute-method="finalSetDate()" validatedNull="validation" />
+        <DateInput @execute-method="finalSetDate" validatedNull="validation" />
       </div>
       <FormSelect
         :selectRadioName="setSelectRadio"
         :items="expenceItems"
-        @executeIncome-method="finalselectIncomeType()"
-        @executeExpenditure-method="finalselectExprnditureType()"
+        @executeIncome-method="finalselectIncomeType"
+        @executeExpenditure-method="finalselectExprnditureType"
         validatedNull="false"
       />
       <div>
         <label>{{ '金額：' }}</label>
-        <NumberInput @execute-methods="finalSetNumber()" validatedNull="validation" />
+        <NumberInput @execute-method="finalSetNumber" validatedNull="validation" />
       </div>
       <div>
         <label>備考：</label>
-        <TextArea @execute-method="finalSetNote()" validatedNull="false" />
+        <TextArea @execute-method="finalSetNote" validatedNull="false" />
       </div>
 
       <div>
