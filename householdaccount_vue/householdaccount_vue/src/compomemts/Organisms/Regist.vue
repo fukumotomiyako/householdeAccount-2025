@@ -37,11 +37,12 @@ export default {
 
       expenditureItems: [
         {
-          expenditureExpenseItemCode: String,
+          expenditureExpenseItemCode: '',
           //支出費目　添字
-          expenditureExpenseItemName: String,
+          expenditureExpenseItemName: '',
           //支出費目　要素名
-          expenditureExpenseItemNameKana: String,
+          expenditureExpenseItemNameKana: '',
+          //支出費目　カナ
         },
       ],
 
@@ -67,24 +68,24 @@ export default {
       },
     }
   },
-  // mounted() {
-  //   this.getExpenditureItems()
-  //   //モーダル表示のための情報取得のメソッドを最初に実行
-  // },
+  mounted() {
+    this.getExpenditureItems()
+    //モーダル表示のための情報取得のメソッドを最初に実行
+  },
 
   methods: {
-    // async getExpenditureItems() {
-    //   //非同期　支出費目プルダウン表示情報取得のためのメソッド
-    //   try {
-    //     const response = await axios.get('http://localhost:8080/api/expenditureItems')
-    //     //これが完了されるまでモーダル表示されない
-    //     this.expenditureItems = response.data
-    //     //支出費目の関数に取得したデータを入れる
-    //   } catch (error) {
-    //     //tryの中が最後まで実行されなかったら呼ばれる
-    //     console.log('取得できませんでした', error)
-    //   }
-    // },
+    async getExpenditureItems() {
+      //   //非同期　支出費目プルダウン表示情報取得のためのメソッド
+      try {
+        const response = await axios.get('http://localhost:8080/api/expenditureItems')
+        //     //これが完了されるまでモーダル表示されない
+        this.expenditureItems = response.data
+        //     //支出費目の関数に取得したデータを入れる
+      } catch (error) {
+        //     //tryの中が最後まで実行されなかったら呼ばれる
+        console.log('取得できませんでした', error)
+      }
+    },
 
     registIncome: function () {
       //収入をバックエンドに送るメソッド
@@ -228,7 +229,7 @@ export default {
       </div>
       <FormSelect
         :selectRadioName="setSelectRadio"
-        :items="expenceItems"
+        :items="expenseItems"
         @executeIncome-method="finalselectIncomeType"
         @executeExpenditure-method="finalselectExprnditureType"
         validatedNull="false"
