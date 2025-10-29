@@ -25,19 +25,20 @@ export default {
       this.noteResult = ''
     },
 
-    noteCheckValidate() {
-      if (this.validatedNull == 'ture') {
-        if (this.note.length <= 200) {
-          return 'ture'
-        }
-        return '200文字以内で入力してください'
+    noteCheckValidate(note: any) {
+      // if (this.validatedNull == 'ture') {
+      if (this.note.length <= 200) {
+        return 'ture'
       }
-      return 'ture'
+      return '200文字以内で入力してください'
+      // }
+      // return 'ture'
     },
   },
 }
 </script>
 
 <template>
-  <textarea v-model="note" @blur="setNote" placeholder="200文字以内で入力"> </textarea>
+  <textarea v-model="note" @blur="setNote" maxlength="200" placeholder="200文字以内で入力">
+  </textarea>
 </template>

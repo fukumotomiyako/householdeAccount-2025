@@ -20,7 +20,7 @@ export default {
 
   data() {
     return {
-      Test: 'true',
+      NoteTest: 'aa',
       setSelectRadio: '収入',
       setRadioName1: '収入',
       setRadioName2: '支出',
@@ -37,11 +37,12 @@ export default {
 
       expenditureItems: [
         {
-          expenditureExpenseItemCode: String,
+          expenditureExpenseItemCode: '',
           //支出費目　添字
-          expenditureExpenseItemName: String,
+          expenditureExpenseItemName: '',
           //支出費目　要素名
-          expenditureExpenseItemNameKana: String,
+          expenditureExpenseItemNameKana: '',
+          //支出費目　カナ
         },
       ],
 
@@ -55,7 +56,7 @@ export default {
         selectExpenditure: '',
         price: '',
         note: '',
-      }, //いらなくない？
+      },
 
       validation: {
         radioButtonResult: '',
@@ -67,33 +68,48 @@ export default {
       },
     }
   },
+  mounted() {
+    this.getExpenditureItems()
+    //モーダル表示のための情報取得のメソッドを最初に実行
+  },
 
   methods: {
-    registIncome: function () {
+    async getExpenditureItems() {
+      //   //非同期　支出費目プルダウン表示情報取得のためのメソッド
       try {
-        // const incomeData =  this.inputCheck
-        // radioName: this.inputCheck.setSelectRadio,
-        // date: this.inputCheck.data,
-        // selectIncome: this.inputCheck.selectIncome,
-        // price: this.inputCheck.price,
-        // note: this.inputCheck.note,
+        const response = await axios.get('http://localhost:8080/api/expenditureItems')
+        //     //これが完了されるまでモーダル表示されない
+        this.expenditureItems = response.data
+        //     //支出費目の関数に取得したデータを入れる
+      } catch (error) {
+        //     //tryの中が最後まで実行されなかったら呼ばれる
+        console.log('取得できませんでした', error)
+      }
+    },
 
+    registIncome: function () {
+      //収入をバックエンドに送るメソッド
+      try {
         axios.post('http://localhost:8080/api/income', this.inputCheck).then((response) => {
           console.log(response)
         })
       } catch (error) {
+        // tryの中が最後まで終わらなかったら実行
         console.log(error)
       }
     },
 
-    // async fetchExpenditureItems() {
-    //   try {
-    //     const response = await axios.get('http://localhost://8080/api/expenditureItems')
-    //     this.expenditureItems = response.data
-    //   } catch (error) {
-    //     console.error('', error)
-    //   }
-    // },
+    registExpenditure: function () {
+      //支出をバックエンドに送るメソッド
+      try {
+        axios.post('http://localhost:8080/api/expenditure', this.inputCheck).then((response) => {
+          console.log(response)
+        })
+      } catch (error) {
+        // tryの中が最後まで終わらなかったら実行
+        console.log(error)
+      }
+    },
 
     finalSelectRadio(setRadioName: any, radioButtonResult: any) {
       this.setSelectRadio = setRadioName
@@ -101,7 +117,6 @@ export default {
     },
 
     finalSetDate(date: any, dateResult: any) {
-      this.Test = false
       this.inputCheck.date = date
       this.validation.dateResult = dateResult
       this.validationCheck()
@@ -135,24 +150,32 @@ export default {
     },
 
     executeKeep() {
-      this.registIncome()
-      // 保存するよの処理
+      if (this.setSelectRadio == '収入') {
+        //選択されたラジオボタンが収入なら
+        this.registIncome()
+        //収入登録のメソッド呼び出し
+      } else {
+        this.registExpenditure()
+        //支出なら支出登録のメソッド呼び出し
+      }
       this.executeCancel()
+      //モーダル閉じるメソッド呼び出し
     },
 
     executeCancel() {
-      this.Test = 'false'
+      // モーダル閉じる処理
       this.$emit('execute-method')
     },
 
     validationCheck() {
+      this.NoteTest = 'bb'
       if (this.setSelectRadio == '収入') {
         if (
           this.validation.dateResult ||
           this.validation.selectIncomeResult ||
-          this.validation.selectExpenditureResult ||
           this.validation.priceResult ||
           this.validation.noteResult
+          // ||→どれかが真だったら実行
         ) {
           this.validationCheck = true
         } else {
@@ -161,26 +184,27 @@ export default {
       } else if (this.setSelectRadio == '支出') {
         if (
           this.validation.dateResult ||
-          this.validation.selectIncomeResult ||
           this.validation.selectExpenditureResult ||
           this.validation.priceResult ||
           this.validation.noteResult
+          // ||→どれかが真だったら実行
         ) {
           this.validationCheck = true
         } else {
           this.validationCheck = false
         }
       }
-      // if (
-      //   !this.inputCheck.date &&
-      //   !this.inputCheck.selectIncome &&
-      //   !this.inputCheck.selectIncome &&
-      //   !this.inputCheck.selectExpenditure &&
-      //   !this.inputCheck.price &&
-      //   !this.inputCheck.note
-      // ) {
-      //   this.validationCheck = true
-      // }
+      if (
+        !this.inputCheck.date &&
+        !this.inputCheck.selectIncome &&
+        !this.inputCheck.selectIncome &&
+        !this.inputCheck.selectExpenditure &&
+        !this.inputCheck.price &&
+        !this.inputCheck.note
+        //　&&→すべて疑だったら実行する
+      ) {
+        this.validationCheck = true
+      }
     },
   },
 }
@@ -192,6 +216,7 @@ export default {
       <h6>登録情報</h6>
       <div>
         <p>{{ inputCheck }}</p>
+        <p>{{ validationCheck }}</p>
         <label>{{ '収支区分：' }}</label>
         <RadioButton
           :radioName1="setRadioName1"
@@ -206,7 +231,7 @@ export default {
       </div>
       <FormSelect
         :selectRadioName="setSelectRadio"
-        :items="expenceItems"
+        :items="expenseItems"
         @executeIncome-method="finalselectIncomeType"
         @executeExpenditure-method="finalselectExprnditureType"
         validatedNull="false"
@@ -217,6 +242,7 @@ export default {
       </div>
       <div>
         <label>備考：</label>
+        <p>{{ NoteTest }}</p>
         <TextArea @execute-method="finalSetNote" validatedNull="false" />
       </div>
 
