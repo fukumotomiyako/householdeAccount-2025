@@ -92,7 +92,7 @@ export default {
         this.selectIncomeResult = selectIncome_error_message
         //incomeSelect_error_messageがtrueじゃなかったら、incomeSelect_error_messageをselectIncomeResultに格納
       }
-      this.selectIncomeResult = ''
+      this.selectIncomeResult = 'bb'
       //tureだったらselectIncomeResultを空にする
     },
 
@@ -166,13 +166,14 @@ export default {
             :key="select_income.text"
           >
             <!-- income_selectにselectsが入る　vlueは要素　keyは添字 -->
-            {{}}
+            {{ select_income.text }}
           </option>
         </select>
+        <div>{{ selectIncomeResult }}</div>
       </div>
       <div>
         <label>{{ '支出費目：' }}</label>
-        <select v-model="selectExpenditure" @blur="setNotSelect">
+        <select v-model="selectExpenditure" @blur="setSelectExpenditure">
           <option
             v-for="select_expenditure in items"
             :value="select_expenditure.expenditureExpenseItemCode"
@@ -181,7 +182,7 @@ export default {
             {{ select_expenditure.expenditureExpenseItemName }}
           </option>
         </select>
-        <div>{{ 'selectExpenditureResult' }}</div>
+        <div>{{ selectExpenditureResult }}</div>
       </div>
     </div>
 
@@ -199,7 +200,7 @@ export default {
             {{ select_income.text }}
           </option>
         </select>
-        <div>{{ 'selectIncomeResult' }}</div>
+        <div>{{ selectIncomeResult }}</div>
       </div>
       <div>
         <label>{{ '支出費目：' }}</label>
@@ -212,7 +213,7 @@ export default {
             {{ select_expenditure.expenditureExpenseItemName }}
           </option>
         </select>
-        <div>{{ 'selectExpenditureResult' }}</div>
+        <div>{{ selectExpenditureResult }}</div>
       </div>
     </div>
   </div>

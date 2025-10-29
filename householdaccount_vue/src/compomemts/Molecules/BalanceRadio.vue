@@ -17,6 +17,7 @@ export default {
   },
   methods: {
     setSelectRadio(radioName: any) {
+      this.selectRadioValidate()
       this.setRadioName = radioName
       this.$emit('execute-method', this.setRadioName, this.radioButtonResult)
     },

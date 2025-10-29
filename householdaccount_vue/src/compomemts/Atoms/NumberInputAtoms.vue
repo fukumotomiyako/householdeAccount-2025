@@ -7,7 +7,7 @@ export default {
   data() {
     return {
       price: '',
-      priceResult: 'aa',
+      priceResult: '',
     }
   },
 
@@ -23,7 +23,6 @@ export default {
         this.priceResult = price_error_message
       }
       this.priceResult = ''
-      this.priceResult = 'bb'
     },
 
     priceCheckValidate() {
@@ -40,7 +39,5 @@ export default {
 </script>
 
 <template>
-  <p>{{ priceResult }}</p>
   <input type="number" v-model="price" placeholder="8桁以内で入力" @blur="setPrice" />
-  <!-- <input type="number" v-model.number="price" placeholder="8桁以内で入力" @blur="setPrice" /> -->
 </template>
