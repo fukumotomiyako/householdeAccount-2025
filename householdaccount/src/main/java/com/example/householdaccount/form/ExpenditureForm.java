@@ -8,6 +8,7 @@ public class ExpenditureForm {
 	private String selectExpenditure;
 	private  Integer price;
 	private String note;
+	
 	public String getRadioName() {
 		return radioName;
 	}
