@@ -13,11 +13,11 @@ export default {
     items: [
       //配列　支出費目
       {
-        expenditureExpenseItemCode: String,
+        expenditure_expense_item_code: String,
         //支出費目　添字
-        expenditureExpenseItemName: String,
+        expenditure_expense_item_name: String,
         //支出費目　要素名
-        expenditureExpenseItemNameKana: String,
+        expenditure_expense_item_name_kana: String,
       },
     ],
   },
@@ -92,7 +92,7 @@ export default {
         this.selectIncomeResult = selectIncome_error_message
         //incomeSelect_error_messageがtrueじゃなかったら、incomeSelect_error_messageをselectIncomeResultに格納
       }
-      this.selectIncomeResult = 'bb'
+      this.selectIncomeResult = ''
       //tureだったらselectIncomeResultを空にする
     },
 
@@ -146,8 +146,8 @@ export default {
           <!-- ture　常に無効化 -->
           <option
             v-for="select_expenditure in items"
-            :value="select_expenditure.expenditureExpenseItemCode"
-            :key="select_expenditure.expenditureExpenseItemName"
+            :value="select_expenditure.expenditure_expense_item_code"
+            :key="select_expenditure.expenditure_expense_item_name"
           >
             {{}}
           </option>
@@ -176,10 +176,10 @@ export default {
         <select v-model="selectExpenditure" @blur="setSelectExpenditure">
           <option
             v-for="select_expenditure in items"
-            :value="select_expenditure.expenditureExpenseItemCode"
-            :key="select_expenditure.expenditureExpenseItemName"
+            :value="select_expenditure.expenditure_expense_item_code"
+            :key="select_expenditure.expenditure_expense_item_name"
           >
-            {{ select_expenditure.expenditureExpenseItemName }}
+            {{ select_expenditure.expenditure_expense_item_name }}
           </option>
         </select>
         <div>{{ selectExpenditureResult }}</div>
@@ -207,10 +207,10 @@ export default {
         <select v-model="selectExpenditure" @blur="setNotSelect">
           <option
             v-for="select_expenditure in items"
-            :value="select_expenditure.expenditureExpenseItemCode"
-            :key="select_expenditure.expenditureExpenseItemName"
+            :value="select_expenditure.expenditure_expense_item_code"
+            :key="select_expenditure.expenditure_expense_item_name"
           >
-            {{ select_expenditure.expenditureExpenseItemName }}
+            {{ select_expenditure.expenditure_expense_item_name }}
           </option>
         </select>
         <div>{{ selectExpenditureResult }}</div>

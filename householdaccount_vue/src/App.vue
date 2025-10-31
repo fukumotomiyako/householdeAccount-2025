@@ -8,13 +8,11 @@ export default {
   data() {
     return {
       regist_modal: false,
-      Test: 'ture',
     }
   },
 
   methods: {
     excuteRegist() {
-      this.Test = 'false'
       this.regist_modal = true
       //このファイルで定義したregist_modal
     },
@@ -28,13 +26,11 @@ export default {
 
 <template>
   <div>
-    <button @click="excuteRegist()">収支登録</button>
+    <button @click="excuteRegist">収支登録</button>
     <div v-if="regist_modal == true">
       <regist @execute-method="returnScreen" />
     </div>
     <p>APP</p>
-
-    <p>{{ Test }}</p>
     <p>resist_Modal</p>
     <p>{{ regist_modal }}</p>
   </div>

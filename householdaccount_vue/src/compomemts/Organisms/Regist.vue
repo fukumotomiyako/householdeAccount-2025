@@ -37,11 +37,11 @@ export default {
 
       expenditureItems: [
         {
-          expenditureExpenseItemCode: '',
+          expenditure_expense_item_code: '',
           //支出費目　添字
-          expenditureExpenseItemName: '',
+          expenditure_expense_item_name: '',
           //支出費目　要素名
-          expenditureExpenseItemNameKana: '',
+          expenditure_expense_item_name_kana: '',
           //支出費目　カナ
         },
       ],
@@ -70,7 +70,7 @@ export default {
   },
   mounted() {
     this.getExpenditureItems()
-    //モーダル表示のための情報取得のメソッドを最初に実行
+    // モーダル表示のための情報取得のメソッドを最初に実行
   },
 
   methods: {
@@ -231,7 +231,7 @@ export default {
       </div>
       <FormSelect
         :selectRadioName="setSelectRadio"
-        :items="expenseItems"
+        :items="expenditureItems"
         @executeIncome-method="finalselectIncomeType"
         @executeExpenditure-method="finalselectExprnditureType"
         validatedNull="false"
