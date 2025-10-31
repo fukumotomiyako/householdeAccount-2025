@@ -29,7 +29,7 @@ import com.example.householdaccount.service.HouseholdService;
 
 
 @RestController
-//@RequestMapping("/api")
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:5173")
 public class HouseholeController {
 	
@@ -37,7 +37,7 @@ public class HouseholeController {
 	HouseholdService householdService;
 	
 //	//支出費目取得
-	@RequestMapping(value = "/api/expenditureItems", method = RequestMethod.GET) 
+	@RequestMapping(value = "/expenditureItems", method = RequestMethod.GET) 
 	public List<ExpenditureItems> getExpenditureItems(){
 		List<ExpenditureItems> expenditureItemList = householdService.getExpenditureItems();
 		return expenditureItemList;
@@ -45,13 +45,13 @@ public class HouseholeController {
 	
 	
 	//登録(収入)
-	@RequestMapping(value = "aaaaaa", method = RequestMethod.POST) 
+	@RequestMapping(value = "/income", method = RequestMethod.POST) 
 	public String incomeCreate( @RequestBody @Validated IncomeForm incomeCommmand,BindingResult result){
 		
 		if(result.hasErrors()) {
 		     return "登録できません";
 		    }
-		householdService.createIncomeInfo(incomeCommmand);
+//		householdService.createIncomeInfo(incomeCommmand);
 		
 		System.out.println("収入");
 		System.out.println(incomeCommmand.getRadioName());
@@ -66,14 +66,19 @@ public class HouseholeController {
 	//登録(支出)
 	@RequestMapping(value = "/expenditure", method = RequestMethod.POST) 
 	public String expenditureCreate( @RequestBody @Validated ExpenditureForm expenditureCommand, BindingResult result){
+		
 		if(result.hasErrors()) {
 		     return "登録できません";
 		    }
 		
 		
 		System.out.println("支出");
-		System.out.println(expenditureCommand);
-		householdService.createExpenditureInfo(expenditureCommand);
+		System.out.println(expenditureCommand.getRadioName());
+		System.out.println(expenditureCommand.getDate());
+		System.out.println(expenditureCommand.getSelectExpenditure());
+		System.out.println(expenditureCommand.getPrice());
+		System.out.println(expenditureCommand.getNote());
+//		householdService.createExpenditureInfo(expenditureCommand);
 		
 		return "登録しました";
 	}

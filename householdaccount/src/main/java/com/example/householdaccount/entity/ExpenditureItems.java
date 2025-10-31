@@ -1,49 +1,54 @@
 package com.example.householdaccount.entity;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
+//@Table(name="expenditure_expense",schema="expense_sys")
+//@Table(name="expense_sys_expenditure_expense",schema="public")
+@Table(name="expenditure_item",schema="public" )
 public class ExpenditureItems {
 	
 	@Id
-	@Column(name="expenditure_expense_item_code")
-	private Integer expenditureExpenseItemCode;
+	@Column
+	private String expenditure_expense_item_code;
 
-	@Column(name="expenditure_expense_item_name")
-	private String expenditureExpenseItemName;
+	@Column
+	private String expenditure_expense_item_name;
 	
-	@Column(name="expenditure_expense_item_name_kana")
-	private String expenditureExpenseItemNameKana;
+	@Column
+	private String expenditure_expense_item_name_kana;
 	
 
-	public int getExpenditureExpenseItemCode() {
-		return expenditureExpenseItemCode;
+	public String getExpenditure_expense_item_code() {
+		return expenditure_expense_item_code;
 	}
 
-	public void setExpenditureExpenseItemCode(int expenditureExpenseItemCode) {
-		this.expenditureExpenseItemCode = expenditureExpenseItemCode;
+	public void setExpenditure_expense_item_code(String expenditure_expense_item_code) {
+		this.expenditure_expense_item_code = expenditure_expense_item_code;
 	}
 
-	public String getExpenditureExpenseItemName() {
-		return expenditureExpenseItemName;
+	public String getExpenditure_expense_item_name() {
+		return expenditure_expense_item_name;
 	}
 
-	public void setExpenditureExpenseItemName(String expenditureExpenseItemName) {
-		this.expenditureExpenseItemName = expenditureExpenseItemName;
+	public void setExpenditure_expense_item_name(String expenditure_expense_item_name) {
+		this.expenditure_expense_item_name = expenditure_expense_item_name;
 	}
 
-	public String getExpenditureExpenseItemNameKana() {
-		return expenditureExpenseItemNameKana;
+	public String getExpenditure_expense_item_name_kana() {
+		return expenditure_expense_item_name_kana;
 	}
 
-	public void setExpenditureExpenseItemNameKana(String expenditureExpenseItemNameKana) {
-		this.expenditureExpenseItemNameKana = expenditureExpenseItemNameKana;
+	public void setExpenditure_expense_item_name_kana(String expenditure_expense_item_name_kana) {
+		this.expenditure_expense_item_name_kana = expenditure_expense_item_name_kana;
 	}
+
+	
+
+
 }

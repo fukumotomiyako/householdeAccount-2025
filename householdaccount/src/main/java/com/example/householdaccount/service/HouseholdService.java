@@ -18,7 +18,7 @@ import com.example.householdaccount.repository.mybatis.IncomeRepository;
 public class HouseholdService {
 	
 	@Autowired
-	 GetExpenditureItemsRepository expenditureItemRepository;
+	GetExpenditureItemsRepository expenditureItemRepository;
 	@Autowired
 	IncomeRepository incomeRepository;
 	@Autowired
@@ -26,8 +26,10 @@ public class HouseholdService {
 	
 	//支出費目取得
 	public List<ExpenditureItems> getExpenditureItems(){
-		System.out.println(expenditureItemRepository.findAll());
-		
+//		System.out.println("miyako");
+//		List<ExpenditureItems> tmp = expenditureItemRepository.findAll();
+//		System.out.println(tmp.get(0).getExpenditure_expense_item_name());
+		//System.out.println(expenditureItemRepository.findExpenditureByBalanceCode());
 		//リポジトリから取得した情報を返している
 		return expenditureItemRepository.findAll();
 	}
@@ -35,6 +37,10 @@ public class HouseholdService {
 	//収入登録
 	public Income createIncomeInfo(IncomeForm incomeCommand) {
 		Income income = new Income();
+//		income.setIncomeNo(); //incomeNoを作成する
+		
+		//Entity側で必要なものをセッターでデータを入れる
+		//不要なものは記述しない
 		
 		return incomeRepository.save(income);
 	}
