@@ -10,7 +10,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class IncomeForm {
 	@NotNull
 	private String radioName;
-
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date;
 	
 	@NotNull

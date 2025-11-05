@@ -51,7 +51,6 @@ public class HouseholeController {
 		if(result.hasErrors()) {
 		     return "登録できません";
 		    }
-		householdService.createIncomeInfo(incomeCommmand);
 		
 		System.out.println("収入");
 		System.out.println(incomeCommmand.getRadioName());
@@ -59,6 +58,8 @@ public class HouseholeController {
 		System.out.println(incomeCommmand.getDate());
 		System.out.println(incomeCommmand.getPrice());
 		System.out.println(incomeCommmand.getNote());
+		
+		householdService.createIncomeInfo(incomeCommmand);
 
 		return "登録しました";
 	}
@@ -78,7 +79,7 @@ public class HouseholeController {
 		System.out.println(expenditureCommand.getSelectExpenditure());
 		System.out.println(expenditureCommand.getPrice());
 		System.out.println(expenditureCommand.getNote());
-//		householdService.createExpenditureInfo(expenditureCommand);
+		householdService.createExpenditureInfo(expenditureCommand);
 		
 		return "登録しました";
 	}

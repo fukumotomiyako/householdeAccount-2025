@@ -30,11 +30,9 @@ import lombok.Setter;
 @Table(name="income")
 public class Income {
 	
-	
-	
 	@Id
 	@Column(name="income_no")
-	private Integer incomeNo;
+	private IncomeNoVO incomeNo;
 	
 	@Column(name="amount")
 	private Integer amount;
@@ -66,22 +64,24 @@ public class Income {
 	@Column(name="version")
 	private Integer version;
 	
-	public Income(String incomeNo,String strDate, IncomeForm incomeCommand) {
-		this.incomeNo=IncomeNoVO.of(code);
+	public Income() {
+	}
+	public Income(String incomeNo,IncomeForm incomeCommand) {
 		//this.incomeNo　= VO呼び出す 
+		this.incomeNo=IncomeNoVO.of(incomeNo);
 		this.amount = incomeCommand.getPrice();
 		this.incomeType = incomeCommand.getSelectIncome();
-		this.incomeDate = incomeCommand.getDate();
+		this.incomeDate =incomeCommand.getDate();
 		this.note = incomeCommand.getNote();
+		//不変だから直接入れる
 		this.deleteFlag = false;
-		
-		//不変だからセット
+		this.version=0;
 	}
 	
 	//収入VO
 	@ValueObject
 	@Embeddable
-	@Value
+//	@Value
 	@AllArgsConstructor(staticName="of")
 	@NoArgsConstructor(force=true,access=AccessLevel.PROTECTED)
 	@JsonSerialize(using=ToStringSerializer.class)
@@ -97,11 +97,11 @@ public class Income {
 	}
 	
 	//Getter,Setter
-	public Integer getIncomeNo() {
+	public IncomeNoVO getIncomeNo() {
 		return incomeNo;
 	}
 
-	public void setIncomeNo(Integer incomeNo) {
+	public void setIncomeNo(IncomeNoVO incomeNo) {
 		this.incomeNo = incomeNo;
 	}
 

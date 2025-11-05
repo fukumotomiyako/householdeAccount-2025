@@ -2,12 +2,23 @@ package com.example.householdaccount.form;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class ExpenditureForm {
 	private String radioName;
+	@NotNull
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date;
+	@NotNull
 	private String selectExpenditure;
+	@NotNull
 	private  Integer price;
+	@Size(max=200)
 	private String note;
+	
 	
 	public String getRadioName() {
 		return radioName;

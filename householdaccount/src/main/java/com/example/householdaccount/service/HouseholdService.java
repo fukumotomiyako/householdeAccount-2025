@@ -37,9 +37,12 @@ public class HouseholdService {
 	public Income createIncomeInfo(IncomeForm incomeCommand) {
 
 		// 入力された日付をyyyy/mm/ddにしたい
-		Date date = incomeCommand.getDate();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
-		String strDate = sdf.format(date);
+//		Date date = incomeCommand.getDate();
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+//		String strDate = sdf.format(date);
+//		
+//		System.out.println("mmmmmmmmmm");
+//		System.out.println(strDate);
 
 		// incomeNo(I+YYMM登録時点の年月+00000)を作成する
 		Calendar cl = Calendar.getInstance();
@@ -51,46 +54,47 @@ public class HouseholdService {
 		String strfYear = strYear.substring(2);
 
 		// 現時点の月取得
-		SimpleDateFormat sdfMonth = new SimpleDateFormat("mm");
+		SimpleDateFormat sdfMonth = new SimpleDateFormat("MM");
 		String strMonth = sdfMonth.format(cl.getTime());
 
-		String incomeNo = "I" + strfYear + strMonth + 00000;
+		// テーブルのデータ数をJPARepositoryで取得
+		Long dateNumber = incomeRepository.count();
+		// %→フォーマット指定の開始 0→ゼロ埋め 5→最小桁数 d→整数
+		// 取得したデータ数＋1したものを返す
+		String incomeNumber = String.format("%05d", dateNumber + 1);
 
-		Income income = new Income(incomeNo, strDate, incomeCommand);
+		String incomeNo = "I" + strfYear + strMonth + incomeNumber;
+
+		Income income = new Income(incomeNo,incomeCommand);
 		// コンストラクタを呼び出し、引数にincomeNoなど不足しているものを入れる
 
 		// Entity側で必要なものをセッターでデータを入れる
 		// 不要なものは記述しない
-
-		return incomeRepository.save(income);
+		incomeRepository.save(income);
+		return income;
 	}
 
 	// 支出登録
 	public Expenditure createExpenditureInfo(ExpenditureForm expenditureCommand) {
 
-		// 入力された日付をyyyy/mm/ddにしたい
 		Date date = expenditureCommand.getDate();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/mm/dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		String strDate = sdf.format(date);
 
-		// expenditureNo(I+YYMM登録時点の年月+00000)を作成する
 		Calendar cl = Calendar.getInstance();
-
-		// 現時点の年取得
 		SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
 		String strYear = sdfYear.format(cl.getTime());
-		// 3番目の文字列から最後までを抽出
 		String strfYear = strYear.substring(2);
-
-		// 現時点の月取得
-		SimpleDateFormat sdfMonth = new SimpleDateFormat("mm");
+		SimpleDateFormat sdfMonth = new SimpleDateFormat("MM");
 		String strMonth = sdfMonth.format(cl.getTime());
+		Long dateNumber = expenditureRepository.count();
+		String expenditureNumber = String.format("%05d", dateNumber + 1);
+		String expenditureNo = "I" + strfYear + strMonth + expenditureNumber;
 
-		String expenditureNo = "E" + strfYear + strMonth + 00000;
+		Expenditure expenditure = new Expenditure(expenditureNo, strDate, expenditureCommand);
 
-		Expenditure expenditure = new Expenditure(expenditureNo,expenditureCommand);
-
-		return expenditureRepository.save(expenditure);
+		expenditureRepository.save(expenditure);
+		return expenditure;
 	}
 
 }

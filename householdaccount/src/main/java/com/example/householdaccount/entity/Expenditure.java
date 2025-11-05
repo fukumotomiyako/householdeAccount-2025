@@ -28,7 +28,7 @@ public class Expenditure {
 	
 	@Id
 	@Column(name="expenditure_no")
-	private Integer expenditureNo;
+	private ExpenditureNoVO expenditureNo;
 	
 	@Column(name="amount")
 	private Integer amount;
@@ -63,19 +63,22 @@ public class Expenditure {
 	@Column(name="version")
 	private Integer version;
 	
-	public Expenditure(String expenditureNo,ExpenditureForm expenditureCommand) {
-		this.expenditureNo = ExpenditureNoVO.of(code);
+	public Expenditure() {
+	}
+	public Expenditure(String expenditureNo,String strDate,ExpenditureForm expenditureCommand) {
+		this.expenditureNo = ExpenditureNoVO.of(expenditureNo);
 		this.amount = expenditureCommand.getPrice();
 		this.expenditureExpenseItemName = expenditureCommand.getSelectExpenditure();
 		this.expenditureDate = expenditureCommand.getDate();
 		this.note = expenditureCommand.getNote();
 		this.deleteFlag=false;
+		this.version=0;
 	}
 	
 	//支出VO
 	@ValueObject
 	@Embeddable
-	@Value
+//	@Value
 	@AllArgsConstructor(staticName="of")
 	@NoArgsConstructor(force=true,access=AccessLevel.PROTECTED)
 	@JsonSerialize(using=ToStringSerializer.class)
@@ -91,11 +94,11 @@ public class Expenditure {
 	}
 
 	//Setter Getter
-	public Integer getExpenditureNo() {
+	public ExpenditureNoVO getExpenditureNo() {
 		return expenditureNo;
 	}
 
-	public void setExpenditureNo(Integer expenditureNo) {
+	public void setExpenditureNo(ExpenditureNoVO expenditureNo) {
 		this.expenditureNo = expenditureNo;
 	}
 
