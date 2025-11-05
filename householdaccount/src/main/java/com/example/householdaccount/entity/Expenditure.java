@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -23,18 +24,91 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="expenditure")
+@Table(name="expenditure_info")
 public class Expenditure {
 	
 	@Id
 	@Column(name="expenditure_no")
-	private ExpenditureNoVO expenditureNo;
+	private ExpenditureNoVO expenditure_no;
 	
+	public ExpenditureNoVO getExpenditure_no() {
+		return expenditure_no;
+	}
+	public void setExpenditure_no(ExpenditureNoVO expenditure_no) {
+		this.expenditure_no = expenditure_no;
+	}
+	public Integer getAmount() {
+		return amount;
+	}
+	public void setAmount(Integer amount) {
+		this.amount = amount;
+	}
+	public Integer getExpenditureExpenseItemCode() {
+		return expenditureExpenseItemCode;
+	}
+	public void setExpenditureExpenseItemCode(Integer expenditureExpenseItemCode) {
+		this.expenditureExpenseItemCode = expenditureExpenseItemCode;
+	}
+	public String getExpenditureExpenseItemName() {
+		return expenditureExpenseItemName;
+	}
+	public void setExpenditureExpenseItemName(String expenditureExpenseItemName) {
+		this.expenditureExpenseItemName = expenditureExpenseItemName;
+	}
+	public Date getExpenditureDate() {
+		return expenditureDate;
+	}
+	public void setExpenditureDate(Date expenditureDate) {
+		this.expenditureDate = expenditureDate;
+	}
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
+	public boolean isDeleteFrag() {
+		return deleteFrag;
+	}
+	public void setDeleteFrag(boolean deleteFrag) {
+		this.deleteFrag = deleteFrag;
+	}
+	public LocalDateTime getInitialCreateDateAndTime() {
+		return initialCreateDateAndTime;
+	}
+	public void setInitialCreateDateAndTime(LocalDateTime initialCreateDateAndTime) {
+		this.initialCreateDateAndTime = initialCreateDateAndTime;
+	}
+	public LocalDateTime getLastUpdateDateAndTime() {
+		return lastUpdateDateAndTime;
+	}
+	public void setLastUpdateDateAndTime(LocalDateTime lastUpdateDateAndTime) {
+		this.lastUpdateDateAndTime = lastUpdateDateAndTime;
+	}
+	public String getInitialCreateUserCode() {
+		return initialCreateUserCode;
+	}
+	public void setInitialCreateUserCode(String initialCreateUserCode) {
+		this.initialCreateUserCode = initialCreateUserCode;
+	}
+	public String getLastUpdateUserCode() {
+		return lastUpdateUserCode;
+	}
+	public void setLastUpdateUserCode(String lastUpdateUserCode) {
+		this.lastUpdateUserCode = lastUpdateUserCode;
+	}
+	public Integer getVersion() {
+		return version;
+	}
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
 	@Column(name="amount")
 	private Integer amount;
 	
 	@Column(name="expenditure_expense_item_code")
-	private Integer expenditureExpenceItemCode;
+	private Integer expenditureExpenseItemCode;
 	
 	@Column(name="expenditure_expense_item_name")
 	private String expenditureExpenseItemName;
@@ -46,7 +120,7 @@ public class Expenditure {
 	private String note;
 	
 	@Column(name="delete_frag")
-	private boolean deleteFlag;
+	private boolean deleteFrag;
 	
 	@Column(name="initial_create_date_and_time")
 	private LocalDateTime initialCreateDateAndTime;
@@ -65,13 +139,18 @@ public class Expenditure {
 	
 	public Expenditure() {
 	}
-	public Expenditure(String expenditureNo,String strDate,ExpenditureForm expenditureCommand) {
-		this.expenditureNo = ExpenditureNoVO.of(expenditureNo);
+	public Expenditure(String expenditureNo,ExpenditureForm expenditureCommand) {
+		this.expenditure_no = ExpenditureNoVO.of(expenditureNo);
 		this.amount = expenditureCommand.getPrice();
+		this.expenditureExpenseItemCode=1;
 		this.expenditureExpenseItemName = expenditureCommand.getSelectExpenditure();
 		this.expenditureDate = expenditureCommand.getDate();
 		this.note = expenditureCommand.getNote();
-		this.deleteFlag=false;
+		this.deleteFrag=false;
+		this.initialCreateDateAndTime=null;
+		this.lastUpdateDateAndTime=null;
+		this.initialCreateUserCode="a";
+		this.lastUpdateUserCode="a";
 		this.version=0;
 	}
 	
@@ -94,100 +173,6 @@ public class Expenditure {
 	}
 
 	//Setter Getter
-	public ExpenditureNoVO getExpenditureNo() {
-		return expenditureNo;
-	}
 
-	public void setExpenditureNo(ExpenditureNoVO expenditureNo) {
-		this.expenditureNo = expenditureNo;
-	}
-
-	public Integer getAmount() {
-		return amount;
-	}
-
-	public void setAmount(Integer amount) {
-		this.amount = amount;
-	}
-
-	public Integer getExpenditureExpenceItemCode() {
-		return expenditureExpenceItemCode;
-	}
-
-	public void setExpenditureExpenceItemCode(Integer expenditureExpenceItemCode) {
-		this.expenditureExpenceItemCode = expenditureExpenceItemCode;
-	}
-
-	public String getExpenditureExpenseItemName() {
-		return expenditureExpenseItemName;
-	}
-
-	public void setExpenditureExpenseItemName(String expenditureExpenseItemName) {
-		this.expenditureExpenseItemName = expenditureExpenseItemName;
-	}
-
-	public Date getExpenditureDate() {
-		return expenditureDate;
-	}
-
-	public void setExpenditureDate(Date expenditureDate) {
-		this.expenditureDate = expenditureDate;
-	}
-
-	public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
-	}
-
-	public boolean isDeleteFlag() {
-		return deleteFlag;
-	}
-
-	public void setDeleteFlag(boolean deleteFlag) {
-		this.deleteFlag = deleteFlag;
-	}
-
-	public LocalDateTime getInitialCreateDateAndTime() {
-		return initialCreateDateAndTime;
-	}
-
-	public void setInitialCreateDateAndTime(LocalDateTime initialCreateDateAndTime) {
-		this.initialCreateDateAndTime = initialCreateDateAndTime;
-	}
-
-	public LocalDateTime getLastUpdateDateAndTime() {
-		return lastUpdateDateAndTime;
-	}
-
-	public void setLastUpdateDateAndTime(LocalDateTime lastUpdateDateAndTime) {
-		this.lastUpdateDateAndTime = lastUpdateDateAndTime;
-	}
-
-	public String getInitialCreateUserCode() {
-		return initialCreateUserCode;
-	}
-
-	public void setInitialCreateUserCode(String initialCreateUserCode) {
-		this.initialCreateUserCode = initialCreateUserCode;
-	}
-
-	public String getLastUpdateUserCode() {
-		return lastUpdateUserCode;
-	}
-
-	public void setLastUpdateUserCode(String lastUpdateUserCode) {
-		this.lastUpdateUserCode = lastUpdateUserCode;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
 	
 }

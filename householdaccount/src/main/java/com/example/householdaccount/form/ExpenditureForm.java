@@ -12,10 +12,13 @@ public class ExpenditureForm {
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date;
+	
 	@NotNull
 	private String selectExpenditure;
+	
 	@NotNull
 	private  Integer price;
+	
 	@Size(max=200)
 	private String note;
 	

@@ -27,7 +27,7 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-@Table(name="income")
+@Table(name="income_info")
 public class Income {
 	
 	@Id
@@ -65,7 +65,8 @@ public class Income {
 	private Integer version;
 	
 	public Income() {
-	}
+	}//引数なしのコンストラクタ
+	
 	public Income(String incomeNo,IncomeForm incomeCommand) {
 		//this.incomeNo　= VO呼び出す 
 		this.incomeNo=IncomeNoVO.of(incomeNo);
@@ -75,6 +76,11 @@ public class Income {
 		this.note = incomeCommand.getNote();
 		//不変だから直接入れる
 		this.deleteFlag = false;
+		this.initialCreateDateAndTime=null;
+		this.lastUpdateDateAndTime=null;
+		this.initialCreateUserCode="a";
+		this.lastUpdateUserCode="a";
+		//不変だから直接入れる
 		this.version=0;
 	}
 	
@@ -93,8 +99,20 @@ public class Income {
 		@Override
 		public String toString() {
 			return this.incomeNo;
+			
+			
 		}
 	}
+	
+//	@ValueObject
+//	@Embeddable
+////	@Value
+//	@AllArgsConstructor(staticName="of")
+//	@NoArgsConstructor(force=true,access=AccessLevel.PROTECTED)
+//	@JsonSerialize(using=ToStringSerializer.class)
+//	public static class SystemItemVO implements Serializable,Identifier{
+//		
+//	}
 	
 	//Getter,Setter
 	public IncomeNoVO getIncomeNo() {

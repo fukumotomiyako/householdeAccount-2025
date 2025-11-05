@@ -77,9 +77,9 @@ public class HouseholdService {
 	// 支出登録
 	public Expenditure createExpenditureInfo(ExpenditureForm expenditureCommand) {
 
-		Date date = expenditureCommand.getDate();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-		String strDate = sdf.format(date);
+//		Date date = expenditureCommand.getDate();
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+//		String strDate = sdf.format(date);
 
 		Calendar cl = Calendar.getInstance();
 		SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
@@ -91,7 +91,7 @@ public class HouseholdService {
 		String expenditureNumber = String.format("%05d", dateNumber + 1);
 		String expenditureNo = "I" + strfYear + strMonth + expenditureNumber;
 
-		Expenditure expenditure = new Expenditure(expenditureNo, strDate, expenditureCommand);
+		Expenditure expenditure = new Expenditure(expenditureNo,expenditureCommand);
 
 		expenditureRepository.save(expenditure);
 		return expenditure;
