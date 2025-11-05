@@ -10,9 +10,5 @@ import com.example.householdaccount.entity.ExpenditureItems;
 
 @Repository
 public interface GetExpenditureItemsRepository extends JpaRepository<ExpenditureItems,String>{
-														//ExpenditureItemsの主キーの型(Integer)
-//	@Query(value = "SELECT * FROM expenditure_item", nativeQuery = true)
-//	public List<ExpenditureItems> findExpenditureByBalanceCode();
-
-	
+														//ExpenditureItemsの主キーの型(Integer)	
 }

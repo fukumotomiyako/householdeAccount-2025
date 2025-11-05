@@ -1,14 +1,27 @@
 package com.example.householdaccount.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.jmolecules.ddd.annotation.ValueObject;
+import org.jmolecules.ddd.types.Identifier;
+import org.springframework.beans.factory.annotation.Value;
+
+import com.example.householdaccount.form.IncomeForm;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -16,6 +29,8 @@ import lombok.Setter;
 @Getter
 @Table(name="income")
 public class Income {
+	
+	
 	
 	@Id
 	@Column(name="income_no")
@@ -51,6 +66,37 @@ public class Income {
 	@Column(name="version")
 	private Integer version;
 	
+	public Income(String incomeNo,String strDate, IncomeForm incomeCommand) {
+		this.incomeNo=IncomeNoVO.of(code);
+		//this.incomeNo　= VO呼び出す 
+		this.amount = incomeCommand.getPrice();
+		this.incomeType = incomeCommand.getSelectIncome();
+		this.incomeDate = incomeCommand.getDate();
+		this.note = incomeCommand.getNote();
+		this.deleteFlag = false;
+		
+		//不変だからセット
+	}
+	
+	//収入VO
+	@ValueObject
+	@Embeddable
+	@Value
+	@AllArgsConstructor(staticName="of")
+	@NoArgsConstructor(force=true,access=AccessLevel.PROTECTED)
+	@JsonSerialize(using=ToStringSerializer.class)
+	public static class IncomeNoVO implements Serializable,Identifier{
+		
+		@Column(nullable=false,length=10)
+		private final String incomeNo;
+		
+		@Override
+		public String toString() {
+			return this.incomeNo;
+		}
+	}
+	
+	//Getter,Setter
 	public Integer getIncomeNo() {
 		return incomeNo;
 	}

@@ -2,11 +2,24 @@ package com.example.householdaccount.form;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class IncomeForm {
+	@NotNull
 	private String radioName;
+
 	private Date date;
-	private String selectIncome;
+	
+	@NotNull
+	private Integer selectIncome;
+	
+	@NotNull
 	private  Integer price;
+	
+	@Size(max=200)
 	private String note;
 	
 	public String getRadioName() {
@@ -21,10 +34,10 @@ public class IncomeForm {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public String getSelectIncome() {
+	public Integer getSelectIncome() {
 		return selectIncome;
 	}
-	public void setSelectIncome(String selectIncome) {
+	public void setSelectIncome(Integer selectIncome) {
 		this.selectIncome = selectIncome;
 	}
 	public Integer getPrice() {
@@ -39,5 +52,4 @@ public class IncomeForm {
 	public void setNote(String note) {
 		this.note = note;
 	}
-
 }

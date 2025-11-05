@@ -51,7 +51,7 @@ public class HouseholeController {
 		if(result.hasErrors()) {
 		     return "登録できません";
 		    }
-//		householdService.createIncomeInfo(incomeCommmand);
+		householdService.createIncomeInfo(incomeCommmand);
 		
 		System.out.println("収入");
 		System.out.println(incomeCommmand.getRadioName());

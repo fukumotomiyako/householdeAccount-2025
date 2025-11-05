@@ -1,12 +1,26 @@
 package com.example.householdaccount.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.jmolecules.ddd.annotation.ValueObject;
+import org.jmolecules.ddd.types.Identifier;
+import org.springframework.beans.factory.annotation.Value;
+
+import com.example.householdaccount.form.ExpenditureForm;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="expenditure")
@@ -23,7 +37,7 @@ public class Expenditure {
 	private Integer expenditureExpenceItemCode;
 	
 	@Column(name="expenditure_expense_item_name")
-	private Integer expenditureExpenseItemName;
+	private String expenditureExpenseItemName;
 	
 	@Column(name="expenditure_date")
 	private Date expenditureDate;
@@ -48,7 +62,35 @@ public class Expenditure {
 	
 	@Column(name="version")
 	private Integer version;
+	
+	public Expenditure(String expenditureNo,ExpenditureForm expenditureCommand) {
+		this.expenditureNo = ExpenditureNoVO.of(code);
+		this.amount = expenditureCommand.getPrice();
+		this.expenditureExpenseItemName = expenditureCommand.getSelectExpenditure();
+		this.expenditureDate = expenditureCommand.getDate();
+		this.note = expenditureCommand.getNote();
+		this.deleteFlag=false;
+	}
+	
+	//支出VO
+	@ValueObject
+	@Embeddable
+	@Value
+	@AllArgsConstructor(staticName="of")
+	@NoArgsConstructor(force=true,access=AccessLevel.PROTECTED)
+	@JsonSerialize(using=ToStringSerializer.class)
+	public static class ExpenditureNoVO implements Serializable,Identifier{
+		
+		@Column(nullable=false,length=5)
+		private final String expemditureNo;
+		
+		@Override
+		public String toString() {
+			return this.expemditureNo;
+		}
+	}
 
+	//Setter Getter
 	public Integer getExpenditureNo() {
 		return expenditureNo;
 	}
@@ -73,11 +115,11 @@ public class Expenditure {
 		this.expenditureExpenceItemCode = expenditureExpenceItemCode;
 	}
 
-	public Integer getExpenditureExpenseItemName() {
+	public String getExpenditureExpenseItemName() {
 		return expenditureExpenseItemName;
 	}
 
-	public void setExpenditureExpenseItemName(Integer expenditureExpenseItemName) {
+	public void setExpenditureExpenseItemName(String expenditureExpenseItemName) {
 		this.expenditureExpenseItemName = expenditureExpenseItemName;
 	}
 
