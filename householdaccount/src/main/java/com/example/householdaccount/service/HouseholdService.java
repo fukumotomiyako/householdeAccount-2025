@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.householdaccount.entity.Expenditure;
 import com.example.householdaccount.entity.ExpenditureItems;
+import com.example.householdaccount.entity.ExpenditureItems.ExpenditureExpenseItemCodeVO;
 import com.example.householdaccount.entity.Income;
 import com.example.householdaccount.form.ExpenditureForm;
 import com.example.householdaccount.form.IncomeForm;
@@ -80,7 +81,13 @@ public class HouseholdService {
 //		Date date = expenditureCommand.getDate();
 //		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 //		String strDate = sdf.format(date);
-
+		
+		String expenditureItemName = expenditureCommand.getSelectExpenditure();
+		ExpenditureItems expenditureItems=expenditureItemRepository.findByExpenditureExpenseItemName(expenditureItemName);
+		ExpenditureExpenseItemCodeVO expenditureExpenseItemCode=expenditureItems.getExpenditure_expense_item_code();
+		
+		//String expenditureExpenseItemCode="EI001";
+		
 		Calendar cl = Calendar.getInstance();
 		SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
 		String strYear = sdfYear.format(cl.getTime());
@@ -89,9 +96,9 @@ public class HouseholdService {
 		String strMonth = sdfMonth.format(cl.getTime());
 		Long dateNumber = expenditureRepository.count();
 		String expenditureNumber = String.format("%05d", dateNumber + 1);
-		String expenditureNo = "I" + strfYear + strMonth + expenditureNumber;
+		String expenditureNo = "E" + strfYear + strMonth + expenditureNumber;
 
-		Expenditure expenditure = new Expenditure(expenditureNo,expenditureCommand);
+		Expenditure expenditure = new Expenditure(expenditureNo,expenditureCommand,expenditureExpenseItemCode);
 
 		expenditureRepository.save(expenditure);
 		return expenditure;

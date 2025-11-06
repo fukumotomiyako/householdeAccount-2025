@@ -14,6 +14,7 @@ import org.jmolecules.ddd.annotation.ValueObject;
 import org.jmolecules.ddd.types.Identifier;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.example.householdaccount.common.SystemItemVO;
 import com.example.householdaccount.form.IncomeForm;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -49,20 +50,23 @@ public class Income {
 	@Column(name="delete_frag")
 	private boolean deleteFlag;
 	
-	@Column(name="initial_create_date_and_time")
-	private LocalDateTime initialCreateDateAndTime;
-	
-	@Column(name="last_update_date_and_time")
-	private LocalDateTime lastUpdateDateAndTime;
-	
-	@Column(name="initial_create_user_code")
-	private String initialCreateUserCode;
-	
-	@Column(name="last_update_user_code")
-	private String lastUpdateUserCode;
+//	@Column(name="initial_create_date_and_time")
+//	private LocalDateTime initialCreateDateAndTime;
+//	
+//	@Column(name="last_update_date_and_time")
+//	private LocalDateTime lastUpdateDateAndTime;
+//	
+//	@Column(name="initial_create_user_code")
+//	private String initialCreateUserCode;
+//	
+//	@Column(name="last_update_user_code")
+//	private String lastUpdateUserCode;
 	
 	@Column(name="version")
 	private Integer version;
+	
+	private final SystemItemVO systemItemVO = new SystemItemVO();
+	//システムアイテムVO呼び出し
 	
 	public Income() {
 	}//引数なしのコンストラクタ
@@ -76,10 +80,10 @@ public class Income {
 		this.note = incomeCommand.getNote();
 		//不変だから直接入れる
 		this.deleteFlag = false;
-		this.initialCreateDateAndTime=null;
-		this.lastUpdateDateAndTime=null;
-		this.initialCreateUserCode="a";
-		this.lastUpdateUserCode="a";
+//		this.initialCreateDateAndTime=LocalDateTime.now();
+//		this.lastUpdateDateAndTime=LocalDateTime.now();
+//		this.initialCreateUserCode="aa";
+//		this.lastUpdateUserCode="bb";
 		//不変だから直接入れる
 		this.version=0;
 	}
@@ -99,20 +103,8 @@ public class Income {
 		@Override
 		public String toString() {
 			return this.incomeNo;
-			
-			
 		}
 	}
-	
-//	@ValueObject
-//	@Embeddable
-////	@Value
-//	@AllArgsConstructor(staticName="of")
-//	@NoArgsConstructor(force=true,access=AccessLevel.PROTECTED)
-//	@JsonSerialize(using=ToStringSerializer.class)
-//	public static class SystemItemVO implements Serializable,Identifier{
-//		
-//	}
 	
 	//Getter,Setter
 	public IncomeNoVO getIncomeNo() {
@@ -163,37 +155,37 @@ public class Income {
 		this.deleteFlag = deleteFlag;
 	}
 
-	public LocalDateTime getInitialCreateDateAndTime() {
-		return initialCreateDateAndTime;
-	}
-
-	public void setInitialCreateDateAndTime(LocalDateTime initialCreateDateAndTime) {
-		this.initialCreateDateAndTime = initialCreateDateAndTime;
-	}
-
-	public LocalDateTime getLastUpdateDateAndTime() {
-		return lastUpdateDateAndTime;
-	}
-
-	public void setLastUpdateDateAndTime(LocalDateTime lastUpdateDateAndTime) {
-		this.lastUpdateDateAndTime = lastUpdateDateAndTime;
-	}
-
-	public String getInitialCreateUserCode() {
-		return initialCreateUserCode;
-	}
-
-	public void setInitialCreateUserCode(String initialCreateUserCode) {
-		this.initialCreateUserCode = initialCreateUserCode;
-	}
-
-	public String getLastUpdateUserCode() {
-		return lastUpdateUserCode;
-	}
-
-	public void setLastUpdateUserCode(String lastUpdateUserCode) {
-		this.lastUpdateUserCode = lastUpdateUserCode;
-	}
+//	public LocalDateTime getInitialCreateDateAndTime() {
+//		return initialCreateDateAndTime;
+//	}
+//
+//	public void setInitialCreateDateAndTime(LocalDateTime initialCreateDateAndTime) {
+//		this.initialCreateDateAndTime = initialCreateDateAndTime;
+//	}
+//
+//	public LocalDateTime getLastUpdateDateAndTime() {
+//		return lastUpdateDateAndTime;
+//	}
+//
+//	public void setLastUpdateDateAndTime(LocalDateTime lastUpdateDateAndTime) {
+//		this.lastUpdateDateAndTime = lastUpdateDateAndTime;
+//	}
+//
+//	public String getInitialCreateUserCode() {
+//		return initialCreateUserCode;
+//	}
+//
+//	public void setInitialCreateUserCode(String initialCreateUserCode) {
+//		this.initialCreateUserCode = initialCreateUserCode;
+//	}
+//
+//	public String getLastUpdateUserCode() {
+//		return lastUpdateUserCode;
+//	}
+//
+//	public void setLastUpdateUserCode(String lastUpdateUserCode) {
+//		this.lastUpdateUserCode = lastUpdateUserCode;
+//	}
 
 	public Integer getVersion() {
 		return version;
