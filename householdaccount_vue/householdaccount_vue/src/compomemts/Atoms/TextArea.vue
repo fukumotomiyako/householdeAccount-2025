@@ -6,6 +6,7 @@ export default {
 
   data() {
     return {
+      test: '',
       note: '',
       noteResult: '',
     }
@@ -19,20 +20,17 @@ export default {
 
     noteValidate() {
       const note_error_messege = this.noteCheckValidate(this.note)
-      if (note_error_messege != 'ture') {
-        this.noteResult = note_error_messege
+      if (note_error_messege == 'true') {
+        this.noteResult = ''
       }
-      this.noteResult = ''
+      this.noteResult = note_error_messege
     },
 
-    noteCheckValidate() {
-      if (this.validatedNull == 'ture') {
-        if (this.note.length <= 200) {
-          return 'ture'
-        }
+    noteCheckValidate(note: any) {
+      if (note.length >= 2) {
         return '200文字以内で入力してください'
       }
-      return 'ture'
+      return 'true'
     },
   },
 }
@@ -40,4 +38,5 @@ export default {
 
 <template>
   <textarea v-model="note" @blur="setNote" placeholder="200文字以内で入力"> </textarea>
+  <p>{{ noteResult }}</p>
 </template>

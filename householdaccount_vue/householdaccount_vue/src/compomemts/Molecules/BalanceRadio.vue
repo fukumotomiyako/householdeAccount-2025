@@ -17,6 +17,7 @@ export default {
   },
   methods: {
     setSelectRadio(radioName: any) {
+      this.selectRadioValidate()
       this.setRadioName = radioName
       this.$emit('execute-method', this.setRadioName, this.radioButtonResult)
     },
@@ -30,13 +31,13 @@ export default {
     },
 
     selectRadioCheckValidate() {
-      if (this.vlidalidatedNull == 'ture') {
+      if (this.vlidalidatedNull == 'true') {
         if (!this.selectRadio) {
           return '選択してください'
         }
-        return 'ture'
+        return 'true'
       }
-      return 'ture'
+      return 'true'
     },
   },
 }

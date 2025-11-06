@@ -13,11 +13,11 @@ export default {
     items: [
       //配列　支出費目
       {
-        expenditureExpenseItemCode: String,
+        expenditure_expense_item_code: String,
         //支出費目　添字
-        expenditureExpenseItemName: String,
+        expenditure_expense_item_name: String,
         //支出費目　要素名
-        expenditureExpenseItemNameKana: String,
+        expenditure_expense_item_name_kana: String,
       },
     ],
   },
@@ -59,7 +59,7 @@ export default {
 
     setSelectExpenditure() {
       this.selectExpenditureValidate()
-      this.$emit('executeExpenditure-methods', this.selectExpenditure, this.selectExpenditureResult)
+      this.$emit('executeExpenditure-method', this.selectExpenditure, this.selectExpenditureResult)
     },
 
     setNotSelect() {
@@ -110,11 +110,8 @@ export default {
     },
 
     selectExcptionCheckValidate(selectExpenditure: any) {
-      if (this.validatedNull == 'ture') {
-        if (!selectExpenditure) {
-          return '選択してください'
-        }
-        return true
+      if (!selectExpenditure) {
+        return '選択してください'
       }
       return true
     },
@@ -127,27 +124,27 @@ export default {
     <div v-if="selectRadioName == '収入'">
       <div>
         <label>{{ '収入種別：' }}</label>
-        <select v-model="selectIncome" @blur="setSelectIncome()" placeholder="選択してください">
+        <select v-model="selectIncome" @blur="setSelectIncome" placeholder="選択してください">
           <!-- イベント発生したら、選択された収入種別をv-modelに入れて、blurの関数を呼ぶ -->
           <option
             v-for="select_income in selects"
             :value="select_income.value"
             :key="select_income.text"
           >
-            <!-- income_selectにselectsが入る　vlueは要素　keyは添字 -->
+            <!-- select_incomeにselectsが入る　vlueは要素　keyは添字 -->
             {{ select_income.text }}
           </option>
         </select>
-        <!-- <div>{{ "selectIncomeResult" }}</div> -->
+        <div>{{ selectIncomeResult }}</div>
       </div>
       <div>
         <label>{{ '支出費目：' }}</label>
-        <select v-model="selectExpenditure" @blur="setSelectExpenditure()" :disabled="true">
+        <select v-model="selectExpenditure" @blur="setSelectExpenditure" :disabled="true">
           <!-- ture　常に無効化 -->
           <option
             v-for="select_expenditure in items"
-            :value="select_expenditure.expenditureExpenseItemCode"
-            :key="select_expenditure.expenditureExpenseItemName"
+            :value="select_expenditure.expenditure_expense_item_name"
+            :key="select_expenditure.expenditure_expense_item_code"
           >
             {{}}
           </option>
@@ -158,37 +155,7 @@ export default {
     <div v-if="selectRadioName == '支出'">
       <div>
         <label>{{ '収入種別：' }}</label>
-        <select v-model="selectIncome" @blur="setSelectIncome()" :disabled="true">
-          <!-- イベント発生したら、選択された収入種別をv-modelに入れて、blurの関数を呼ぶ -->
-          <option
-            v-for="select_income in selects"
-            :value="select_income.value"
-            :key="select_income.text"
-          >
-            <!-- income_selectにselectsが入る　vlueは要素　keyは添字 -->
-            {{}}
-          </option>
-        </select>
-      </div>
-      <div>
-        <label>{{ '支出費目：' }}</label>
-        <select v-model="selectExpenditure" @blur="setNotSelect()">
-          <option
-            v-for="select_expenditure in items"
-            :value="select_expenditure.expenditureExpenseItemCode"
-            :key="select_expenditure.expenditureExpenseItemName"
-          >
-            {{ select_expenditure.expenditureExpenseItemName }}
-          </option>
-        </select>
-        <div>{{ 'selectExpenditureResult' }}</div>
-      </div>
-    </div>
-
-    <div v-if="selectRadioName == '未選択'">
-      <div>
-        <label>{{ '収入種別：' }}</label>
-        <select v-model="selectIncome" @blur="setNotSelect()">
+        <select v-model="selectIncome" @blur="setSelectIncome" :disabled="true">
           <!-- イベント発生したら、選択された収入種別をv-modelに入れて、blurの関数を呼ぶ -->
           <option
             v-for="select_income in selects"
@@ -199,20 +166,51 @@ export default {
             {{ select_income.text }}
           </option>
         </select>
-        <div>{{ 'selectIncomeResult' }}</div>
+        <div>{{ selectIncomeResult }}</div>
       </div>
       <div>
         <label>{{ '支出費目：' }}</label>
-        <select v-model="selectExpenditure" @blur="setNotSelect()">
+        <select v-model="selectExpenditure" @blur="setSelectExpenditure">
           <option
             v-for="select_expenditure in items"
-            :value="select_expenditure.expenditureExpenseItemCode"
-            :key="select_expenditure.expenditureExpenseItemName"
+            :value="select_expenditure.expenditure_expense_item_name"
+            :key="select_expenditure.expenditure_expense_item_code"
           >
-            {{ select_expenditure.expenditureExpenseItemName }}
+            {{ select_expenditure.expenditure_expense_item_name }}
           </option>
         </select>
-        <div>{{ 'selectExpenditureResult' }}</div>
+        <div>{{ selectExpenditureResult }}</div>
+      </div>
+    </div>
+
+    <div v-if="selectRadioName == '未選択'">
+      <div>
+        <label>{{ '収入種別：' }}</label>
+        <select v-model="selectIncome" @blur="setNotSelect">
+          <!-- イベント発生したら、選択された収入種別をv-modelに入れて、blurの関数を呼ぶ -->
+          <option
+            v-for="select_income in selects"
+            :value="select_income.value"
+            :key="select_income.text"
+          >
+            <!-- select_incomeにselectsが入る　vlueは要素　keyは添字 -->
+            {{ select_income.text }}
+          </option>
+        </select>
+        <div>{{ selectIncomeResult }}</div>
+      </div>
+      <div>
+        <label>{{ '支出費目：' }}</label>
+        <select v-model="selectExpenditure" @blur="setNotSelect">
+          <option
+            v-for="select_expenditure in items"
+            :value="select_expenditure.expenditure_expense_item_name"
+            :key="select_expenditure.expenditure_expense_item_code"
+          >
+            {{ select_expenditure.expenditure_expense_item_name }}
+          </option>
+        </select>
+        <div>{{ selectExpenditureResult }}</div>
       </div>
     </div>
   </div>

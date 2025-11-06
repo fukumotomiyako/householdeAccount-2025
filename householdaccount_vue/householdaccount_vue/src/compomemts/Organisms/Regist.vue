@@ -20,7 +20,7 @@ export default {
 
   data() {
     return {
-      Test: 'true',
+      NoteTest: 'aa',
       setSelectRadio: '収入',
       setRadioName1: '収入',
       setRadioName2: '支出',
@@ -37,11 +37,11 @@ export default {
 
       expenditureItems: [
         {
-          expenditureExpenseItemCode: '',
+          expenditure_expense_item_code: '',
           //支出費目　添字
-          expenditureExpenseItemName: '',
+          expenditure_expense_item_name: '',
           //支出費目　要素名
-          expenditureExpenseItemNameKana: '',
+          expenditure_expense_item_name_kana: '',
           //支出費目　カナ
         },
       ],
@@ -70,7 +70,7 @@ export default {
   },
   mounted() {
     this.getExpenditureItems()
-    //モーダル表示のための情報取得のメソッドを最初に実行
+    // モーダル表示のための情報取得のメソッドを最初に実行
   },
 
   methods: {
@@ -117,7 +117,6 @@ export default {
     },
 
     finalSetDate(date: any, dateResult: any) {
-      this.Test = false
       this.inputCheck.date = date
       this.validation.dateResult = dateResult
       this.validationCheck()
@@ -129,7 +128,7 @@ export default {
       this.validationCheck()
     },
 
-    finalselectExprnditureType(selectExpenditure: any, selectExpenditureResult: any) {
+    finalselectExpenditureType(selectExpenditure: any, selectExpenditureResult: any) {
       this.inputCheck.selectExpenditure = selectExpenditure
       this.validation.selectExpenditureResult = selectExpenditureResult
       this.validationCheck()
@@ -173,9 +172,9 @@ export default {
         if (
           this.validation.dateResult ||
           this.validation.selectIncomeResult ||
-          this.validation.selectExpenditureResult ||
           this.validation.priceResult ||
           this.validation.noteResult
+          // ||→どれかが真だったら実行
         ) {
           this.validationCheck = true
         } else {
@@ -184,10 +183,10 @@ export default {
       } else if (this.setSelectRadio == '支出') {
         if (
           this.validation.dateResult ||
-          this.validation.selectIncomeResult ||
           this.validation.selectExpenditureResult ||
           this.validation.priceResult ||
           this.validation.noteResult
+          // ||→どれかが真だったら実行
         ) {
           this.validationCheck = true
         } else {
@@ -197,10 +196,10 @@ export default {
       if (
         !this.inputCheck.date &&
         !this.inputCheck.selectIncome &&
-        !this.inputCheck.selectIncome &&
         !this.inputCheck.selectExpenditure &&
         !this.inputCheck.price &&
         !this.inputCheck.note
+        //　&&→すべて疑だったら実行する
       ) {
         this.validationCheck = true
       }
@@ -229,9 +228,9 @@ export default {
       </div>
       <FormSelect
         :selectRadioName="setSelectRadio"
-        :items="expenseItems"
+        :items="expenditureItems"
         @executeIncome-method="finalselectIncomeType"
-        @executeExpenditure-method="finalselectExprnditureType"
+        @executeExpenditure-method="finalselectExpenditureType"
         validatedNull="false"
       />
       <div>
