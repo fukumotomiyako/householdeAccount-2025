@@ -65,7 +65,8 @@ public class Income {
 	@Column(name="version")
 	private Integer version;
 	
-	private final SystemItemVO systemItemVO = new SystemItemVO();
+	private SystemItemVO systemItemVO = new SystemItemVO();
+	//システムアイテムVOコンストラクタ作成
 	//システムアイテムVO呼び出し
 	
 	public Income() {
@@ -74,6 +75,7 @@ public class Income {
 	public Income(String incomeNo,IncomeForm incomeCommand) {
 		//this.incomeNo　= VO呼び出す 
 		this.incomeNo=IncomeNoVO.of(incomeNo);
+		//incomenumberVO型にしている
 		this.amount = incomeCommand.getPrice();
 		this.incomeType = incomeCommand.getSelectIncome();
 		this.incomeDate =incomeCommand.getDate();
@@ -88,12 +90,14 @@ public class Income {
 		this.version=0;
 	}
 	
-	//収入VO
 	@ValueObject
-	@Embeddable
-//	@Value
+	@Embeddable//クラスをEntityに埋め込む
+	//クラス内のすべてのフィールドを引数にとるコンストラクタ(そのコンストラクタを呼び出す"of()を作成
 	@AllArgsConstructor(staticName="of")
+	//引数なしのコンストラクタを自動生成　force = true→強制的に初期化してコンストラクタ作成
+	//access = AccessLevel.PROTECTED→作成されるコンストラクタの修飾子をPROTECTEDにする
 	@NoArgsConstructor(force=true,access=AccessLevel.PROTECTED)
+	//特定のフィールドを文字列として出力
 	@JsonSerialize(using=ToStringSerializer.class)
 	public static class IncomeNoVO implements Serializable,Identifier{
 		

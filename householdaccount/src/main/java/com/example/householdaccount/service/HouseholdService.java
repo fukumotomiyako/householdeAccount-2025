@@ -12,11 +12,15 @@ import com.example.householdaccount.entity.Expenditure;
 import com.example.householdaccount.entity.ExpenditureItems;
 import com.example.householdaccount.entity.ExpenditureItems.ExpenditureExpenseItemCodeVO;
 import com.example.householdaccount.entity.Income;
+import com.example.householdaccount.entity.SearchResultExpenditure;
+import com.example.householdaccount.entity.SearchResultIncome;
 import com.example.householdaccount.form.ExpenditureForm;
 import com.example.householdaccount.form.IncomeForm;
 import com.example.householdaccount.repository.mybatis.ExpenditureRepository;
 import com.example.householdaccount.repository.mybatis.GetExpenditureItemsRepository;
 import com.example.householdaccount.repository.mybatis.IncomeRepository;
+import com.example.householdaccount.repository.mybatis.SearchExpenditureHouseholdRepository;
+import com.example.householdaccount.repository.mybatis.SearchIncomeHouseholdRepository;
 
 @Service
 public class HouseholdService {
@@ -66,7 +70,7 @@ public class HouseholdService {
 
 		String incomeNo = "I" + strfYear + strMonth + incomeNumber;
 
-		Income income = new Income(incomeNo,incomeCommand);
+		Income income = new Income(incomeNo, incomeCommand);
 		// コンストラクタを呼び出し、引数にincomeNoなど不足しているものを入れる
 
 		// Entity側で必要なものをセッターでデータを入れる
@@ -81,13 +85,14 @@ public class HouseholdService {
 //		Date date = expenditureCommand.getDate();
 //		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 //		String strDate = sdf.format(date);
-		
+
 		String expenditureItemName = expenditureCommand.getSelectExpenditure();
-		ExpenditureItems expenditureItems=expenditureItemRepository.findByExpenditureExpenseItemName(expenditureItemName);
-		ExpenditureExpenseItemCodeVO expenditureExpenseItemCode=expenditureItems.getExpenditure_expense_item_code();
-		
-		//String expenditureExpenseItemCode="EI001";
-		
+		ExpenditureItems expenditureItems = expenditureItemRepository
+				.findByExpenditureExpenseItemName(expenditureItemName);
+		ExpenditureExpenseItemCodeVO expenditureExpenseItemCode = expenditureItems.getExpenditure_expense_item_code();
+
+		// String expenditureExpenseItemCode="EI001";
+
 		Calendar cl = Calendar.getInstance();
 		SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
 		String strYear = sdfYear.format(cl.getTime());
@@ -98,10 +103,44 @@ public class HouseholdService {
 		String expenditureNumber = String.format("%05d", dateNumber + 1);
 		String expenditureNo = "E" + strfYear + strMonth + expenditureNumber;
 
-		Expenditure expenditure = new Expenditure(expenditureNo,expenditureCommand,expenditureExpenseItemCode);
+		Expenditure expenditure = new Expenditure(expenditureNo, expenditureCommand, expenditureExpenseItemCode);
 
 		expenditureRepository.save(expenditure);
 		return expenditure;
+	}
+
+	//検索
+	@Autowired
+	private SearchIncomeHouseholdRepository searchIncomeHouseholdRepository;
+
+	@Autowired
+	private SearchExpenditureHouseholdRepository searchExpenditureHouseholdRepository;
+
+//収入データの通常検索
+	public List<SearchResultIncome> getSearchIncomeInfoList(String balanceCode) {
+		List<SearchResultIncome> searchIncomeInfoList = searchIncomeHouseholdRepository.findIncomeByBalanceCode(balanceCode);
+
+		// 単体テスト用のNullPointerExceptionをthrowする処理
+//		if(searchIncomeInfoList.isEmpty()) {
+//			throw new NullPointerException("検索結果がありません");
+//		}
+
+		return searchIncomeInfoList;
+	}
+
+//支出データの通常検索
+	public List<SearchResultExpenditure> getSearchExpenditureInfoList(String balanceCode) {
+		List<SearchResultExpenditure> searchExpenditureInfoList = searchExpenditureHouseholdRepository.findExpenditureByBalanceCode(balanceCode);
+
+//		System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+//		System.out.println(searchExpenditureInfoList);
+
+		// 単体テスト用のNullPointerExceptionをthrowする処理
+//		if(searchExpenditureInfoList.isEmpty()) {
+//			throw new NullPointerException("検索結果がありません");
+//		}
+
+		return searchExpenditureInfoList;
 	}
 
 }

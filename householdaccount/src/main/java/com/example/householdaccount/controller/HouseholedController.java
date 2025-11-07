@@ -23,15 +23,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.householdaccount.entity.ExpenditureItems;
+import com.example.householdaccount.entity.SearchResultExpenditure;
+import com.example.householdaccount.entity.SearchResultIncome;
 import com.example.householdaccount.form.ExpenditureForm;
 import com.example.householdaccount.form.IncomeForm;
+import com.example.householdaccount.form.SearchResultBalanceForm;
 import com.example.householdaccount.service.HouseholdService;
 
 
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:5173")
-public class HouseholeController {
+public class HouseholedController {
 	
 	@Autowired
 	HouseholdService householdService;
@@ -83,5 +86,56 @@ public class HouseholeController {
 		
 		return "登録しました";
 	}
+	
+	//収入データと支出データを同時に検索して、同時に結果を返す(通常検索)
+		@GetMapping("/searchBalanceList")
+	    public List<SearchResultBalanceForm> getSearchBalance(@RequestParam("ID") String balanceCode) {
+			
+			//収支コードをもとに収支データを検索
+			List<SearchResultIncome> searchIncomeResult = householdService.getSearchIncomeInfoList(balanceCode);
+			List<SearchResultExpenditure> searchExpenditureResult = householdService.getSearchExpenditureInfoList(balanceCode);
+			
+			//収支データを格納するlist
+			List<SearchResultBalanceForm> searchBalanceResult = new ArrayList<SearchResultBalanceForm>();
+			
+			
+			for(int i = 0; i < searchIncomeResult.size(); i++) {
+				//収支データを格納するform
+				SearchResultBalanceForm searchResultBalanceForm = new SearchResultBalanceForm();
+				
+				//コードと日付をフォーマットをフロントエンド用に変換
+				String code = String.valueOf(searchIncomeResult.get(i).getIncomeNo());
+				String date = new SimpleDateFormat("yyyy-MM-dd").format(searchIncomeResult.get(i).getIncomeDate());
+				
+				//収入データの検索結果を格納
+				searchResultBalanceForm.setBalanceType("収入");
+				searchResultBalanceForm.setBalanceCode(code);
+				searchResultBalanceForm.setAmount(searchIncomeResult.get(i).getAmount());
+				searchResultBalanceForm.setBalanceDate(date);
+				searchResultBalanceForm.setIncomeType(searchIncomeResult.get(i).getIncomeType());
+				searchResultBalanceForm.setNote(searchIncomeResult.get(i).getNote());
+				searchBalanceResult.add(searchResultBalanceForm);
+			}
+			
+			for(int i = 0; i < searchExpenditureResult.size(); i++) {
+				//支出データを格納するform
+				SearchResultBalanceForm searchResultBalanceForm = new SearchResultBalanceForm();
+				
+				//コードと日付のフォーマットをフロントエンド用に変換
+				String code = String.valueOf(searchExpenditureResult.get(i).getExpenditureNo());
+				String date = new SimpleDateFormat("yyyy-MM-dd").format(searchExpenditureResult.get(i).getExpenditureDate());
+				
+				//支出データの検索結果を格納
+				searchResultBalanceForm.setBalanceType("支出");
+				searchResultBalanceForm.setBalanceCode(code);
+				searchResultBalanceForm.setAmount(searchExpenditureResult.get(i).getAmount());
+				searchResultBalanceForm.setBalanceDate(date);
+				searchResultBalanceForm.setExpenditureExpenseItemName(searchExpenditureResult.get(i).getExpenditureExpenseItemName());
+				searchResultBalanceForm.setNote(searchExpenditureResult.get(i).getNote());
+				searchBalanceResult.add(searchResultBalanceForm);
+			}
+	        
+	        return searchBalanceResult;
+	    }
 
 }

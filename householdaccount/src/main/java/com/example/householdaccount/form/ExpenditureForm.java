@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class ExpenditureForm {
+	@NotNull
 	private String radioName;
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -22,7 +23,7 @@ public class ExpenditureForm {
 	@Size(max=200)
 	private String note;
 	
-	
+	//Getter Setter
 	public String getRadioName() {
 		return radioName;
 	}

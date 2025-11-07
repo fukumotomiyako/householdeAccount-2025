@@ -11,6 +11,7 @@ public class IncomeForm {
 	@NotNull
 	private String radioName;
 	
+	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date;
 	
@@ -23,6 +24,7 @@ public class IncomeForm {
 	@Size(max=200)
 	private String note;
 	
+	//Getter Setter
 	public String getRadioName() {
 		return radioName;
 	}

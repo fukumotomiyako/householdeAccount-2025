@@ -70,8 +70,10 @@ public class Expenditure {
 	//final→一度値を設定したらその後は変更できないようにする
 	//システムアイテムVO呼び出し
 	
+	//引数なしのコンストラクタ
 	public Expenditure() {
 	}
+	
 	public Expenditure(String expenditureNo,ExpenditureForm expenditureCommand,ExpenditureExpenseItemCodeVO expenditureExpenseItemCode) {
 		this.expenditure_no = ExpenditureNoVO.of(expenditureNo);
 		this.amount = expenditureCommand.getPrice();
