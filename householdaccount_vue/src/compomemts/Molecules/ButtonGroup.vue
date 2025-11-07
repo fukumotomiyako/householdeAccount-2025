@@ -9,6 +9,7 @@ export default {
     buttonName: String,
     setButtonName1: String,
     setButtonName2: String,
+    validatedNull: String,
   },
   data() {
     return {}
@@ -28,7 +29,11 @@ export default {
 
 <template>
   <div>
-    <ButtonAtoms :buttonName="setButtonName1" @click="executeButton1"></ButtonAtoms>
+    <ButtonAtoms
+      :buttonName="setButtonName1"
+      @click="executeButton1"
+      disabled="validatedNull"
+    ></ButtonAtoms>
     <ButtonAtoms :buttonName="setButtonName2" @click="executeButton2" />
   </div>
 </template>

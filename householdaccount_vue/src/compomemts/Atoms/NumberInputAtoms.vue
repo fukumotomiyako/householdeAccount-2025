@@ -2,12 +2,14 @@
 export default {
   props: {
     validatedNull: String,
+    getPrice: String,
   },
 
   data() {
     return {
-      price: '',
+      price: this.getPrice,
       priceResult: '',
+      test: '',
     }
   },
 
@@ -19,25 +21,24 @@ export default {
 
     priceValidate() {
       const price_error_message = this.priceCheckValidate(this.price)
-      if (price_error_message != 'ture') {
-        this.priceResult = price_error_message
+      if (price_error_message == 'true') {
+        this.priceResult = ''
       }
-      this.priceResult = ''
+      this.priceResult = price_error_message
     },
 
-    priceCheckValidate() {
-      if (this.validatedNull == 'true') {
-        if (this.price.length <= 8) {
-          return true
-        }
+    priceCheckValidate(price: any) {
+      if (price.length >= 8) {
         return '8文字以内で入力してください'
       }
-      return true
+      return 'true'
     },
   },
 }
 </script>
 
 <template>
+  <p>{{ test }}</p>
   <input type="number" v-model="price" placeholder="8桁以内で入力" @blur="setPrice" />
+  <p>{{ priceResult }}</p>
 </template>

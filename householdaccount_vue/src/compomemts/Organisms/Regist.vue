@@ -10,6 +10,7 @@ import axios from 'axios'
 
 export default {
   components: {
+    //使用するコンポーネントを宣言
     RadioButton,
     DateInput,
     TextArea,
@@ -20,22 +21,23 @@ export default {
 
   data() {
     return {
-      NoteTest: 'aa',
-      setSelectRadio: '収入',
+      NoteTest: 'aa', //デバック用
+      setSelectRadio: '収入', //モーダル開かれて最初に収入選択された状態にするため
       setRadioName1: '収入',
-      setRadioName2: '支出',
+      setRadioName2: '支出', //ラジオボタンの名前指定
       setButtonName1: '保存',
-      setButtonName2: 'キャンセル',
+      setButtonName2: 'キャンセル', //ボタンの名前指定
       incomeTypes: [
         { value: '1', text: '給与' },
         { value: '2', text: '賞与' },
         { value: '3', text: '副業' },
         { value: '4', text: 'お小遣い' },
         { value: '5', text: '臨時収入' },
-        { value: '6', text: '投資（Enum）' },
+        { value: '6', text: '投資（Enum）' }, //収入のプルダウン指定
       ],
 
       expenditureItems: [
+        //支出費目
         {
           expenditure_expense_item_code: '',
           //支出費目　添字
@@ -46,7 +48,7 @@ export default {
         },
       ],
 
-      registModal: true,
+      registModal: true, //モーダル表示なのでtrue
       validationCheck: true,
 
       inputCheck: {
@@ -91,6 +93,7 @@ export default {
       //収入をバックエンドに送るメソッド
       try {
         axios.post('http://localhost:8080/api/income', this.inputCheck).then((response) => {
+          //responseが正常化チェック
           console.log(response)
         })
       } catch (error) {
@@ -112,14 +115,17 @@ export default {
     },
 
     finalSelectRadio(setRadioName: any, radioButtonResult: any) {
-      this.setSelectRadio = setRadioName
+      this.setSelectRadio = setRadioName //選択されたラジオボタン
       this.inputCheck.radioName = setRadioName
     },
 
     finalSetDate(date: any, dateResult: any) {
       this.inputCheck.date = date
+      //情報をまとめて送る
       this.validation.dateResult = dateResult
+      //バリデーションチェック行うためにれてる
       this.validationCheck()
+      //上で入れた値をチェックするために関数呼び出し
     },
 
     finalselectIncomeType(selectIncome: any, selectIncomeResult: any) {
@@ -128,7 +134,7 @@ export default {
       this.validationCheck()
     },
 
-    finalselectExprnditureType(selectExpenditure: any, selectExpenditureResult: any) {
+    finalselectExpenditureType(selectExpenditure: any, selectExpenditureResult: any) {
       this.inputCheck.selectExpenditure = selectExpenditure
       this.validation.selectExpenditureResult = selectExpenditureResult
       this.validationCheck()
@@ -142,7 +148,7 @@ export default {
 
     finalSetNote(note: any, noteResult: any) {
       this.inputCheck.note = note
-      //値の上限加減などをチェックするためにいれてる
+      //情報をまとめて送る
       this.validation.noteResult = noteResult
       //バリデーションチェック行うためにれてる
       this.validationCheck()
@@ -163,12 +169,11 @@ export default {
     },
 
     executeCancel() {
-      // モーダル閉じる処理
+      // キャンセルされたらモーダル閉じる処理
       this.$emit('execute-method')
     },
 
     validationCheck() {
-      this.NoteTest = 'bb'
       if (this.setSelectRadio == '収入') {
         if (
           this.validation.dateResult ||
@@ -197,13 +202,12 @@ export default {
       if (
         !this.inputCheck.date &&
         !this.inputCheck.selectIncome &&
-        !this.inputCheck.selectIncome &&
         !this.inputCheck.selectExpenditure &&
         !this.inputCheck.price &&
         !this.inputCheck.note
         //　&&→すべて疑だったら実行する
       ) {
-        this.validationCheck = true
+        this.validationCheck = false
       }
     },
   },
@@ -216,43 +220,41 @@ export default {
       <h6>登録情報</h6>
       <div>
         <p>{{ inputCheck }}</p>
-        <p>{{ validationCheck }}</p>
         <label>{{ '収支区分：' }}</label>
         <RadioButton
           :radioName1="setRadioName1"
           :radioName2="setRadioName2"
           @execute-method="finalSelectRadio"
-          validatedNull="validation"
         />
       </div>
       <div>
         <label>{{ '収支日付：' }}</label>
-        <DateInput @execute-method="finalSetDate" validatedNull="validation" />
+        <DateInput :getDate="2025 / 12 / 25" @execute-method="finalSetDate" />
       </div>
       <FormSelect
         :selectRadioName="setSelectRadio"
         :items="expenditureItems"
         @executeIncome-method="finalselectIncomeType"
-        @executeExpenditure-method="finalselectExprnditureType"
-        validatedNull="false"
+        @executeExpenditure-method="finalselectExpenditureType"
       />
       <div>
         <label>{{ '金額：' }}</label>
-        <NumberInput @execute-method="finalSetNumber" validatedNull="validation" />
+        <NumberInput @execute-method="finalSetNumber" />
       </div>
       <div>
         <label>備考：</label>
-        <p>{{ NoteTest }}</p>
         <TextArea @execute-method="finalSetNote" validatedNull="false" />
       </div>
 
       <div>
         <Button
+          validatedNull="validationCheck"
           setButtonName1="保存"
           setButtonName2="キャンセル"
           @executeButton1-method="executeKeep"
           @executeButton2-method="executeCancel"
         />
+        <!-- 入力内容がNGな場合はボタン不活性 -->
       </div>
     </div>
   </div>

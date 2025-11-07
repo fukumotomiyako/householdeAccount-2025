@@ -24,7 +24,6 @@ export default {
   data() {
     //コンポーネントが持つデータ、状態を定義
     return {
-      //使うためにオブジェクトを返す？
       //   selectIncome: this.selectedIncomeType,
       //selectIncomeの値(選択されているもの)をselectedIncomeTypeにわたす
       //   selectExpenditure: this.selectedExpenditureType,
@@ -48,7 +47,7 @@ export default {
     }
   },
   methods: {
-    //メソッドを定義　操作にたいしてどんな処理をするか　＠blurで呼ぶ関数のことかな
+    //メソッドを定義　操作にたいしてどんな処理をするか　＠blurで呼ぶ関数
     setSelectIncome() {
       this.selectIncomeValidate()
       //入力チェック関数の呼び出し
@@ -59,7 +58,7 @@ export default {
 
     setSelectExpenditure() {
       this.selectExpenditureValidate()
-      this.$emit('executeExpenditure-methods', this.selectExpenditure, this.selectExpenditureResult)
+      this.$emit('executeExpenditure-method', this.selectExpenditure, this.selectExpenditureResult)
     },
 
     setNotSelect() {
@@ -110,11 +109,8 @@ export default {
     },
 
     selectExcptionCheckValidate(selectExpenditure: any) {
-      if (this.validatedNull == 'ture') {
-        if (!selectExpenditure) {
-          return '選択してください'
-        }
-        return true
+      if (!selectExpenditure) {
+        return '選択してください'
       }
       return true
     },
@@ -134,11 +130,11 @@ export default {
             :value="select_income.value"
             :key="select_income.text"
           >
-            <!-- income_selectにselectsが入る　vlueは要素　keyは添字 -->
+            <!-- select_incomeにselectsが入る　vlueは要素　keyは添字 -->
             {{ select_income.text }}
           </option>
         </select>
-        <!-- <div>{{ "selectIncomeResult" }}</div> -->
+        <div>{{ selectIncomeResult }}</div>
       </div>
       <div>
         <label>{{ '支出費目：' }}</label>
@@ -146,8 +142,8 @@ export default {
           <!-- ture　常に無効化 -->
           <option
             v-for="select_expenditure in items"
-            :value="select_expenditure.expenditure_expense_item_code"
-            :key="select_expenditure.expenditure_expense_item_name"
+            :value="select_expenditure.expenditure_expense_item_name"
+            :key="select_expenditure.expenditure_expense_item_code"
           >
             {{}}
           </option>
@@ -176,8 +172,8 @@ export default {
         <select v-model="selectExpenditure" @blur="setSelectExpenditure">
           <option
             v-for="select_expenditure in items"
-            :value="select_expenditure.expenditure_expense_item_code"
-            :key="select_expenditure.expenditure_expense_item_name"
+            :value="select_expenditure.expenditure_expense_item_name"
+            :key="select_expenditure.expenditure_expense_item_code"
           >
             {{ select_expenditure.expenditure_expense_item_name }}
           </option>
@@ -196,7 +192,7 @@ export default {
             :value="select_income.value"
             :key="select_income.text"
           >
-            <!-- income_selectにselectsが入る　vlueは要素　keyは添字 -->
+            <!-- select_incomeにselectsが入る　vlueは要素　keyは添字 -->
             {{ select_income.text }}
           </option>
         </select>
@@ -207,8 +203,8 @@ export default {
         <select v-model="selectExpenditure" @blur="setNotSelect">
           <option
             v-for="select_expenditure in items"
-            :value="select_expenditure.expenditure_expense_item_code"
-            :key="select_expenditure.expenditure_expense_item_name"
+            :value="select_expenditure.expenditure_expense_item_name"
+            :key="select_expenditure.expenditure_expense_item_code"
           >
             {{ select_expenditure.expenditure_expense_item_name }}
           </option>
