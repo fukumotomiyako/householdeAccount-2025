@@ -23,10 +23,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.householdaccount.entity.ExpenditureItems;
+import com.example.householdaccount.entity.SearchBalanceExpenditureInfo;
+import com.example.householdaccount.entity.SearchBalanceIncomeInfo;
 import com.example.householdaccount.entity.SearchResultExpenditure;
 import com.example.householdaccount.entity.SearchResultIncome;
 import com.example.householdaccount.form.ExpenditureForm;
 import com.example.householdaccount.form.IncomeForm;
+import com.example.householdaccount.form.SearchBalanceInfo;
 import com.example.householdaccount.form.SearchResultBalanceForm;
 import com.example.householdaccount.service.HouseholdService;
 
@@ -87,6 +90,45 @@ public class HouseholedController {
 		return "登録しました";
 	}
 	
+	//金額情報検索(編集)
+	@GetMapping("/search/balance")
+	public SearchBalanceInfo getSerchBalanceInfo(@RequestParam("No") String balanceNo){
+		
+		//検索
+		SearchBalanceIncomeInfo serchBalanceIncomeResult = householdService.getSearchIncomeInfo(balanceNo);
+		SearchBalanceExpenditureInfo serchBalanceExpenditureResult = householdService.getSearchExpenditureInfo(balanceNo);
+		
+		//検索結果を格納するForm
+		SearchBalanceInfo serchBalanceResult = new SearchBalanceInfo();
+		
+		//検索結果(収入)をセット
+		serchBalanceResult.setBalanceType("収入");
+		serchBalanceResult.setBalanceDate(serchBalanceIncomeResult.getIncomeDate());
+		serchBalanceResult.setIncomeType(serchBalanceResult.getIncomeType());
+		serchBalanceResult.setAmount(serchBalanceResult.getAmount());
+		serchBalanceResult.setNote(serchBalanceResult.getNote());
+		
+		//検索結果(支出)をセット
+		serchBalanceResult.setBalanceType("支出");
+		serchBalanceResult.setBalanceDate(serchBalanceResult.getBalanceType());
+		serchBalanceResult.setExpenditureExpenseItemName(serchBalanceExpenditureResult.getExpenditureExpenseItemName());
+		serchBalanceResult.setAmount(serchBalanceExpenditureResult.getAmount());
+		serchBalanceResult.setNote(serchBalanceExpenditureResult.getNote());
+		
+		return serchBalanceResult;
+	}
+	
+	//編集
+//	@RequestMapping(value = "", method = RequestMethod.POST)
+//	public String edit(@RequestBody @Validated ,BindingResult ) {
+//		
+//		if(result.hasErrors()) {
+//		     return "編集できません";
+//		    }
+//		return "編集が完了しました";
+//	}
+
+	
 	//収入データと支出データを同時に検索して、同時に結果を返す(通常検索)
 		@GetMapping("/searchBalanceList")
 	    public List<SearchResultBalanceForm> getSearchBalance(@RequestParam("ID") String balanceCode) {
@@ -137,5 +179,4 @@ public class HouseholedController {
 	        
 	        return searchBalanceResult;
 	    }
-
 }

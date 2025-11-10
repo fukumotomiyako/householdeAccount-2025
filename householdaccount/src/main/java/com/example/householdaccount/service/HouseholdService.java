@@ -12,6 +12,8 @@ import com.example.householdaccount.entity.Expenditure;
 import com.example.householdaccount.entity.ExpenditureItems;
 import com.example.householdaccount.entity.ExpenditureItems.ExpenditureExpenseItemCodeVO;
 import com.example.householdaccount.entity.Income;
+import com.example.householdaccount.entity.SearchBalanceExpenditureInfo;
+import com.example.householdaccount.entity.SearchBalanceIncomeInfo;
 import com.example.householdaccount.entity.SearchResultExpenditure;
 import com.example.householdaccount.entity.SearchResultIncome;
 import com.example.householdaccount.form.ExpenditureForm;
@@ -19,6 +21,8 @@ import com.example.householdaccount.form.IncomeForm;
 import com.example.householdaccount.repository.mybatis.ExpenditureRepository;
 import com.example.householdaccount.repository.mybatis.GetExpenditureItemsRepository;
 import com.example.householdaccount.repository.mybatis.IncomeRepository;
+import com.example.householdaccount.repository.mybatis.SearchBalanceExpenditureRepository;
+import com.example.householdaccount.repository.mybatis.SearchBalanceIncomeInfoRepository;
 import com.example.householdaccount.repository.mybatis.SearchExpenditureHouseholdRepository;
 import com.example.householdaccount.repository.mybatis.SearchIncomeHouseholdRepository;
 
@@ -108,6 +112,24 @@ public class HouseholdService {
 		expenditureRepository.save(expenditure);
 		return expenditure;
 	}
+	
+	//支出データ取得(編集)
+	@Autowired
+	SearchBalanceIncomeInfoRepository serchBalanceIncomeRepository;
+	@Autowired
+	SearchBalanceExpenditureRepository serchBalanceExpenditureRepository;
+	
+		//収入検索
+		public SearchBalanceIncomeInfo getSearchIncomeInfo(String balanceNo){
+			SearchBalanceIncomeInfo serchBalanceIncomeInfo = serchBalanceIncomeRepository.findByBalanceNo(balanceNo);
+			return serchBalanceIncomeInfo;
+		}
+		
+		//支出検索
+		public SearchBalanceExpenditureInfo getSearchExpenditureInfo(String balanceNo) {
+			SearchBalanceExpenditureInfo serchBalanceExpenditureInfo = serchBalanceExpenditureRepository.findByBalanceNo(balanceNo);
+			return serchBalanceExpenditureInfo;
+		}
 
 	//検索
 	@Autowired
