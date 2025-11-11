@@ -31,7 +31,7 @@ public class SearchBalanceIncomeInfo {
 	private String incomeType;
 	
 	@Column(name="income_date")
-	private String incomeDate;
+	private Date incomeDate;
 	
 	@Column(name="note")
 	private String note;
