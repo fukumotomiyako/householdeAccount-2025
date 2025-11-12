@@ -1,9 +1,6 @@
 <script lang="ts">
 export default {
-  props: {
-    validatedNull: String,
-    getPrice: String,
-  },
+  props: ['validatedNull', 'getPrice'],
 
   data() {
     return {
@@ -38,7 +35,6 @@ export default {
 </script>
 
 <template>
-  <p>{{ test }}</p>
   <input type="number" v-model="price" placeholder="8桁以内で入力" @blur="setPrice" />
   <p>{{ priceResult }}</p>
 </template>

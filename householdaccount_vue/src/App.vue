@@ -13,16 +13,21 @@ const header = ref([
 
 <script lang = "ts">
 import regist from '../src/compomemts/Organisms/Regist.vue'
+import edit from '../src/compomemts/Organisms/Edit.vue'
 import axios from 'axios'
 import { createApp, ref } from 'vue'
 
 export default {
   components: {
     regist,
+    edit,
   },
   data() {
     return {
+      Text: '', //デバック用
+      setBalanceNo: '',
       regist_modal: false,
+      edit_modal: false,
       searchResultBalanceInfo: [
         {
           balanceCode: '',
@@ -93,6 +98,15 @@ export default {
     returnScreen() {
       this.regist_modal = false
     },
+
+    excuteEdit(balanceCode: any) {
+      this.edit_modal = true
+      this.setBalanceNo = balanceCode
+    },
+
+    editReturn() {
+      this.edit_modal = false
+    },
   },
 }
 </script>
@@ -107,13 +121,17 @@ export default {
       @keyup.enter="searchBalanceInfo"
     />
 
+    <!-- 登録モーダル表示 -->
     <button @click="excuteRegist">収支登録</button>
     <div v-if="regist_modal == true">
       <regist @execute-method="returnScreen" />
     </div>
-    <p>APP</p>
-    <p>resist_Modal</p>
-    <p>{{ regist_modal }}</p>
+
+    <!-- 編集モーダル表示 -->
+    <p>{{ edit_modal }}</p>
+    <div v-if="edit_modal == true">
+      <edit :balanceNo="setBalanceNo" @executeEdit-method="editReturn" />
+    </div>
 
     <div class="table_box" v-if="searchFrag == true">
       <table class="table_style">
@@ -132,7 +150,7 @@ export default {
             <td>{{ balancedata.incomeTypeName }}</td>
             <td>{{ balancedata.amount }}</td>
             <td>{{ balancedata.note }}</td>
-            <td><button>編集</button></td>
+            <td><button @click="excuteEdit(balancedata.balanceCode)">編集</button></td>
             <td><button>削除</button></td>
           </tr>
           <tr v-if="balancedata.balanceType == '支出'">
@@ -142,7 +160,7 @@ export default {
             <td>{{ balancedata.expenditureExpenseItemName }}</td>
             <td>{{ balancedata.amount }}</td>
             <td>{{ balancedata.note }}</td>
-            <td><button>編集</button></td>
+            <td><button @click="excuteEdit(balancedata.balanceCode)">編集</button></td>
             <td><button>削除</button></td>
           </tr>
         </tbody>

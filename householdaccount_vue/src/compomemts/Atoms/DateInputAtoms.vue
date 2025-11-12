@@ -1,9 +1,6 @@
 <script lang="ts">
 export default {
-  props: {
-    validatedNull: String,
-    getDate: String,
-  },
+  props: ['validatedNull', 'getDate'],
 
   data() {
     return {
@@ -51,7 +48,7 @@ export default {
 </script>
 
 <template>
-  <p>{{ test }}</p>
+  <p>{{ date }}</p>
   <input type="date" v-model="date" @blur="setDate" placeholder="YYYY/MM/DD" />
   <p>{{ dateResult }}</p>
 </template>

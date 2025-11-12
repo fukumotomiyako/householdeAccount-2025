@@ -219,7 +219,6 @@ export default {
     <div id="modal-content" class="modal">
       <h6>登録情報</h6>
       <div>
-        <p>{{ inputCheck }}</p>
         <label>{{ '収支区分：' }}</label>
         <RadioButton
           :radioName1="setRadioName1"
@@ -229,7 +228,7 @@ export default {
       </div>
       <div>
         <label>{{ '収支日付：' }}</label>
-        <DateInput :getDate="2025 / 12 / 25" @execute-method="finalSetDate" />
+        <DateInput @execute-method="finalSetDate" />
       </div>
       <FormSelect
         :selectRadioName="setSelectRadio"

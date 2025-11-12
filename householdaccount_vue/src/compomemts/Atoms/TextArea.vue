@@ -2,11 +2,12 @@
 export default {
   props: {
     validatedNull: String,
+    getNote: String,
   },
 
   data() {
     return {
-      note: '',
+      note: this.getNote,
       noteResult: '',
     }
   },
