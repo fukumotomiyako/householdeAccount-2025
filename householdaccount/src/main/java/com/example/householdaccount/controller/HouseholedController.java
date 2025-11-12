@@ -90,10 +90,6 @@ public class HouseholedController {
 	// 金額情報検索(編集)
 	@GetMapping("/search/balance")
 	public SearchBalanceInfo getSerchBalanceInfo(@RequestParam("No") String balanceNo) {
-		
-		//検証用 No取得できてる
-		System.out.println("あああああああ");
-		System.out.println(balanceNo);
 
 		// 検索
 		SearchBalanceIncomeInfo serchBalanceIncomeResult = householdService.getSearchIncomeInfo(balanceNo);
@@ -106,8 +102,8 @@ public class HouseholedController {
 		//収入(serchBalanceExpenditureResult)がnullの場合
 		if (serchBalanceExpenditureResult == null) {
 		
-			//日付をYYYY/MM/DDの形に整える
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+			//日付をYYYY-MM-DDの形に整える
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String date = sdf.format(serchBalanceIncomeResult.getIncomeDate());
 			
 			//NoをString型に変換(引数に指定した型をString型に変換する)
@@ -131,7 +127,7 @@ public class HouseholedController {
 			
 		} else {
 			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String date = sdf.format(serchBalanceExpenditureResult.getExpenditureDate());
 			
 			String No = String.valueOf(serchBalanceExpenditureResult.getExpenditureNo());
@@ -159,14 +155,37 @@ public class HouseholedController {
 	}
 
 	// 編集
-//	@RequestMapping(value = "", method = RequestMethod.POST)
-//	public String edit(@RequestBody @Validated ,BindingResult ) {
-//		
-//		if(result.hasErrors()) {
-//		     return "編集できません";
-//		    }
-//		return "編集が完了しました";
-//	}
+	@RequestMapping(value = "/income/edit", method = RequestMethod.PATCH)
+	public String incomeEdit(@RequestBody @Validated SearchBalanceInfo serchBalanceResult, BindingResult result) {
+		
+		if(result.hasErrors()) {
+		     return "編集できません";
+		    }
+		System.out.println(serchBalanceResult.getBalanceType());
+		System.out.println(serchBalanceResult.getBalanceNo());
+		System.out.println(serchBalanceResult.getBalanceDate());
+		System.out.println(serchBalanceResult.getIncomeType());
+		System.out.println(serchBalanceResult.getAmount());
+		System.out.println(serchBalanceResult.getNote());
+		
+		return "編集が完了しました";
+	}
+	
+	@RequestMapping(value = "/expenditure/edit", method = RequestMethod.PATCH)
+	public String expenditureEdit(@RequestBody @Validated SearchBalanceInfo serchBalanceResult, BindingResult result) {
+		
+		if(result.hasErrors()) {
+		     return "編集できません";
+		    }
+		System.out.println(serchBalanceResult.getBalanceType());
+		System.out.println(serchBalanceResult.getBalanceNo());
+		System.out.println(serchBalanceResult.getBalanceDate());
+		System.out.println(serchBalanceResult.getExpenditureExpenseItemName());
+		System.out.println(serchBalanceResult.getAmount());
+		System.out.println(serchBalanceResult.getNote());
+		
+		return "編集が完了しました";
+	}
 
 	// 収入データと支出データを同時に検索して、同時に結果を返す(通常検索)
 	@GetMapping("/searchBalanceList")
