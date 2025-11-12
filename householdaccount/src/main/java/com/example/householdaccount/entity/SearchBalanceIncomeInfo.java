@@ -25,10 +25,10 @@ public class SearchBalanceIncomeInfo {
 	private IncomeNoVO incoemNo;
 	
 	@Column(name="amount")
-	private String amount;
+	private Integer amount;
 	
 	@Column(name="income_type")
-	private String incomeType;
+	private Integer incomeType;
 	
 	@Column(name="income_date")
 	private Date incomeDate;

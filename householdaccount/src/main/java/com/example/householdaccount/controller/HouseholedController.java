@@ -90,8 +90,10 @@ public class HouseholedController {
 	// 金額情報検索(編集)
 	@GetMapping("/search/balance")
 	public SearchBalanceInfo getSerchBalanceInfo(@RequestParam("No") String balanceNo) {
-		//検証用
-		balanceNo="I25110004";
+		
+		//検証用 No取得できてる
+		System.out.println("あああああああ");
+		System.out.println(balanceNo);
 
 		// 検索
 		SearchBalanceIncomeInfo serchBalanceIncomeResult = householdService.getSearchIncomeInfo(balanceNo);
@@ -102,38 +104,55 @@ public class HouseholedController {
 		SearchBalanceInfo serchBalanceResult = new SearchBalanceInfo();
 
 		//収入(serchBalanceExpenditureResult)がnullの場合
-		if (serchBalanceIncomeResult != null) {
+		if (serchBalanceExpenditureResult == null) {
+		
+			//日付をYYYY/MM/DDの形に整える
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+			String date = sdf.format(serchBalanceIncomeResult.getIncomeDate());
+			
+			//NoをString型に変換(引数に指定した型をString型に変換する)
+			String No = String.valueOf(serchBalanceIncomeResult.getIncoemNo());
 
 			// 検索結果(収入)をセット
 			serchBalanceResult.setBalanceType("収入");
-			serchBalanceResult.setBalanceDate(serchBalanceIncomeResult.getIncomeDate());
-			serchBalanceResult.setIncomeType(serchBalanceResult.getIncomeType());
-			serchBalanceResult.setAmount(serchBalanceResult.getAmount());
-			serchBalanceResult.setNote(serchBalanceResult.getNote());
+			serchBalanceResult.setBalanceNo(No);
+			serchBalanceResult.setBalanceDate(date);
+			serchBalanceResult.setIncomeType(serchBalanceIncomeResult.getIncomeType());
+			serchBalanceResult.setAmount(serchBalanceIncomeResult.getAmount());
+			serchBalanceResult.setNote(serchBalanceIncomeResult.getNote());
 			
 			//検証用
-			System.out.println("収入");
-			System.out.println(serchBalanceIncomeResult.getIncomeDate());
+			System.out.println(serchBalanceResult.getBalanceType());
+			System.out.println(serchBalanceResult.getBalanceNo());
+			System.out.println(serchBalanceResult.getBalanceDate());
 			System.out.println(serchBalanceResult.getIncomeType());
 			System.out.println(serchBalanceResult.getAmount());
 			System.out.println(serchBalanceResult.getNote());
 			
 		} else {
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+			String date = sdf.format(serchBalanceExpenditureResult.getExpenditureDate());
+			
+			String No = String.valueOf(serchBalanceExpenditureResult.getExpenditureNo());
+
 
 			// 検索結果(支出)をセット
 			serchBalanceResult.setBalanceType("支出");
-			serchBalanceResult.setBalanceDate(serchBalanceExpenditureResult.getExpenditureDate());
+			serchBalanceResult.setBalanceNo(No);
+			serchBalanceResult.setBalanceDate(date);
 			serchBalanceResult
 					.setExpenditureExpenseItemName(serchBalanceExpenditureResult.getExpenditureExpenseItemName());
 			serchBalanceResult.setAmount(serchBalanceExpenditureResult.getAmount());
 			serchBalanceResult.setNote(serchBalanceExpenditureResult.getNote());
 			
 			//検証用
-			System.out.println("支出");
-			System.out.println(serchBalanceExpenditureResult.getExpenditureDate());
-			System.out.println(serchBalanceExpenditureResult.getExpenditureExpenseItemName());
-			System.out.println(serchBalanceExpenditureResult.getAmount());
-			System.out.println(serchBalanceExpenditureResult.getNote());
+			System.out.println(serchBalanceResult.getBalanceType());
+			System.out.println(serchBalanceResult.getBalanceNo());
+			System.out.println(serchBalanceResult.getBalanceDate());
+			System.out.println(serchBalanceResult.getExpenditureExpenseItemName());
+			System.out.println(serchBalanceResult.getAmount());
+			System.out.println(serchBalanceResult.getNote());
 		}
 
 		return serchBalanceResult;

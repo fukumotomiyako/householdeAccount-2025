@@ -121,6 +121,7 @@ public class HouseholdService {
 	
 		//収入検索
 		public SearchBalanceIncomeInfo getSearchIncomeInfo(String balanceNo){
+			
 			SearchBalanceIncomeInfo serchBalanceIncomeInfo = serchBalanceIncomeRepository.findByBalanceNo(balanceNo);
 			return serchBalanceIncomeInfo;
 		}
