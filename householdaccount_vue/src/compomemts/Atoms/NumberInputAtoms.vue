@@ -18,7 +18,7 @@ export default {
 
     priceValidate() {
       const price_error_message = this.priceCheckValidate(this.price)
-      if (price_error_message == 'true') {
+      if (price_error_message == true) {
         this.priceResult = ''
       }
       this.priceResult = price_error_message
@@ -28,7 +28,7 @@ export default {
       if (price.length >= 8) {
         return '8文字以内で入力してください'
       }
-      return 'true'
+      return true
     },
   },
 }

@@ -1,7 +1,6 @@
 <script lang="ts">
 export default {
   props: {
-    validatedNull: String,
     getNote: String,
   },
 
@@ -20,17 +19,17 @@ export default {
 
     noteValidate() {
       const note_error_messege = this.noteCheckValidate(this.note)
-      if (note_error_messege == 'true') {
-        this.noteResult = ''
+      if (note_error_messege == true) {
+        this.noteResult = 'aaa'
       }
       this.noteResult = note_error_messege
     },
 
     noteCheckValidate(note: any) {
-      if (note.length >= 2) {
+      if (note.length > 200) {
         return '200文字以内で入力してください'
       }
-      return 'true'
+      return true
     },
   },
 }

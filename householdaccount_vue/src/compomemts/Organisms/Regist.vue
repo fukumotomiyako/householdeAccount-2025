@@ -49,7 +49,7 @@ export default {
       ],
 
       registModal: true, //モーダル表示なのでtrue
-      validationCheck: true,
+      validationFlag: true,
 
       inputCheck: {
         radioName: '',
@@ -180,11 +180,11 @@ export default {
           this.validation.selectIncomeResult ||
           this.validation.priceResult ||
           this.validation.noteResult
-          // ||→どれかが真だったら実行
+          // どれかに値がはいっていたら真
         ) {
-          this.validationCheck = true
+          this.validationFlag = false //true
         } else {
-          this.validationCheck = false
+          this.validationFlag = false
         }
       } else if (this.setSelectRadio == '支出') {
         if (
@@ -192,22 +192,12 @@ export default {
           this.validation.selectExpenditureResult ||
           this.validation.priceResult ||
           this.validation.noteResult
-          // ||→どれかが真だったら実行
+          // どれかに値が入っていたら真
         ) {
-          this.validationCheck = true
+          this.validationFlag = false //true
         } else {
-          this.validationCheck = false
+          this.validationFlag = false
         }
-      }
-      if (
-        !this.inputCheck.date &&
-        !this.inputCheck.selectIncome &&
-        !this.inputCheck.selectExpenditure &&
-        !this.inputCheck.price &&
-        !this.inputCheck.note
-        //　&&→すべて疑だったら実行する
-      ) {
-        this.validationCheck = false
       }
     },
   },
@@ -221,8 +211,10 @@ export default {
       <div>
         <label>{{ '収支区分：' }}</label>
         <RadioButton
+          :setRadioBotton="setSelectRadio"
           :radioName1="setRadioName1"
           :radioName2="setRadioName2"
+          :notSelect="false"
           @execute-method="finalSelectRadio"
         />
       </div>
@@ -247,7 +239,7 @@ export default {
 
       <div>
         <Button
-          validatedNull="validationCheck"
+          :validatedNull="validationFlag"
           setButtonName1="保存"
           setButtonName2="キャンセル"
           @executeButton1-method="executeKeep"

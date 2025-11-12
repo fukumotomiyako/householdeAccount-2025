@@ -6,7 +6,6 @@ export default {
     ButtonAtoms,
   },
   props: {
-    buttonName: String,
     setButtonName1: String,
     setButtonName2: String,
     validatedNull: String,
@@ -20,7 +19,6 @@ export default {
       this.$emit('executeButton1-method')
     },
     executeButton2() {
-      this.Test = 'false'
       this.$emit('executeButton2-method')
     },
   },
@@ -32,7 +30,7 @@ export default {
     <ButtonAtoms
       :buttonName="setButtonName1"
       @click="executeButton1"
-      disabled="validatedNull"
+      :disabled="validatedNull"
     ></ButtonAtoms>
     <ButtonAtoms :buttonName="setButtonName2" @click="executeButton2" />
   </div>

@@ -23,6 +23,7 @@ export default {
   data() {
     return {
       Test: '', //デバック用
+      validationFlag: true,
       editInfo: {
         //DBから取得した登録情報
         balanceType: '',
@@ -40,7 +41,6 @@ export default {
         note: '',
         //DBから取得した備考
       },
-
       setRadioName1: '収入',
       setRadioName2: '支出', //ラジオボタンの名前指定
       expenditureItems: [
@@ -54,6 +54,13 @@ export default {
           //支出費目　カナ
         },
       ],
+      validation: {
+        dateResult: '',
+        incomeTypeResult: '',
+        expenditureTypeResult: '',
+        priceResult: '',
+        noteResult: '',
+      },
     }
   },
 
@@ -63,6 +70,7 @@ export default {
     this.getExpenditureItems()
     //支出費目取得
   },
+
   methods: {
     async getEditInfo() {
       //編集するデータ取得
@@ -78,6 +86,7 @@ export default {
         //try内でエラーが出たら、ここにくる
       }
     },
+
     async getExpenditureItems() {
       try {
         const response = await axios.get('http://localhost:8080/api/expenditureItems')
@@ -89,40 +98,168 @@ export default {
         console.log('取得できませんでした', error)
       }
     },
+
+    editIncome: function () {
+      //変更結果(収入)をバックエンドに送るメソッド
+      try {
+        axios.patch('http://localhost:8080/api/income/edit', this.editInfo).then((response) => {
+          console.log(response)
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    editExpenditure: function () {
+      //変更結果(支出)をバックエンドに送るメソッド
+      try {
+        axios
+          .patch('http://localhost:8080/api/expenditure/edit', this.editInfo)
+          .then((response) => {
+            console.log(response)
+          })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
     executekeep() {
       //変更内容保存処理
+      if (this.editInfo.balanceType == '収入') {
+        this.editIncome()
+      } else {
+        this.editExpenditure()
+      }
       this.executeCancel()
       //モーダルを閉じるメソッド呼び出し
     },
+
     executeCancel() {
       this.$emit('executeEdit-method')
+    },
+
+    editSetDate(date: any, dateResult: any) {
+      this.editInfo.balanceDate = date
+      this.validation.dateResult = dateResult
+      this.validationCheck()
+    },
+    editSelectIncome(selectIncome: any, selectIncomeResult: any) {
+      this.editInfo.incomeType = selectIncome
+      this.validation.incomeTypeResult = selectIncomeResult
+      this.validationCheck()
+    },
+    editSelectExpenditure(selecctExpenditure: any, selectExpenditureResult: any) {
+      this.editInfo.expenditureExpenseItemName = selecctExpenditure
+      this.validation.expenditureTypeResult = selectExpenditureResult
+      this.validationCheck()
+    },
+    editSetNumber(price: any, priceResult: any) {
+      //編集した金額
+      this.editInfo.amount = price
+      this.validation.priceResult = priceResult
+      this.validationCheck()
+    },
+    editSetNote(note: any, noteResult: any) {
+      this.editInfo.note = note
+      //情報をまとめて送る
+      this.validation.noteResult = noteResult
+      //バリデーションチェック行うためにれてる
+      this.validationCheck()
+    },
+    validationCheck() {
+      if (this.editInfo.balanceType == '収入') {
+        if (
+          this.validation.dateResult ||
+          this.validation.incomeTypeResult ||
+          this.validation.priceResult ||
+          this.validation.noteResult
+          //どれかに値が入っていたら真
+        ) {
+          this.validationFlag = true
+        } else {
+          this.validationFlag = false
+        }
+      } else if (this.editInfo.balanceType == '支出') {
+        if (
+          this.validation.dateResult ||
+          this.validation.expenditureTypeResult ||
+          this.validation.priceResult ||
+          this.validation.noteResult
+        ) {
+          this.validationFlag = true
+        } else {
+          this.validationFlag = false
+        }
+      }
     },
   },
 }
 </script>
 <template>
-  <div id="modal-content" class="modal">
-    <p>{{ editInfo }}</p>
-    <div>
-      <label>{{ '収支区分：' }}</label>
-      <RadioButton :radioName1="setRadioName1" :radioName2="setRadioName2" />
+  <div id="model">
+    <div id="modal-content" class="modal">
+      <h6>編集情報</h6>
+      <p>{{ editInfo }}</p>
+      <p>{{ validation }}</p>
+      <p>{{ validationFlag }}</p>
+      <p>{{ Test }}</p>
+      <div>
+        <label>{{ '収支区分：' }}</label>
+        <RadioButton
+          :radioName1="setRadioName1"
+          :radioName2="setRadioName2"
+          :setRadioBotton="editInfo.balanceType"
+          :notSelect="true"
+        />
+      </div>
+      <div>
+        <label>{{ '収支日付：' }}</label>
+        <DateInput
+          :getDate="editInfo.balanceDate"
+          :key="editInfo.balanceDate"
+          @execute-method="editSetDate"
+        />
+      </div>
+      <div>
+        <div v-if="editInfo.balanceType == '収入'">
+          <FormSelect
+            :selectRadioName="editInfo.balanceType"
+            :getIncome="editInfo.incomeType"
+            :items="expenditureItems"
+            :key="editInfo.incomeType"
+            @executeIncome-method="editSelectIncome"
+          />
+        </div>
+        <div v-if="editInfo.balanceType == '支出'">
+          <FormSelect
+            :selectRadioName="editInfo.balanceType"
+            :getExpenditure="editInfo.expenditureExpenseItemName"
+            :items="expenditureItems"
+            :key="editInfo.expenditureExpenseItemName"
+            @executeExpenditure-method="editSelectExpenditure"
+          />
+        </div>
+      </div>
+      <div>
+        <label>{{ '金額：' }}</label>
+        <NumberInput
+          :getPrice="editInfo.amount"
+          :key="editInfo.amount"
+          @execute-method="editSetNumber"
+        />
+      </div>
+      <div>
+        <label>備考：</label>
+        <TextArea :getNote="editInfo.note" :key="editInfo.note" @execute-method="editSetNote" />
+      </div>
+      <Button
+        setButtonName1="保存"
+        setButtonName2="キャンセル"
+        :validatedNull="validationFlag"
+        @executeButton1-method="executekeep"
+        @executeButton2-method="executeCancel"
+      />
     </div>
-    <DateInput :getDate="editInfo.balanceDate" :key="editInfo.balanceDate" />
-    <FormSelect :selectRadioName="editInfo.balanceType" :items="expenditureItems" />
-    <div>
-      <label>{{ '金額：' }}</label>
-      <NumberInput :getPrice="editInfo.amount" :key="editInfo.amount" />
-    </div>
-    <div>
-      <label>備考：</label>
-      <TextArea :getNote="editInfo.note" :key="editInfo.note" />
-    </div>
-    <Button
-      setButtonName1="保存"
-      setButtonName2="キャンセル"
-      @executeButton1-method="executekeep"
-      @executeButton2-method="executeCancel"
-    />
   </div>
 </template>
 

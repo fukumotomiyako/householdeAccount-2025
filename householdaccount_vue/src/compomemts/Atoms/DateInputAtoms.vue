@@ -19,14 +19,13 @@ export default {
     dateValidate() {
       const date_error_message = this.dateCheckValidate(this.date)
       if (date_error_message === true) {
-        this.test = 'aaa'
         this.dateResult = ''
       }
       this.dateResult = date_error_message
     },
 
-    dateCheckValidate(data: any) {
-      if (data == null) {
+    dateCheckValidate(date: any) {
+      if (date == null) {
         this.test = 'mmmm'
         return '日付を入力してください'
       }
@@ -48,7 +47,6 @@ export default {
 </script>
 
 <template>
-  <p>{{ date }}</p>
   <input type="date" v-model="date" @blur="setDate" placeholder="YYYY/MM/DD" />
   <p>{{ dateResult }}</p>
 </template>

@@ -6,8 +6,10 @@ export default {
   },
   props: {
     validatedNull: String,
+    setRadioBotton: String,
     radioName1: String,
     radioName2: String,
+    notSelect: String,
   },
   data() {
     return {
@@ -44,7 +46,17 @@ export default {
 </script>
 
 <template>
-  <RadioButtonAtoms :radioName="radioName1" @execute-method="setSelectRadio" />
+  <RadioButtonAtoms
+    :radioName="radioName1"
+    :setRadio="setRadioBotton"
+    :select="notSelect"
+    @execute-method="setSelectRadio"
+  />
   <!-- radioNameはAtomsに渡しているだけ -->
-  <RadioButtonAtoms :radioName="radioName2" @execute-method="setSelectRadio" />
+  <RadioButtonAtoms
+    :radioName="radioName2"
+    :setRadio="setRadioBotton"
+    :select="notSelect"
+    @execute-method="setSelectRadio"
+  />
 </template>

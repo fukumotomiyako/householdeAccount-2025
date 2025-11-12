@@ -1,7 +1,9 @@
 <script lang="ts">
 export default {
   props: {
+    setRadio: String,
     radioName: String,
+    select: String,
   },
   data() {
     return {
@@ -19,12 +21,12 @@ export default {
 </script>
 
 <template>
-  <span v-if="radioName == '収入'">
-    <input type="radio" name="radioCategory" @change="setRadioButton" checked />
+  <span v-if="radioName == setRadio">
+    <input type="radio" name="radioCategory" @change="setRadioButton" checked :disabled="select" />
     {{ radioName }}
   </span>
   <span v-else>
-    <input type="radio" name="radioCategory" @change="setRadioButton" />
+    <input type="radio" name="radioCategory" @change="setRadioButton" :disabled="select" />
     {{ radioName }}
   </span>
 </template>

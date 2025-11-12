@@ -2,21 +2,18 @@
 export default {
   props: {
     //親コンポーネントから渡されるデータ(プロパティ)を定義
-    //ラジオボタン選択結果:String,
-    // selectedIncomeType:String,
-    //現在選択されているタイプ　登録時には未選択なため不要
-    // selectedExpenditureType:String,
-    //現在選択されているタイプ 登録時には未選択なため不要
     validatedNull: String,
     // 入力チェック
     selectRadioName: String,
+    getIncome: String,
+    getExpenditure: String,
     items: [
       //配列　支出費目
       {
         expenditure_expense_item_code: String,
         //支出費目　添字
         expenditure_expense_item_name: String,
-        //支出費目　要素名
+        //支出費目　要素
         expenditure_expense_item_name_kana: String,
       },
     ],
@@ -24,10 +21,8 @@ export default {
   data() {
     //コンポーネントが持つデータ、状態を定義
     return {
-      //   selectIncome: this.selectedIncomeType,
-      //selectIncomeの値(選択されているもの)をselectedIncomeTypeにわたす
-      //   selectExpenditure: this.selectedExpenditureType,
-      //selectExpenditureの値(選択されているもの)をselectedExpenditureTypeにわたす
+      selectIncome: this.getIncome,
+      selectExpenditure: this.getExpenditure,
       selectIncomeResult: '',
       //  　初期化
       selectExpenditureResult: '',
