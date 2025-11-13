@@ -56,9 +56,11 @@ export default {
       ],
       validation: {
         dateResult: '',
-        incomeTypeResult: '',
-        expenditureTypeResult: '',
+        dateNumberResult: '',
+        selectIncomeResult: '',
+        selectExpenditureResult: '',
         priceResult: '',
+        priceNumberResult: '',
         noteResult: '',
       },
     }
@@ -138,9 +140,10 @@ export default {
       this.$emit('executeEdit-method')
     },
 
-    editSetDate(date: any, dateResult: any) {
+    editSetDate(date: any, dateResult: any, dateNumberResult: any) {
       this.editInfo.balanceDate = date
       this.validation.dateResult = dateResult
+      this.validation.dateNumberResult = dateNumberResult
       this.validationCheck()
     },
     editSelectIncome(selectIncome: any, selectIncomeResult: any) {
@@ -153,10 +156,11 @@ export default {
       this.validation.expenditureTypeResult = selectExpenditureResult
       this.validationCheck()
     },
-    editSetNumber(price: any, priceResult: any) {
+    editSetNumber(price: any, priceResult: any, priceNumberResult: any) {
       //編集した金額
       this.editInfo.amount = price
       this.validation.priceResult = priceResult
+      this.validation.priceNumberResult = priceNumberResult
       this.validationCheck()
     },
     editSetNote(note: any, noteResult: any) {
@@ -170,8 +174,10 @@ export default {
       if (this.editInfo.balanceType == '収入') {
         if (
           this.validation.dateResult ||
-          this.validation.incomeTypeResult ||
+          this.validation.dateNumberResult ||
+          this.validation.selectIncomeResult ||
           this.validation.priceResult ||
+          this.validation.priceNumberResult ||
           this.validation.noteResult
           //どれかに値が入っていたら真
         ) {
@@ -182,8 +188,10 @@ export default {
       } else if (this.editInfo.balanceType == '支出') {
         if (
           this.validation.dateResult ||
-          this.validation.expenditureTypeResult ||
+          this.validation.dateNumberResult ||
+          this.validation.selectExpenditureResult ||
           this.validation.priceResult ||
+          this.validation.priceNumberResult ||
           this.validation.noteResult
         ) {
           this.validationFlag = true
@@ -199,10 +207,8 @@ export default {
   <div id="model">
     <div id="modal-content" class="modal">
       <h6>編集情報</h6>
-      <p>{{ editInfo }}</p>
+      <p>{{ '編集モーダルで出力' }}</p>
       <p>{{ validation }}</p>
-      <p>{{ validationFlag }}</p>
-      <p>{{ Test }}</p>
       <div>
         <label>{{ '収支区分：' }}</label>
         <RadioButton

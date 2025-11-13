@@ -61,12 +61,14 @@ export default {
       },
 
       validation: {
-        radioButtonResult: '',
-        dateResult: '',
-        incomeTypeResult: '',
-        expenditureTypeResult: '',
-        priceResult: '',
-        noteResult: '',
+        radioButtonResult: true,
+        dateResult: true,
+        dateNumberResult: true,
+        selectIncomeResult: true,
+        selectExpenditureResult: true,
+        priceResult: true,
+        priceNumberResult: true,
+        noteResult: true,
       },
     }
   },
@@ -116,14 +118,16 @@ export default {
 
     finalSelectRadio(setRadioName: any, radioButtonResult: any) {
       this.setSelectRadio = setRadioName //選択されたラジオボタン
+      this.validation.radioButtonResult = radioButtonResult
       this.inputCheck.radioName = setRadioName
     },
 
-    finalSetDate(date: any, dateResult: any) {
+    finalSetDate(date: any, dateResult: any, dateNumberResult: any) {
       this.inputCheck.date = date
       //情報をまとめて送る
       this.validation.dateResult = dateResult
       //バリデーションチェック行うためにれてる
+      this.validation.dateNumberResult = dateNumberResult
       this.validationCheck()
       //上で入れた値をチェックするために関数呼び出し
     },
@@ -140,9 +144,10 @@ export default {
       this.validationCheck()
     },
 
-    finalSetNumber(price: any, priceResult: any) {
+    finalSetNumber(price: any, priceResult: any, priceNumberResult: any) {
       this.inputCheck.price = price
       this.validation.priceResult = priceResult
+      this.validation.priceNumberResult = priceNumberResult
       this.validationCheck()
     },
 
@@ -177,24 +182,28 @@ export default {
       if (this.setSelectRadio == '収入') {
         if (
           this.validation.dateResult ||
+          this.validation.dateNumberResult ||
           this.validation.selectIncomeResult ||
           this.validation.priceResult ||
+          this.validation.priceNumberResult ||
           this.validation.noteResult
           // どれかに値がはいっていたら真
         ) {
-          this.validationFlag = false //true
+          this.validationFlag = true
         } else {
           this.validationFlag = false
         }
       } else if (this.setSelectRadio == '支出') {
         if (
           this.validation.dateResult ||
+          this.validation.dateNumberResult ||
           this.validation.selectExpenditureResult ||
           this.validation.priceResult ||
+          this.validation.priceNumberResult ||
           this.validation.noteResult
           // どれかに値が入っていたら真
         ) {
-          this.validationFlag = false //true
+          this.validationFlag = true
         } else {
           this.validationFlag = false
         }
@@ -208,6 +217,7 @@ export default {
   <div id="modal">
     <div id="modal-content" class="modal">
       <h6>登録情報</h6>
+      <p>{{ validation }}</p>
       <div>
         <label>{{ '収支区分：' }}</label>
         <RadioButton
@@ -234,7 +244,7 @@ export default {
       </div>
       <div>
         <label>備考：</label>
-        <TextArea @execute-method="finalSetNote" validatedNull="false" />
+        <TextArea @execute-method="finalSetNote" />
       </div>
 
       <div>

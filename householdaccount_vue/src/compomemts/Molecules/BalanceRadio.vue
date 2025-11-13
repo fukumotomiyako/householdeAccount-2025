@@ -5,11 +5,10 @@ export default {
     RadioButtonAtoms,
   },
   props: {
-    validatedNull: String,
-    setRadioBotton: String,
-    radioName1: String,
-    radioName2: String,
-    notSelect: String,
+    setRadioBotton: String, //最初に選択されている状態にしたいラジオボタン名
+    radioName1: String, //表示するラジオボタンの名前
+    radioName2: String, //表示するラジオボタンの名前
+    notSelect: String, //選択可否のtrueかfalse
   },
   data() {
     return {
@@ -18,28 +17,27 @@ export default {
     }
   },
   methods: {
-    setSelectRadio(radioName: any) {
+    setSelectRadio(selectRadioName: any) {
+      this.setRadioName = selectRadioName
       this.selectRadioValidate()
-      this.setRadioName = radioName
       this.$emit('execute-method', this.setRadioName, this.radioButtonResult)
     },
 
     selectRadioValidate() {
-      const selectRadio_error_message = this.selectRadioCheckValidate(this.radioName)
-      if (selectRadio_error_message != 'true') {
+      const selectRadio_error_message = this.selectRadioCheckValidate(this.setRadioName)
+      if (selectRadio_error_message === true) {
+        this.radioButtonResult = ''
+      } else {
         this.radioButtonResult = selectRadio_error_message
       }
-      this.radioButtonResult = ''
     },
 
-    selectRadioCheckValidate() {
-      if (this.vlidalidatedNull == 'true') {
-        if (!this.selectRadio) {
-          return '選択してください'
-        }
-        return 'true'
+    selectRadioCheckValidate(setRadioName: any) {
+      if (!setRadioName) {
+        return '選択してください'
+      } else {
+        return true
       }
-      return 'true'
     },
   },
 }
@@ -59,4 +57,5 @@ export default {
     :select="notSelect"
     @execute-method="setSelectRadio"
   />
+  <p>{{ radioButtonResult }}</p>
 </template>

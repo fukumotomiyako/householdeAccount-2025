@@ -19,17 +19,20 @@ export default {
 
     noteValidate() {
       const note_error_messege = this.noteCheckValidate(this.note)
-      if (note_error_messege == true) {
-        this.noteResult = 'aaa'
+      if (note_error_messege === true) {
+        this.noteResult = ''
+      } else {
+        this.noteResult = note_error_messege
       }
-      this.noteResult = note_error_messege
     },
 
     noteCheckValidate(note: any) {
-      if (note.length > 200) {
+      if (note.length > 5) {
+        //noteが200文字以上
         return '200文字以内で入力してください'
+      } else {
+        return true
       }
-      return true
     },
   },
 }

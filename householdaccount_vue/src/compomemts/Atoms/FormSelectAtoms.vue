@@ -71,43 +71,45 @@ export default {
     selectIncomeValidate() {
       const selectIncome_error_message = this.selectIncomeCheckValidate(this.selectIncome)
       //selectIncomeCheckValidateを呼び出してincomeSelect_error_messageに入れる
-      if (selectIncome_error_message != 'true') {
+      if (selectIncome_error_message === true) {
+        this.selectIncomeResult = ''
+        //tureだったらselectIncomeResultを空にする
+      } else {
         this.selectIncomeResult = selectIncome_error_message
         //incomeSelect_error_messageがtrueじゃなかったら、incomeSelect_error_messageをselectIncomeResultに格納
       }
-      this.selectIncomeResult = ''
-      //tureだったらselectIncomeResultを空にする
     },
 
     selectExpenditureValidate() {
-      const selectIncome_error_message = this.selectExcptionCheckValidate(this.selectIncome)
+      const selectExpenditure_error_message = this.selectExpenditureCheckValidate(
+        this.selectExpenditure
+      )
       //selectIncomeCheckValidateを呼び出してincomeSelect_error_messageに入れる
-      if (selectIncome_error_message != 'true') {
-        this.selectIncomeResult = selectIncome_error_message
+      if (selectExpenditure_error_message === true) {
+        this.selectExpenditureResult = ''
+        //tureだったらselectIncomeResultを空にする
+      } else {
+        this.selectExpenditureResult = selectExpenditure_error_message
         //incomeSelect_error_messageがtrueじゃなかったら、incomeSelect_error_messageをselectIncomeResultに格納
       }
-      this.selectIncomeResult = ''
-      //tureだったらselectIncomeResultを空にする
     },
 
     selectIncomeCheckValidate(selectIncome: any) {
       //収入が選択されているかのチェック　”any”はどんな型でもOK
-      if (this.validatedNull == 'ture') {
-        //this.validatedNullがnullが”ture”のときのみincometypeが未選択かどうかのチェックを行う
-        if (!selectIncome) {
-          //selectIncomeが未選択の場合
-          return '選択してください'
-        }
+      if (!selectIncome) {
+        //selectIncomeが未選択の場合
+        return '選択してください'
+      } else {
         return true
       }
-      return true
     },
 
-    selectExcptionCheckValidate(selectExpenditure: any) {
+    selectExpenditureCheckValidate(selectExpenditure: any) {
       if (!selectExpenditure) {
         return '選択してください'
+      } else {
+        return true
       }
-      return true
     },
   },
 }
@@ -143,6 +145,7 @@ export default {
             {{}}
           </option>
         </select>
+        <div>{{}}</div>
       </div>
     </div>
 
@@ -157,10 +160,10 @@ export default {
             :key="select_income.text"
           >
             <!-- income_selectにselectsが入る　vlueは要素　keyは添字 -->
-            {{ select_income.text }}
+            {{}}
           </option>
         </select>
-        <div>{{ selectIncomeResult }}</div>
+        <div>{{}}</div>
       </div>
       <div>
         <label>{{ '支出費目：' }}</label>
