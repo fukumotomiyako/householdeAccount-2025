@@ -27,6 +27,8 @@ import com.example.householdaccount.entity.SearchBalanceExpenditureInfo;
 import com.example.householdaccount.entity.SearchBalanceIncomeInfo;
 import com.example.householdaccount.entity.SearchResultExpenditure;
 import com.example.householdaccount.entity.SearchResultIncome;
+import com.example.householdaccount.form.IncomeEditForm;
+import com.example.householdaccount.form.ExpenditureEditForm;
 import com.example.householdaccount.form.ExpenditureForm;
 import com.example.householdaccount.form.IncomeForm;
 import com.example.householdaccount.form.SearchBalanceInfo;
@@ -156,33 +158,38 @@ public class HouseholedController {
 
 	// 編集
 	@RequestMapping(value = "/income/edit", method = RequestMethod.PATCH)
-	public String incomeEdit(@RequestBody @Validated SearchBalanceInfo serchBalanceResult, BindingResult result) {
+	public String incomeEdit(@RequestBody @Validated IncomeEditForm editincomeForm, BindingResult result) {
 		
 		if(result.hasErrors()) {
 		     return "編集できません";
 		    }
-		System.out.println(serchBalanceResult.getBalanceType());
-		System.out.println(serchBalanceResult.getBalanceNo());
-		System.out.println(serchBalanceResult.getBalanceDate());
-		System.out.println(serchBalanceResult.getIncomeType());
-		System.out.println(serchBalanceResult.getAmount());
-		System.out.println(serchBalanceResult.getNote());
+		System.out.println(editincomeForm.getBalanceType());
+		System.out.println(editincomeForm.getBalanceNo());
+		System.out.println(editincomeForm.getBalanceDate());
+		System.out.println(editincomeForm.getIncomeType());
+		System.out.println(editincomeForm.getAmount());
+		System.out.println(editincomeForm.getNote());
+		
+		householdService.incomeEdit(editincomeForm);
 		
 		return "編集が完了しました";
 	}
 	
 	@RequestMapping(value = "/expenditure/edit", method = RequestMethod.PATCH)
-	public String expenditureEdit(@RequestBody @Validated SearchBalanceInfo serchBalanceResult, BindingResult result) {
+	public String expenditureEdit(@RequestBody @Validated  ExpenditureEditForm expenditureEditForm, BindingResult result) {
 		
 		if(result.hasErrors()) {
 		     return "編集できません";
 		    }
-		System.out.println(serchBalanceResult.getBalanceType());
-		System.out.println(serchBalanceResult.getBalanceNo());
-		System.out.println(serchBalanceResult.getBalanceDate());
-		System.out.println(serchBalanceResult.getExpenditureExpenseItemName());
-		System.out.println(serchBalanceResult.getAmount());
-		System.out.println(serchBalanceResult.getNote());
+		System.out.println("しゅとくできたよおおおおおおおおおお");
+		System.out.println(expenditureEditForm.getBalanceType());
+		System.out.println(expenditureEditForm.getBalanceNo());
+		System.out.println(expenditureEditForm.getBalanceDate());
+		System.out.println(expenditureEditForm.getExpenditureExpenseItemName());
+		System.out.println(expenditureEditForm.getAmount());
+		System.out.println(expenditureEditForm.getNote());
+		
+		householdService.expenditureEdit(expenditureEditForm);
 		
 		return "編集が完了しました";
 	}

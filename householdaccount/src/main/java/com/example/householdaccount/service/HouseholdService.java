@@ -16,8 +16,11 @@ import com.example.householdaccount.entity.SearchBalanceExpenditureInfo;
 import com.example.householdaccount.entity.SearchBalanceIncomeInfo;
 import com.example.householdaccount.entity.SearchResultExpenditure;
 import com.example.householdaccount.entity.SearchResultIncome;
+import com.example.householdaccount.form.ExpenditureEditForm;
 import com.example.householdaccount.form.ExpenditureForm;
+import com.example.householdaccount.form.IncomeEditForm;
 import com.example.householdaccount.form.IncomeForm;
+import com.example.householdaccount.form.SearchBalanceInfo;
 import com.example.householdaccount.repository.mybatis.ExpenditureRepository;
 import com.example.householdaccount.repository.mybatis.GetExpenditureItemsRepository;
 import com.example.householdaccount.repository.mybatis.IncomeRepository;
@@ -131,6 +134,38 @@ public class HouseholdService {
 			SearchBalanceExpenditureInfo serchBalanceExpenditureInfo = serchBalanceExpenditureRepository.findByBalanceNo(balanceNo);
 			return serchBalanceExpenditureInfo;
 		}
+	
+	//編集データ登録
+		//収入
+	public Income incomeEdit(IncomeEditForm incomeEditForm) {
+		
+		//バージョン取得して、＋１する
+		String incomeNo = incomeEditForm.getBalanceNo(); 
+		Integer incomeVersion = incomeRepository.findByIncomeNo(incomeNo);
+		incomeVersion = incomeVersion+1;
+		
+		Income income = new Income(incomeEditForm,incomeVersion);
+		incomeRepository.save(income);
+		return income;
+	}
+	
+//	支出
+	public Expenditure expenditureEdit(ExpenditureEditForm expenditureEditForm) {
+		//アイテムコード取得
+		String expenditureItemName = expenditureEditForm.getExpenditureExpenseItemName();
+		ExpenditureItems expenditureItems = expenditureItemRepository
+				.findByExpenditureExpenseItemName(expenditureItemName);
+		ExpenditureExpenseItemCodeVO expenditureExpenseItemCode = expenditureItems.getExpenditure_expense_item_code();
+		
+		//バージョン取得して、＋１する
+		String expenditureNo = expenditureEditForm.getBalanceNo(); 
+		Integer expenditureVersion = expenditureRepository.findByExpenditureNo(expenditureNo);
+		expenditureVersion = expenditureVersion+1;
+		
+		Expenditure expenditure = new Expenditure(expenditureEditForm,expenditureExpenseItemCode,expenditureVersion);
+		expenditureRepository.save(expenditure);
+		return expenditure;
+	}
 
 	//検索
 	@Autowired

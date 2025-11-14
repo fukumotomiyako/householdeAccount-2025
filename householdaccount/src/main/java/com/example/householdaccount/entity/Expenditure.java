@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.example.householdaccount.common.SystemItemVO;
 import com.example.householdaccount.entity.ExpenditureItems.ExpenditureExpenseItemCodeVO;
+import com.example.householdaccount.form.ExpenditureEditForm;
 import com.example.householdaccount.form.ExpenditureForm;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -87,6 +88,17 @@ public class Expenditure {
 //		this.initialCreateUserCode="aa";
 //		this.lastUpdateUserCode="bb";
 		this.version=0;
+	}
+	
+	public Expenditure(ExpenditureEditForm expenditureEditForm,ExpenditureExpenseItemCodeVO expenditureExpenseItemCode,Integer expenditureVersion) {
+		this.expenditure_no = ExpenditureNoVO.of(expenditureEditForm.getBalanceNo());
+		this.amount = expenditureEditForm.getAmount();
+		this.expenditureExpenseItemCode=expenditureExpenseItemCode;
+		this.expenditureExpenseItemName = expenditureEditForm.getExpenditureExpenseItemName();
+		this.expenditureDate = expenditureEditForm.getBalanceDate();
+		this.note = expenditureEditForm.getNote();
+		this.deleteFrag=false;
+		this.version=expenditureVersion;
 	}
 	
 	//支出VO

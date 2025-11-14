@@ -15,7 +15,9 @@ import org.jmolecules.ddd.types.Identifier;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.example.householdaccount.common.SystemItemVO;
+import com.example.householdaccount.form.IncomeEditForm;
 import com.example.householdaccount.form.IncomeForm;
+import com.example.householdaccount.form.SearchBalanceInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
@@ -88,6 +90,16 @@ public class Income {
 //		this.lastUpdateUserCode="bb";
 		//不変だから直接入れる
 		this.version=0;
+	}
+	
+	public Income(IncomeEditForm editIncomeForm,Integer incomeVersion) {
+		this.incomeNo=IncomeNoVO.of(editIncomeForm.getBalanceNo());
+		this.amount=editIncomeForm.getAmount();
+		this.incomeType=editIncomeForm.getIncomeType();
+		this.incomeDate=editIncomeForm.getBalanceDate();
+		this.note=editIncomeForm.getNote();
+		this.deleteFlag=false;
+		this.version=incomeVersion;
 	}
 	
 	@ValueObject
