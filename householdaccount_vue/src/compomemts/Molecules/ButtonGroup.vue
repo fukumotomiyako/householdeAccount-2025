@@ -5,10 +5,11 @@ export default {
   components: {
     ButtonAtoms,
   },
+  emits: ['executeButton1-method', 'executeButton2-method'],
   props: {
     setButtonName1: String,
     setButtonName2: String,
-    validatedNull: String,
+    validatedNull: Boolean,
   },
   data() {
     return {}

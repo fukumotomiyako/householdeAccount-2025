@@ -2,7 +2,6 @@
 export default {
   props: {
     //親コンポーネントから渡されるデータ(プロパティ)を定義
-    validatedNull: String,
     // 入力チェック
     selectRadioName: String,
     getIncome: String,
@@ -18,6 +17,7 @@ export default {
       },
     ],
   },
+  emits: ['executeIncome-method', 'executeExpenditure-method', 'executeNotSelect-methods'],
   data() {
     //コンポーネントが持つデータ、状態を定義
     return {

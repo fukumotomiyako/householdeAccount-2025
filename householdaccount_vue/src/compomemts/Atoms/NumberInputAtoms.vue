@@ -1,13 +1,18 @@
 <script lang="ts">
 export default {
   props: ['getPrice'],
+  emits: ['execute-method'],
 
   data() {
     return {
-      price: this.getPrice,
+      price: '',
       priceResult: '',
+      priceNumberResult: '',
       test: '',
     }
+  },
+  mounted() {
+    this.price = this.getPrice
   },
 
   methods: {
@@ -27,7 +32,7 @@ export default {
     },
 
     priceCheckValidate(price: any) {
-      if (!price || String(price).length > 8) {
+      if (!price || String(price).length > 8 || price == 0) {
         return '8文字以内で入力してください'
       } else {
         return true
@@ -61,6 +66,7 @@ export default {
 
 <template>
   <input type="number" v-model="price" placeholder="8桁以内で入力" @blur="setPrice" />
+  <p>{{ 'NumberInputAtomsで出力' }}</p>
   <p>{{ priceNumberResult }}</p>
   <p>{{ priceResult }}</p>
 </template>

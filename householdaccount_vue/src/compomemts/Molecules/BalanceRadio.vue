@@ -4,11 +4,12 @@ export default {
   components: {
     RadioButtonAtoms,
   },
+  emits: ['execute-method'],
   props: {
     setRadioBotton: String, //最初に選択されている状態にしたいラジオボタン名
     radioName1: String, //表示するラジオボタンの名前
     radioName2: String, //表示するラジオボタンの名前
-    notSelect: String, //選択可否のtrueかfalse
+    notSelect: Boolean, //選択可否のtrueかfalse
   },
   data() {
     return {

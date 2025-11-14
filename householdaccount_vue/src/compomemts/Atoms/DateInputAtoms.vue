@@ -1,12 +1,18 @@
 <script lang="ts">
 export default {
   props: ['getDate', 'id'],
+  emits: ['execute-method'],
 
   data() {
     return {
-      date: this.getDate,
+      date: '',
       dateResult: '',
+      dateNumberResult: '',
     }
+  },
+
+  mounted() {
+    this.date = this.getDate
   },
 
   methods: {
@@ -59,7 +65,6 @@ export default {
 
 <template>
   <input type="date" v-model="date" @blur="setDate" placeholder="YYYY/MM/DD" :id="id" />
-  <p>{{ 'dateAtomsで出力' }}</p>
   <p>{{ dateNumberResult }}</p>
   <p>{{ dateResult }}</p>
 </template>

@@ -3,8 +3,9 @@ export default {
   props: {
     setRadio: String, //最初に選択されている状態にしたいラジオボタン名
     radioName: String, //表示するラジオボタンの名前
-    select: String, //選択可否のtrueかfalse
+    select: Boolean, //選択可否のtrueかfalse
   },
+  emits: ['execute-method'],
   data() {
     return {
       selectRadioName: '',

@@ -3,12 +3,17 @@ export default {
   props: {
     getNote: String,
   },
+  emits: ['execute-method'],
 
   data() {
     return {
-      note: this.getNote,
+      note: '',
       noteResult: '',
     }
+  },
+
+  mounted() {
+    this.note = this.getNote
   },
 
   methods: {
