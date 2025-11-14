@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  props: ['getDate'],
+  props: ['getDate', 'id'],
 
   data() {
     return {
@@ -43,7 +43,11 @@ export default {
     },
 
     dateNumberCheckValidate(date: any) {
-      if (!/^\d+$/.test(String(date))) {
+      if (/^\d{4}\/\d{2}\/\d{2}$/.test(date)) {
+        //正規表現　/../の中に書くことで、一致するか判定
+        //^文字列の先頭という意味
+        //d{4}数字が4回繰り返される
+        //test　正規表現に一致するか判定　一致したらtrue 一致しなければfalse
         return '数字のみ入力できます'
       } else {
         return true
@@ -54,7 +58,7 @@ export default {
 </script>
 
 <template>
-  <input type="date" v-model="date" @blur="setDate" placeholder="YYYY/MM/DD" />
+  <input type="date" v-model="date" @blur="setDate" placeholder="YYYY/MM/DD" :id="id" />
   <p>{{ 'dateAtomsで出力' }}</p>
   <p>{{ dateNumberResult }}</p>
   <p>{{ dateResult }}</p>

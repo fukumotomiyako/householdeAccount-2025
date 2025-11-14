@@ -46,6 +46,10 @@ export default {
 
     priceNumberCheckValidate(price: any) {
       if (!/^\d+$/.test(String(price))) {
+        //正規表現
+        //^　文字列の先頭
+        //d　数字
+        //$　文字列の末尾　数字だけで構成された文字列
         return '数字のみ入力できます'
       } else {
         return true

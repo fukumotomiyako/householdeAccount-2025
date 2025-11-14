@@ -221,6 +221,7 @@ export default {
       <div>
         <label>{{ '収支日付：' }}</label>
         <DateInput
+          id="日付"
           :getDate="editInfo.balanceDate"
           :key="editInfo.balanceDate"
           @execute-method="editSetDate"
