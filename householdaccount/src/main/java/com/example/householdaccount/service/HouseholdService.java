@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.example.householdaccount.entity.Expenditure;
 import com.example.householdaccount.entity.ExpenditureItems;
 import com.example.householdaccount.entity.ExpenditureItems.ExpenditureExpenseItemCodeVO;
+import com.example.householdaccount.entity.Income.IncomeNoVO;
 import com.example.householdaccount.entity.Income;
 import com.example.householdaccount.entity.SearchBalanceExpenditureInfo;
 import com.example.householdaccount.entity.SearchBalanceIncomeInfo;
@@ -115,59 +117,107 @@ public class HouseholdService {
 		expenditureRepository.save(expenditure);
 		return expenditure;
 	}
-	
-	//支出データ取得(編集)
+
+	// 支出データ取得(編集)
 	@Autowired
 	SearchBalanceIncomeInfoRepository serchBalanceIncomeRepository;
 	@Autowired
 	SearchBalanceExpenditureRepository serchBalanceExpenditureRepository;
-	
-		//収入検索
-		public SearchBalanceIncomeInfo getSearchIncomeInfo(String balanceNo){
-			
-			SearchBalanceIncomeInfo serchBalanceIncomeInfo = serchBalanceIncomeRepository.findByBalanceNo(balanceNo);
-			return serchBalanceIncomeInfo;
-		}
-		
-		//支出検索
-		public SearchBalanceExpenditureInfo getSearchExpenditureInfo(String balanceNo) {
-			SearchBalanceExpenditureInfo serchBalanceExpenditureInfo = serchBalanceExpenditureRepository.findByBalanceNo(balanceNo);
-			return serchBalanceExpenditureInfo;
-		}
-	
-	//編集データ登録
-		//収入
+
+	// 収入検索
+	public SearchBalanceIncomeInfo getSearchIncomeInfo(String balanceNo) {
+
+		SearchBalanceIncomeInfo serchBalanceIncomeInfo = serchBalanceIncomeRepository.findByBalanceNo(balanceNo);
+		return serchBalanceIncomeInfo;
+	}
+
+	// 支出検索
+	public SearchBalanceExpenditureInfo getSearchExpenditureInfo(String balanceNo) {
+		SearchBalanceExpenditureInfo serchBalanceExpenditureInfo = serchBalanceExpenditureRepository
+				.findByBalanceNo(balanceNo);
+		return serchBalanceExpenditureInfo;
+	}
+
+	// 編集データ登録
+	// 収入
 	public Income incomeEdit(IncomeEditForm incomeEditForm) {
-		
-		//バージョン取得して、＋１する
-		String incomeNo = incomeEditForm.getBalanceNo(); 
+
+		// バージョン取得して、＋１する
+		String incomeNo = incomeEditForm.getBalanceNo();
 		Integer incomeVersion = incomeRepository.findByIncomeNo(incomeNo);
-		incomeVersion = incomeVersion+1;
-		
-		Income income = new Income(incomeEditForm,incomeVersion);
+		incomeVersion = incomeVersion + 1;
+
+		Income income = new Income(incomeEditForm, incomeVersion);
 		incomeRepository.save(income);
 		return income;
 	}
-	
+
 //	支出
 	public Expenditure expenditureEdit(ExpenditureEditForm expenditureEditForm) {
-		//アイテムコード取得
+		// アイテムコード取得
 		String expenditureItemName = expenditureEditForm.getExpenditureExpenseItemName();
 		ExpenditureItems expenditureItems = expenditureItemRepository
 				.findByExpenditureExpenseItemName(expenditureItemName);
 		ExpenditureExpenseItemCodeVO expenditureExpenseItemCode = expenditureItems.getExpenditure_expense_item_code();
-		
-		//バージョン取得して、＋１する
-		String expenditureNo = expenditureEditForm.getBalanceNo(); 
+
+		// バージョン取得して、＋１する
+		String expenditureNo = expenditureEditForm.getBalanceNo();
 		Integer expenditureVersion = expenditureRepository.findByExpenditureNo(expenditureNo);
-		expenditureVersion = expenditureVersion+1;
-		
-		Expenditure expenditure = new Expenditure(expenditureEditForm,expenditureExpenseItemCode,expenditureVersion);
+		expenditureVersion = expenditureVersion + 1;
+
+		Expenditure expenditure = new Expenditure(expenditureEditForm, expenditureExpenseItemCode, expenditureVersion);
 		expenditureRepository.save(expenditure);
 		return expenditure;
 	}
 
-	//検索
+//削除
+	// 収入
+	public Income incomeDelete(String incomeNo) {
+		//incomeNoを引数に、テーブルの１行も取得するリポジトリ呼び出し
+		Income incomeInfo = incomeRepository.findById(incomeNo);
+		//コンストラクタ呼び出し
+		Income income = new Income(incomeInfo);
+		
+//		// バージョン取得
+//		Integer incomeVersion = incomeRepository.findByIncomeNo(incomeNo);
+//
+//		// incomeNoを引数に、DBから一行取得
+//		SearchBalanceIncomeInfo serchBalanceIncomeInfo = serchBalanceIncomeRepository.findByBalanceNo(incomeNo);
+//
+//		// コンストラクタ呼び出し
+//		Income income = new Income(incomeNo, serchBalanceIncomeInfo, incomeVersion);
+//
+		// 保存
+		return incomeRepository.save(income);
+	}
+
+	// 支出
+	public Expenditure expenditureDelete(String expenditureNo) {
+
+		Expenditure expenditureInfo = expenditureRepository.findById(expenditureNo);
+		Expenditure expenditure = new Expenditure(expenditureInfo);
+
+//		// バージョン取得
+//		Integer expenditureVersion = expenditureRepository.findByExpenditureNo(expenditureNo);
+//
+//		// expenditureNoを引数に、DBから一行取得
+//		SearchBalanceExpenditureInfo serchBalanceExpenditureInfo = serchBalanceExpenditureRepository
+//				.findByBalanceNo(expenditureNo);
+//
+//		// アイテムコード取得
+//		String expenditureItemName = serchBalanceExpenditureInfo.getExpenditureExpenseItemName();
+//		ExpenditureItems expenditureItems = expenditureItemRepository
+//				.findByExpenditureExpenseItemName(expenditureItemName);
+//		ExpenditureExpenseItemCodeVO expenditureExpenseItemCode = expenditureItems.getExpenditure_expense_item_code();
+//		
+//		// コンストラクタ呼び出し
+//		Expenditure expenditure = new Expenditure(expenditureNo, expenditureVersion, serchBalanceExpenditureInfo,expenditureExpenseItemCode);
+
+		// 保存
+		return expenditureRepository.save(expenditure);
+	}
+
+	// 検索
 	@Autowired
 	private SearchIncomeHouseholdRepository searchIncomeHouseholdRepository;
 
@@ -176,7 +226,8 @@ public class HouseholdService {
 
 //収入データの通常検索
 	public List<SearchResultIncome> getSearchIncomeInfoList(String balanceCode) {
-		List<SearchResultIncome> searchIncomeInfoList = searchIncomeHouseholdRepository.findIncomeByBalanceCode(balanceCode);
+		List<SearchResultIncome> searchIncomeInfoList = searchIncomeHouseholdRepository
+				.findIncomeByBalanceCode(balanceCode);
 
 		// 単体テスト用のNullPointerExceptionをthrowする処理
 //		if(searchIncomeInfoList.isEmpty()) {
@@ -188,7 +239,8 @@ public class HouseholdService {
 
 //支出データの通常検索
 	public List<SearchResultExpenditure> getSearchExpenditureInfoList(String balanceCode) {
-		List<SearchResultExpenditure> searchExpenditureInfoList = searchExpenditureHouseholdRepository.findExpenditureByBalanceCode(balanceCode);
+		List<SearchResultExpenditure> searchExpenditureInfoList = searchExpenditureHouseholdRepository
+				.findExpenditureByBalanceCode(balanceCode);
 
 //		System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 //		System.out.println(searchExpenditureInfoList);

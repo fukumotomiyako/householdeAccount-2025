@@ -3,6 +3,7 @@ package com.example.householdaccount.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -100,6 +101,26 @@ public class Income {
 		this.note=editIncomeForm.getNote();
 		this.deleteFlag=false;
 		this.version=incomeVersion;
+	}
+	
+//	public Income(String incomeNo,SearchBalanceIncomeInfo serchBalanceIncomeInfo,Integer incomeVersion) {
+//		this.incomeNo=IncomeNoVO.of(incomeNo);
+//		this.amount=serchBalanceIncomeInfo.getAmount();
+//		this.incomeType=serchBalanceIncomeInfo.getIncomeType();
+//		this.incomeDate=serchBalanceIncomeInfo.getIncomeDate();
+//		this.note=serchBalanceIncomeInfo.getNote();
+//		this.deleteFlag=true;
+//		this.version=incomeVersion;
+//	}
+//	
+	public Income(Income incomeInfo) {
+		this.incomeNo=incomeInfo.getIncomeNo();
+		this.amount=incomeInfo.getAmount();
+		this.incomeType=incomeInfo.getIncomeType();
+		this.incomeDate=incomeInfo.getIncomeDate();
+		this.note=incomeInfo.getNote();
+		this.deleteFlag=true;
+		this.version=incomeInfo.getVersion();
 	}
 	
 	@ValueObject

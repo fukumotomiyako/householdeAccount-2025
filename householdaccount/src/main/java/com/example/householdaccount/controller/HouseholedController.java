@@ -157,41 +157,53 @@ public class HouseholedController {
 	}
 
 	// 編集
+	//収入
 	@RequestMapping(value = "/income/edit", method = RequestMethod.PATCH)
 	public String incomeEdit(@RequestBody @Validated IncomeEditForm editincomeForm, BindingResult result) {
 		
 		if(result.hasErrors()) {
 		     return "編集できません";
 		    }
-		System.out.println(editincomeForm.getBalanceType());
-		System.out.println(editincomeForm.getBalanceNo());
-		System.out.println(editincomeForm.getBalanceDate());
-		System.out.println(editincomeForm.getIncomeType());
-		System.out.println(editincomeForm.getAmount());
-		System.out.println(editincomeForm.getNote());
 		
+		//service呼び出し
 		householdService.incomeEdit(editincomeForm);
 		
 		return "編集が完了しました";
 	}
 	
+	//支出
 	@RequestMapping(value = "/expenditure/edit", method = RequestMethod.PATCH)
 	public String expenditureEdit(@RequestBody @Validated  ExpenditureEditForm expenditureEditForm, BindingResult result) {
 		
 		if(result.hasErrors()) {
 		     return "編集できません";
 		    }
-		System.out.println("しゅとくできたよおおおおおおおおおお");
-		System.out.println(expenditureEditForm.getBalanceType());
-		System.out.println(expenditureEditForm.getBalanceNo());
-		System.out.println(expenditureEditForm.getBalanceDate());
-		System.out.println(expenditureEditForm.getExpenditureExpenseItemName());
-		System.out.println(expenditureEditForm.getAmount());
-		System.out.println(expenditureEditForm.getNote());
 		
+		//service呼び出し
 		householdService.expenditureEdit(expenditureEditForm);
 		
 		return "編集が完了しました";
+	}
+	
+	//削除
+	//収入
+	@RequestMapping(value="/income/{incomeNo}/delete",method=RequestMethod.PUT)
+	public String incomeDelete(@PathVariable String incomeNo) {
+		//service呼び出し
+		householdService.incomeDelete(incomeNo);
+		
+		System.out.println(incomeNo);
+		return "削除しました";
+	}
+	
+	//支出
+	@RequestMapping(value="/expenditure/{expenditureNo}/delete",method=RequestMethod.PUT)
+	public String expenditureDelete(@PathVariable String expenditureNo) {
+		//service呼び出し
+		householdService.expenditureDelete(expenditureNo);
+		
+		System.out.println(expenditureNo);
+		return "削除しました";
 	}
 
 	// 収入データと支出データを同時に検索して、同時に結果を返す(通常検索)

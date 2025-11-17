@@ -11,4 +11,7 @@ public interface ExpenditureRepository extends JpaRepository<Expenditure,Expendi
 
 	@Query(value = "SELECT e.VERSION FROM EXPENDITURE_INFO AS e WHERE e.EXPENDITURE_NO = :expenditureNo",nativeQuery = true)
 	Integer findByExpenditureNo(@Param("expenditureNo") String expenditureNo);
+	
+	@Query(value = "SELECT * FROM EXPENDITURE_INFO AS e WHERE e.EXPENDITURE_NO = :expenditureNo",nativeQuery = true)
+	Expenditure findById(@Param("expenditureNo") String expenditureNo);
 }
