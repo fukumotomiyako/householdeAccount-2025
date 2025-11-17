@@ -11,6 +11,7 @@ export default {
   props: {
     balanceNo: String,
   },
+  emits: ['executeEdit-method'],
   components: {
     //使用するコンポーネントを宣言
     RadioButton,

@@ -14,6 +14,7 @@ const header = ref([
 <script lang = "ts">
 import regist from '../src/compomemts/Organisms/Regist.vue'
 import edit from '../src/compomemts/Organisms/Edit.vue'
+import Delete from '../src/compomemts/Organisms/Delete.vue'
 import axios from 'axios'
 import { createApp, ref } from 'vue'
 
@@ -21,13 +22,17 @@ export default {
   components: {
     regist,
     edit,
+    Delete,
   },
   data() {
     return {
-      Text: '', //デバック用
-      setBalanceNo: '',
+      test: 'cccccc', //デバック用
+      setBalanceNo: '', //収支検索
+      setIncomeNo: '', //収入削除
+      setExpenditureNo: '', //支出削除
       regist_modal: false,
       edit_modal: false,
+      delete_modal: false,
       searchResultBalanceInfo: [
         {
           balanceCode: '',
@@ -99,7 +104,7 @@ export default {
       this.regist_modal = false
     },
 
-    excuteEdit(balanceCode: any) {
+    executeEdit(balanceCode: any) {
       this.edit_modal = true
       this.setBalanceNo = balanceCode
     },
@@ -107,12 +112,30 @@ export default {
     editReturn() {
       this.edit_modal = false
     },
+
+    //収入で削除をが押されたら呼び出される
+    executeIncomeDelete(balanceCode: any) {
+      //取得したCodeをsetIncomeNoにセット
+      this.setIncomeNo = balanceCode
+      //モーダル表示
+      this.delete_modal = true
+    },
+
+    executeExpenditureDelete(balanceCode: any) {
+      this.setExpenditureNo = balanceCode
+      this.delete_modal = true
+    },
+
+    deleteReturn() {
+      this.delete_modal = false
+    },
   },
 }
 </script>
  
 <template>
   <div>
+    <!-- 検索値入力テキストエリア -->
     <input
       type="text"
       v-model="searchBalanceCode"
@@ -128,11 +151,20 @@ export default {
     </div>
 
     <!-- 編集モーダル表示 -->
-    <p>{{ edit_modal }}</p>
     <div v-if="edit_modal == true">
       <edit :balanceNo="setBalanceNo" @executeEdit-method="editReturn" />
     </div>
 
+    <!-- 削除モーダル表示 -->
+    <div v-if="delete_modal == true">
+      <Delete
+        :expenditureNo="setExpenditureNo"
+        :incomeNo="setIncomeNo"
+        @executeDelete-method="deleteReturn"
+      />
+    </div>
+
+    <!-- 検索結果一覧表示 -->
     <div class="table_box" v-if="searchFrag == true">
       <table class="table_style">
         <thead>
@@ -150,8 +182,8 @@ export default {
             <td>{{ balancedata.incomeTypeName }}</td>
             <td>{{ balancedata.amount }}</td>
             <td>{{ balancedata.note }}</td>
-            <td><button @click="excuteEdit(balancedata.balanceCode)">編集</button></td>
-            <td><button>削除</button></td>
+            <td><button @click="executeEdit(balancedata.balanceCode)">編集</button></td>
+            <td><button @click="executeIncomeDelete(balancedata.balanceCode)">削除</button></td>
           </tr>
           <tr v-if="balancedata.balanceType == '支出'">
             <td>{{ balancedata.balanceCode }}</td>
@@ -160,8 +192,10 @@ export default {
             <td>{{ balancedata.expenditureExpenseItemName }}</td>
             <td>{{ balancedata.amount }}</td>
             <td>{{ balancedata.note }}</td>
-            <td><button @click="excuteEdit(balancedata.balanceCode)">編集</button></td>
-            <td><button>削除</button></td>
+            <td><button @click="executeEdit(balancedata.balanceCode)">編集</button></td>
+            <td>
+              <button @click="executeExpenditureDelete(balancedata.balanceCode)">削除</button>
+            </td>
           </tr>
         </tbody>
       </table>
