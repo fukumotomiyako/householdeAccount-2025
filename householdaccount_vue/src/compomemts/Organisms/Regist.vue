@@ -52,6 +52,7 @@ export default {
       validationFlag: true,
 
       inputCheck: {
+        //入力結果が入る
         radioName: '',
         date: '',
         selectIncome: '',
@@ -60,15 +61,23 @@ export default {
         note: '',
       },
 
+      errorMessage: {
+        //エラーメッセージが入る
+        radioButtonResult: '',
+        dateResult: '',
+        selectIncomeResult: '',
+        selectExpenditureResult: '',
+        priceResult: '',
+        noteResult: '',
+      },
+
       validation: {
-        radioButtonResult: true,
-        dateResult: true,
-        dateNumberResult: true,
-        selectIncomeResult: true,
-        selectExpenditureResult: true,
-        priceResult: true,
-        priceNumberResult: true,
-        noteResult: true,
+        radioValidation: false,
+        dateValidation: false,
+        incomeValidation: false,
+        expenditureValidation: false,
+        priceValidation: false,
+        noteValidation: true,
       },
     }
   },
@@ -116,46 +125,54 @@ export default {
       }
     },
 
-    finalSelectRadio(setRadioName: any, radioButtonResult: any) {
+    finalSelectRadio(setRadioName: any, radioButtonResult: any, radioValidation: any) {
       this.setSelectRadio = setRadioName //選択されたラジオボタン
-      this.validation.radioButtonResult = radioButtonResult
+      this.errorMessage.radioButtonResult = radioButtonResult
+      this.validation.radioValidation = radioValidation
       this.inputCheck.radioName = setRadioName
     },
 
-    finalSetDate(date: any, dateResult: any, dateNumberResult: any) {
+    finalSetDate(date: any, dateResult: any, dateValidation: any) {
       this.inputCheck.date = date
       //情報をまとめて送る
-      this.validation.dateResult = dateResult
+      this.errorMessage.dateResult = dateResult
       //バリデーションチェック行うためにれてる
-      this.validation.dateNumberResult = dateNumberResult
+      this.validation.dateValidation = dateValidation
       this.validationCheck()
       //上で入れた値をチェックするために関数呼び出し
     },
 
-    finalselectIncomeType(selectIncome: any, selectIncomeResult: any) {
-      this.inputCheck.selectIncome = selectIncome
-      this.validation.selectIncomeResult = selectIncomeResult
+    finalselectIncomeType(incomeType: any, selectIncomeResult: any, incomeValidation: any) {
+      this.inputCheck.selectIncome = incomeType
+      this.errorMessage.selectIncomeResult = selectIncomeResult
+      this.validation.incomeValidation = incomeValidation
       this.validationCheck()
     },
 
-    finalselectExpenditureType(selectExpenditure: any, selectExpenditureResult: any) {
-      this.inputCheck.selectExpenditure = selectExpenditure
-      this.validation.selectExpenditureResult = selectExpenditureResult
+    finalselectExpenditureType(
+      expenditureType: any,
+      selectExpenditureResult: any,
+      expenditureValidation: any
+    ) {
+      this.inputCheck.selectExpenditure = expenditureType
+      this.errorMessage.selectExpenditureResult = selectExpenditureResult
+      this.validation.expenditureValidation = expenditureValidation
       this.validationCheck()
     },
 
-    finalSetNumber(price: any, priceResult: any, priceNumberResult: any) {
+    finalSetNumber(price: any, priceResult: any, priceValidation: any) {
       this.inputCheck.price = price
-      this.validation.priceResult = priceResult
-      this.validation.priceNumberResult = priceNumberResult
+      this.errorMessage.priceResult = priceResult
+      this.validation.priceValidation = priceValidation
       this.validationCheck()
     },
 
-    finalSetNote(note: any, noteResult: any) {
+    finalSetNote(note: any, noteResult: any, noteValidation: any) {
       this.inputCheck.note = note
       //情報をまとめて送る
-      this.validation.noteResult = noteResult
+      this.errorMessage.noteResult = noteResult
       //バリデーションチェック行うためにれてる
+      this.validation.noteValidation = noteValidation
       this.validationCheck()
       //上で入れた値をチェックするために関数呼び出し
     },
@@ -181,31 +198,27 @@ export default {
     validationCheck() {
       if (this.setSelectRadio == '収入') {
         if (
-          this.validation.dateResult ||
-          this.validation.dateNumberResult ||
-          this.validation.selectIncomeResult ||
-          this.validation.priceResult ||
-          this.validation.priceNumberResult ||
-          this.validation.noteResult
-          // どれかに値がはいっていたら真
+          this.validation.dateValidation &&
+          this.validation.incomeValidation &&
+          this.validation.priceValidation &&
+          this.validation.noteValidation
+          //すべてtrueだったら
         ) {
-          this.validationFlag = true
-        } else {
           this.validationFlag = false
+        } else {
+          this.validationFlag = true
         }
       } else if (this.setSelectRadio == '支出') {
         if (
-          this.validation.dateResult ||
-          this.validation.dateNumberResult ||
-          this.validation.selectExpenditureResult ||
-          this.validation.priceResult ||
-          this.validation.priceNumberResult ||
-          this.validation.noteResult
-          // どれかに値が入っていたら真
+          this.validation.dateValidation &&
+          this.validation.expenditureValidation &&
+          this.validation.priceValidation &&
+          this.validation.noteValidation
         ) {
-          this.validationFlag = true
-        } else {
           this.validationFlag = false
+          //すべてtrueだったら
+        } else {
+          this.validationFlag = true
         }
       }
     },
@@ -217,7 +230,6 @@ export default {
   <div id="modal">
     <div id="modal-content" class="modal">
       <h6>登録情報</h6>
-      <p>{{ validation }}</p>
       <div>
         <label>{{ '収支区分：' }}</label>
         <RadioButton
@@ -227,24 +239,36 @@ export default {
           :notSelect="false"
           @execute-method="finalSelectRadio"
         />
+        <p>{{ errorMessage.radioButtonResult }}</p>
       </div>
       <div>
         <label>{{ '収支日付：' }}</label>
         <DateInput @execute-method="finalSetDate" />
+        <p>{{ errorMessage.dateResult }}</p>
       </div>
-      <FormSelect
-        :selectRadioName="setSelectRadio"
-        :items="expenditureItems"
-        @executeIncome-method="finalselectIncomeType"
-        @executeExpenditure-method="finalselectExpenditureType"
-      />
+      <div>
+        <FormSelect
+          :selectRadioName="setSelectRadio"
+          :items="expenditureItems"
+          @executeIncome-method="finalselectIncomeType"
+          @executeExpenditure-method="finalselectExpenditureType"
+        />
+        <div v-if="setSelectRadio == '収入'">
+          <P>{{ errorMessage.selectIncomeResult }}</P>
+        </div>
+        <div v-if="setSelectRadio == '支出'">
+          <p>{{ errorMessage.selectExpenditureResult }}</p>
+        </div>
+      </div>
       <div>
         <label>{{ '金額：' }}</label>
         <NumberInput @execute-method="finalSetNumber" />
+        <p>{{ errorMessage.priceResult }}</p>
       </div>
       <div>
         <label>備考：</label>
         <TextArea @execute-method="finalSetNote" />
+        <p>{{ errorMessage.noteResult }}</p>
       </div>
 
       <div>

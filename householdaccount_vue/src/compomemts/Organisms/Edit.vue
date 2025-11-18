@@ -9,7 +9,7 @@ import axios from 'axios'
 
 export default {
   props: {
-    balanceNo: String,
+    balanceNo: String, //編集対象支出No
   },
   emits: ['executeEdit-method'],
   components: {
@@ -23,7 +23,6 @@ export default {
   },
   data() {
     return {
-      Test: '', //デバック用
       validationFlag: true,
       editInfo: {
         //DBから取得した登録情報
@@ -56,12 +55,20 @@ export default {
         },
       ],
       validation: {
+        //入力チェック
+        dateValidation: true,
+        incomeValidation: true,
+        expenditureValidation: true,
+        priceValidation: true,
+        noteValidation: true,
+      },
+
+      errorMessage: {
+        //エラーメッセージ
         dateResult: '',
-        dateNumberResult: '',
         selectIncomeResult: '',
         selectExpenditureResult: '',
         priceResult: '',
-        priceNumberResult: '',
         noteResult: '',
       },
     }
@@ -79,7 +86,7 @@ export default {
       //編集するデータ取得
       try {
         const response = await axios.get('http://localhost:8080/api/search/balance?', {
-          params: { No: this.balanceNo },
+          params: { No: this.balanceNo }, //支出Noを送る
         })
         //APIで収支Noを送る
         this.editInfo = response.data
@@ -108,6 +115,7 @@ export default {
         axios.patch('http://localhost:8080/api/income/edit', this.editInfo).then((response) => {
           console.log(response)
         })
+        //レスポンスの結果をコンソールに出力
       } catch (error) {
         console.log(error)
       }
@@ -121,6 +129,7 @@ export default {
           .then((response) => {
             console.log(response)
           })
+        //レスポンスの結果をコンソールに出力
       } catch (error) {
         console.log(error)
       }
@@ -129,6 +138,7 @@ export default {
     executekeep() {
       //変更内容保存処理
       if (this.editInfo.balanceType == '収入') {
+        //ラジオボタン選択結果が収入なら
         this.editIncome()
       } else {
         this.editExpenditure()
@@ -141,63 +151,67 @@ export default {
       this.$emit('executeEdit-method')
     },
 
-    editSetDate(date: any, dateResult: any, dateNumberResult: any) {
+    editSetDate(date: any, dateResult: any, dateValidation: any) {
       this.editInfo.balanceDate = date
-      this.validation.dateResult = dateResult
-      this.validation.dateNumberResult = dateNumberResult
+      this.errorMessage.dateResult = dateResult
+      this.validation.dateValidation = dateValidation
       this.validationCheck()
     },
-    editSelectIncome(selectIncome: any, selectIncomeResult: any) {
+    editSelectIncome(selectIncome: any, selectIncomeResult: any, incomeValidation: any) {
       this.editInfo.incomeType = selectIncome
-      this.validation.incomeTypeResult = selectIncomeResult
+      this.errorMessage.incomeTypeResult = selectIncomeResult
+      this.validation.incomeValidation = incomeValidation
       this.validationCheck()
     },
-    editSelectExpenditure(selecctExpenditure: any, selectExpenditureResult: any) {
+    editSelectExpenditure(
+      selecctExpenditure: any,
+      selectExpenditureResult: any,
+      expenditureValidation: any
+    ) {
       this.editInfo.expenditureExpenseItemName = selecctExpenditure
-      this.validation.expenditureTypeResult = selectExpenditureResult
+      this.errorMessage.expenditureTypeResult = selectExpenditureResult
+      this.validation.expenditureValidation = expenditureValidation
       this.validationCheck()
     },
-    editSetNumber(price: any, priceResult: any, priceNumberResult: any) {
+    editSetNumber(price: any, priceResult: any, priceValidation: any) {
       //編集した金額
       this.editInfo.amount = price
-      this.validation.priceResult = priceResult
-      this.validation.priceNumberResult = priceNumberResult
+      this.errorMessage.priceResult = priceResult
+      this.validation.priceValidation = priceValidation
       this.validationCheck()
     },
-    editSetNote(note: any, noteResult: any) {
+    editSetNote(note: any, noteResult: any, noteValidation) {
       this.editInfo.note = note
       //情報をまとめて送る
-      this.validation.noteResult = noteResult
+      this.errorMessage.noteResult = noteResult
       //バリデーションチェック行うためにれてる
+      this.validation.noteValidation = noteValidation
       this.validationCheck()
     },
     validationCheck() {
       if (this.editInfo.balanceType == '収入') {
         if (
-          this.validation.dateResult ||
-          this.validation.dateNumberResult ||
-          this.validation.selectIncomeResult ||
-          this.validation.priceResult ||
-          this.validation.priceNumberResult ||
-          this.validation.noteResult
-          //どれかに値が入っていたら真
+          this.validation.dateValidation &&
+          this.validation.incomeValidation &&
+          this.validation.priceValidation &&
+          this.validation.noteValidation
         ) {
-          this.validationFlag = true
-        } else {
+          //すべてtrueだったら
           this.validationFlag = false
+        } else {
+          //一つでもfalseがあったら
+          this.validationFlag = true
         }
       } else if (this.editInfo.balanceType == '支出') {
         if (
-          this.validation.dateResult ||
-          this.validation.dateNumberResult ||
-          this.validation.selectExpenditureResult ||
-          this.validation.priceResult ||
-          this.validation.priceNumberResult ||
-          this.validation.noteResult
+          this.validation.dateValidation &&
+          this.validation.expenditureValidation &&
+          this.validation.priceValidation &&
+          this.validation.noteValidation
         ) {
-          this.validationFlag = true
-        } else {
           this.validationFlag = false
+        } else {
+          this.validationFlag = true
         }
       }
     },
@@ -208,8 +222,6 @@ export default {
   <div id="model">
     <div id="modal-content" class="modal">
       <h6>編集情報</h6>
-      <p>{{ '編集モーダルで出力' }}</p>
-      <p>{{ validation }}</p>
       <div>
         <label>{{ '収支区分：' }}</label>
         <RadioButton
@@ -218,6 +230,7 @@ export default {
           :setRadioBotton="editInfo.balanceType"
           :notSelect="true"
         />
+        <p>{{ errorMessage.radioButtonResult }}</p>
       </div>
       <div>
         <label>{{ '収支日付：' }}</label>
@@ -227,6 +240,7 @@ export default {
           :key="editInfo.balanceDate"
           @execute-method="editSetDate"
         />
+        <p>{{ errorMessage.dateResult }}</p>
       </div>
       <div>
         <div v-if="editInfo.balanceType == '収入'">
@@ -237,7 +251,9 @@ export default {
             :key="editInfo.incomeType"
             @executeIncome-method="editSelectIncome"
           />
+          <p>{{ errorMessage.selectIncomeResult }}</p>
         </div>
+
         <div v-if="editInfo.balanceType == '支出'">
           <FormSelect
             :selectRadioName="editInfo.balanceType"
@@ -246,6 +262,7 @@ export default {
             :key="editInfo.expenditureExpenseItemName"
             @executeExpenditure-method="editSelectExpenditure"
           />
+          <p>{{ errorMessage.selectExpenditureResult }}</p>
         </div>
       </div>
       <div>
@@ -255,11 +272,14 @@ export default {
           :key="editInfo.amount"
           @execute-method="editSetNumber"
         />
+        <p>{{ errorMessage.priceResult }}</p>
       </div>
       <div>
         <label>備考：</label>
         <TextArea :getNote="editInfo.note" :key="editInfo.note" @execute-method="editSetNote" />
+        <p>{{ errorMessage.noteResult }}</p>
       </div>
+
       <Button
         setButtonName1="保存"
         setButtonName2="キャンセル"

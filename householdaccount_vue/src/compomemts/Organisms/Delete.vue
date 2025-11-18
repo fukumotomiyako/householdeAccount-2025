@@ -6,7 +6,7 @@ export default {
   components: {
     Button,
   },
-  props: ['incomeNo', 'expenditureNo'],
+  props: ['incomeNo', 'expenditureNo'], //削除対象No
   emit: ['executeDelete-method'],
   data() {
     return {}

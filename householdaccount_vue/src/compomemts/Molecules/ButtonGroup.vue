@@ -11,9 +11,6 @@ export default {
     setButtonName2: String,
     validatedNull: Boolean,
   },
-  data() {
-    return {}
-  },
 
   methods: {
     executeButton1() {

@@ -15,6 +15,7 @@ export default {
   methods: {
     setRadioButton() {
       this.selectRadioName = this.radioName
+      //選択されたラジオボタン名をselectRadioNameに入れて送る
       this.$emit('execute-method', this.selectRadioName)
     },
   },

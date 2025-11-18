@@ -15,6 +15,7 @@ const header = ref([
 import regist from '../src/compomemts/Organisms/Regist.vue'
 import edit from '../src/compomemts/Organisms/Edit.vue'
 import Delete from '../src/compomemts/Organisms/Delete.vue'
+import Detail from '../src/compomemts/Organisms/SearchWithDetailDialog.vue'
 import axios from 'axios'
 import { createApp, ref } from 'vue'
 
@@ -23,6 +24,7 @@ export default {
     regist,
     edit,
     Delete,
+    Detail,
   },
   data() {
     return {
@@ -33,6 +35,7 @@ export default {
       regist_modal: false,
       edit_modal: false,
       delete_modal: false,
+      detail_modal: true,
       searchResultBalanceInfo: [
         {
           balanceCode: '',
@@ -162,6 +165,11 @@ export default {
         :incomeNo="setIncomeNo"
         @executeDelete-method="deleteReturn"
       />
+    </div>
+
+    <!-- 詳細検索モーダル表示 -->
+    <div v-if="detail_modal == true">
+      <Detail />
     </div>
 
     <!-- 検索結果一覧表示 -->

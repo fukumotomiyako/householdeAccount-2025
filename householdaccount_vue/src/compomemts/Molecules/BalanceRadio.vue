@@ -13,22 +13,26 @@ export default {
   },
   data() {
     return {
-      radioButtonResult: '',
-      setRadioName: '',
+      radioButtonResult: '', //エラーメッセージ
+      setRadioName: '', //選択されたラジオボタン名
+      radioValidation: '', //入力チェックの結果(true or false)
     }
   },
   methods: {
     setSelectRadio(selectRadioName: any) {
       this.setRadioName = selectRadioName
+      //選択されたラジオボタン名をsetRadioNameに入れる
       this.selectRadioValidate()
-      this.$emit('execute-method', this.setRadioName, this.radioButtonResult)
+      this.$emit('execute-method', this.setRadioName, this.radioButtonResult, this.radioValidation)
     },
 
     selectRadioValidate() {
       const selectRadio_error_message = this.selectRadioCheckValidate(this.setRadioName)
       if (selectRadio_error_message === true) {
+        this.radioValidation = true
         this.radioButtonResult = ''
       } else {
+        this.radioValidation = false
         this.radioButtonResult = selectRadio_error_message
       }
     },
@@ -58,5 +62,4 @@ export default {
     :select="notSelect"
     @execute-method="setSelectRadio"
   />
-  <p>{{ radioButtonResult }}</p>
 </template>

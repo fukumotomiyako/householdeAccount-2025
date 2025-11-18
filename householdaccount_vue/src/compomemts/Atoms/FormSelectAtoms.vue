@@ -3,9 +3,9 @@ export default {
   props: {
     //親コンポーネントから渡されるデータ(プロパティ)を定義
     // 入力チェック
-    selectRadioName: String,
-    getIncome: String,
-    getExpenditure: String,
+    selectRadioName: String, //選択されたラジオボタン
+    getIncome: String, //選択されていた収入
+    getExpenditure: String, //選択されていた支出
     items: [
       //配列　支出費目
       {
@@ -21,11 +21,12 @@ export default {
   data() {
     //コンポーネントが持つデータ、状態を定義
     return {
-      selectIncome: this.getIncome,
-      selectExpenditure: this.getExpenditure,
+      selectIncome: '',
+      selectExpenditure: '', //選択結果
       selectIncomeResult: '',
-      //  　初期化
-      selectExpenditureResult: '',
+      selectExpenditureResult: '', //エラーメッセージ
+      incomeValidation: '',
+      expenditureValidation: '', //入力チェックの結果
       //　　初期化
       selects: [
         //プルダウンの候補　配列
@@ -41,19 +42,32 @@ export default {
       ],
     }
   },
+  mounted() {
+    ;(this.selectIncome = this.getIncome), (this.selectExpenditure = this.getExpenditure)
+  },
   methods: {
     //メソッドを定義　操作にたいしてどんな処理をするか　＠blurで呼ぶ関数
     setSelectIncome() {
       this.selectIncomeValidate()
       //入力チェック関数の呼び出し
-      this.$emit('executeIncome-method', this.selectIncome, this.selectIncomeResult)
+      this.$emit(
+        'executeIncome-method',
+        this.selectIncome,
+        this.selectIncomeResult,
+        this.incomeValidation
+      )
       // this.$emit('イベント名',データ)
       //選択された候補、エラーメッセージ
     },
 
     setSelectExpenditure() {
       this.selectExpenditureValidate()
-      this.$emit('executeExpenditure-method', this.selectExpenditure, this.selectExpenditureResult)
+      this.$emit(
+        'executeExpenditure-method',
+        this.selectExpenditure,
+        this.selectExpenditureResult,
+        this.expenditureValidation
+      )
     },
 
     setNotSelect() {
@@ -64,7 +78,9 @@ export default {
         this.selectIncome,
         this.selectIncomeResult,
         this.selectExpenditure,
-        this.selectExpenditureResult
+        this.selectExpenditureResult,
+        this.incomeValidation,
+        this.expenditureValidation
       )
     },
 
@@ -72,9 +88,11 @@ export default {
       const selectIncome_error_message = this.selectIncomeCheckValidate(this.selectIncome)
       //selectIncomeCheckValidateを呼び出してincomeSelect_error_messageに入れる
       if (selectIncome_error_message === true) {
+        this.incomeValidation = true
         this.selectIncomeResult = ''
         //tureだったらselectIncomeResultを空にする
       } else {
+        this.incomeValidation = false
         this.selectIncomeResult = selectIncome_error_message
         //incomeSelect_error_messageがtrueじゃなかったら、incomeSelect_error_messageをselectIncomeResultに格納
       }
@@ -86,9 +104,11 @@ export default {
       )
       //selectIncomeCheckValidateを呼び出してincomeSelect_error_messageに入れる
       if (selectExpenditure_error_message === true) {
+        this.expenditureValidation = true
         this.selectExpenditureResult = ''
         //tureだったらselectIncomeResultを空にする
       } else {
+        this.expenditureValidation = false
         this.selectExpenditureResult = selectExpenditure_error_message
         //incomeSelect_error_messageがtrueじゃなかったら、incomeSelect_error_messageをselectIncomeResultに格納
       }
@@ -131,7 +151,6 @@ export default {
             {{ select_income.text }}
           </option>
         </select>
-        <div>{{ selectIncomeResult }}</div>
       </div>
       <div>
         <label>{{ '支出費目：' }}</label>
@@ -176,7 +195,6 @@ export default {
             {{ select_expenditure.expenditure_expense_item_name }}
           </option>
         </select>
-        <div>{{ selectExpenditureResult }}</div>
       </div>
     </div>
 
@@ -194,7 +212,6 @@ export default {
             {{ select_income.text }}
           </option>
         </select>
-        <div>{{ selectIncomeResult }}</div>
       </div>
       <div>
         <label>{{ '支出費目：' }}</label>
@@ -207,7 +224,6 @@ export default {
             {{ select_expenditure.expenditure_expense_item_name }}
           </option>
         </select>
-        <div>{{ selectExpenditureResult }}</div>
       </div>
     </div>
   </div>
