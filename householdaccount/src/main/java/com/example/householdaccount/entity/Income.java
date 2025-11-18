@@ -102,17 +102,7 @@ public class Income {
 		this.deleteFlag=false;
 		this.version=incomeVersion;
 	}
-	
-//	public Income(String incomeNo,SearchBalanceIncomeInfo serchBalanceIncomeInfo,Integer incomeVersion) {
-//		this.incomeNo=IncomeNoVO.of(incomeNo);
-//		this.amount=serchBalanceIncomeInfo.getAmount();
-//		this.incomeType=serchBalanceIncomeInfo.getIncomeType();
-//		this.incomeDate=serchBalanceIncomeInfo.getIncomeDate();
-//		this.note=serchBalanceIncomeInfo.getNote();
-//		this.deleteFlag=true;
-//		this.version=incomeVersion;
-//	}
-//	
+		
 	public Income(Income incomeInfo) {
 		this.incomeNo=incomeInfo.getIncomeNo();
 		this.amount=incomeInfo.getAmount();

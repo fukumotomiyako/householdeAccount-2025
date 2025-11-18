@@ -101,7 +101,7 @@ public class HouseholedController {
 		// 検索結果を格納するForm
 		SearchBalanceInfo serchBalanceResult = new SearchBalanceInfo();
 
-		//収入(serchBalanceExpenditureResult)がnullの場合
+		//支出(serchBalanceExpenditureResult)がnullの場合
 		if (serchBalanceExpenditureResult == null) {
 		
 			//日付をYYYY-MM-DDの形に整える
@@ -119,14 +119,6 @@ public class HouseholedController {
 			serchBalanceResult.setAmount(serchBalanceIncomeResult.getAmount());
 			serchBalanceResult.setNote(serchBalanceIncomeResult.getNote());
 			
-			//検証用
-			System.out.println(serchBalanceResult.getBalanceType());
-			System.out.println(serchBalanceResult.getBalanceNo());
-			System.out.println(serchBalanceResult.getBalanceDate());
-			System.out.println(serchBalanceResult.getIncomeType());
-			System.out.println(serchBalanceResult.getAmount());
-			System.out.println(serchBalanceResult.getNote());
-			
 		} else {
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -143,14 +135,6 @@ public class HouseholedController {
 					.setExpenditureExpenseItemName(serchBalanceExpenditureResult.getExpenditureExpenseItemName());
 			serchBalanceResult.setAmount(serchBalanceExpenditureResult.getAmount());
 			serchBalanceResult.setNote(serchBalanceExpenditureResult.getNote());
-			
-			//検証用
-			System.out.println(serchBalanceResult.getBalanceType());
-			System.out.println(serchBalanceResult.getBalanceNo());
-			System.out.println(serchBalanceResult.getBalanceDate());
-			System.out.println(serchBalanceResult.getExpenditureExpenseItemName());
-			System.out.println(serchBalanceResult.getAmount());
-			System.out.println(serchBalanceResult.getNote());
 		}
 
 		return serchBalanceResult;
@@ -191,8 +175,6 @@ public class HouseholedController {
 	public String incomeDelete(@PathVariable String incomeNo) {
 		//service呼び出し
 		householdService.incomeDelete(incomeNo);
-		
-		System.out.println(incomeNo);
 		return "削除しました";
 	}
 	
@@ -201,8 +183,6 @@ public class HouseholedController {
 	public String expenditureDelete(@PathVariable String expenditureNo) {
 		//service呼び出し
 		householdService.expenditureDelete(expenditureNo);
-		
-		System.out.println(expenditureNo);
 		return "削除しました";
 	}
 

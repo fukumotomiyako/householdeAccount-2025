@@ -101,18 +101,6 @@ public class Expenditure {
 		this.version=expenditureVersion;
 	}
 	
-//	public Expenditure(String expenditureNo,Integer expenditureVersion,SearchBalanceExpenditureInfo serchBalanceExpenditureInfo,ExpenditureExpenseItemCodeVO expenditureExpenseItemCode) {
-//	 this.expenditure_no=ExpenditureNoVO.of(expenditureNo);
-//	 this.amount=serchBalanceExpenditureInfo.getAmount();
-//	 this.expenditureExpenseItemCode=expenditureExpenseItemCode;
-//	 this.expenditureExpenseItemName=serchBalanceExpenditureInfo.getExpenditureExpenseItemName();
-//	 this.expenditureDate=serchBalanceExpenditureInfo.getExpenditureDate();
-//	 this.note=serchBalanceExpenditureInfo.getNote();
-//	 this.deleteFrag=true;
-//	 this.version=expenditureVersion;
-//	 
-//	}
-//	
 	public Expenditure(Expenditure expenditureInfo) {
 		this.expenditure_no=expenditureInfo.getExpenditure_no();
 		 this.amount=expenditureInfo.getAmount();

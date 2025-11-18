@@ -177,16 +177,6 @@ public class HouseholdService {
 		Income incomeInfo = incomeRepository.findById(incomeNo);
 		//コンストラクタ呼び出し
 		Income income = new Income(incomeInfo);
-		
-//		// バージョン取得
-//		Integer incomeVersion = incomeRepository.findByIncomeNo(incomeNo);
-//
-//		// incomeNoを引数に、DBから一行取得
-//		SearchBalanceIncomeInfo serchBalanceIncomeInfo = serchBalanceIncomeRepository.findByBalanceNo(incomeNo);
-//
-//		// コンストラクタ呼び出し
-//		Income income = new Income(incomeNo, serchBalanceIncomeInfo, incomeVersion);
-//
 		// 保存
 		return incomeRepository.save(income);
 	}
@@ -196,23 +186,6 @@ public class HouseholdService {
 
 		Expenditure expenditureInfo = expenditureRepository.findById(expenditureNo);
 		Expenditure expenditure = new Expenditure(expenditureInfo);
-
-//		// バージョン取得
-//		Integer expenditureVersion = expenditureRepository.findByExpenditureNo(expenditureNo);
-//
-//		// expenditureNoを引数に、DBから一行取得
-//		SearchBalanceExpenditureInfo serchBalanceExpenditureInfo = serchBalanceExpenditureRepository
-//				.findByBalanceNo(expenditureNo);
-//
-//		// アイテムコード取得
-//		String expenditureItemName = serchBalanceExpenditureInfo.getExpenditureExpenseItemName();
-//		ExpenditureItems expenditureItems = expenditureItemRepository
-//				.findByExpenditureExpenseItemName(expenditureItemName);
-//		ExpenditureExpenseItemCodeVO expenditureExpenseItemCode = expenditureItems.getExpenditure_expense_item_code();
-//		
-//		// コンストラクタ呼び出し
-//		Expenditure expenditure = new Expenditure(expenditureNo, expenditureVersion, serchBalanceExpenditureInfo,expenditureExpenseItemCode);
-
 		// 保存
 		return expenditureRepository.save(expenditure);
 	}
