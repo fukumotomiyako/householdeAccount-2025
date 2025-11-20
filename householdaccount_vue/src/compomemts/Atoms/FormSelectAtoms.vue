@@ -17,7 +17,7 @@ export default {
       },
     ],
   },
-  emits: ['executeIncome-method', 'executeExpenditure-method', 'executeNotSelect-methods'],
+  emits: ['executeIncome-method', 'executeExpenditure-method', 'executeNotSpecified-method'],
   data() {
     //コンポーネントが持つデータ、状態を定義
     return {
@@ -70,11 +70,11 @@ export default {
       )
     },
 
-    setNotSelect() {
+    setNotSpecified() {
       this.selectIncomeValidate()
       this.selectExpenditureValidate()
       this.$emit(
-        'executeNotSelect-methods',
+        'executeNotSpecified-method',
         this.selectIncome,
         this.selectIncomeResult,
         this.selectExpenditure,
@@ -198,10 +198,10 @@ export default {
       </div>
     </div>
 
-    <div v-if="selectRadioName == '未選択'">
+    <div v-if="selectRadioName == '指定なし'">
       <div>
         <label>{{ '収入種別：' }}</label>
-        <select v-model="selectIncome" @blur="setNotSelect">
+        <select v-model="selectIncome" @blur="setNotSpecified">
           <!-- イベント発生したら、選択された収入種別をv-modelに入れて、blurの関数を呼ぶ -->
           <option
             v-for="select_income in selects"
@@ -215,7 +215,7 @@ export default {
       </div>
       <div>
         <label>{{ '支出費目：' }}</label>
-        <select v-model="selectExpenditure" @blur="setNotSelect">
+        <select v-model="selectExpenditure" @blur="setNotSpecified">
           <option
             v-for="select_expenditure in items"
             :value="select_expenditure.expenditure_expense_item_name"

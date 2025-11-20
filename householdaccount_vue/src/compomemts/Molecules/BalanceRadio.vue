@@ -6,7 +6,7 @@ export default {
   },
   emits: ['execute-method'],
   props: {
-    setRadioBotton: String, //最初に選択されている状態にしたいラジオボタン名
+    setRadioButton: String, //最初に選択されている状態にしたいラジオボタン名
     radioName1: String, //表示するラジオボタンの名前
     radioName2: String, //表示するラジオボタンの名前
     notSelect: Boolean, //選択可否のtrueかfalse
@@ -51,14 +51,14 @@ export default {
 <template>
   <RadioButtonAtoms
     :radioName="radioName1"
-    :setRadio="setRadioBotton"
+    :setRadio="setRadioButton"
     :select="notSelect"
     @execute-method="setSelectRadio"
   />
   <!-- radioNameはAtomsに渡しているだけ -->
   <RadioButtonAtoms
     :radioName="radioName2"
-    :setRadio="setRadioBotton"
+    :setRadio="setRadioButton"
     :select="notSelect"
     @execute-method="setSelectRadio"
   />

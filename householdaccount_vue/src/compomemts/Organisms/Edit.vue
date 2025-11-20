@@ -86,7 +86,7 @@ export default {
       //編集するデータ取得
       try {
         const response = await axios.get('http://localhost:8080/api/search/balance?', {
-          params: { No: this.balanceNo }, //支出Noを送る
+          params: { No: this.balanceNo }, //収支Noを送る
         })
         //APIで収支Noを送る
         this.editInfo = response.data
@@ -227,7 +227,7 @@ export default {
         <RadioButton
           :radioName1="setRadioName1"
           :radioName2="setRadioName2"
-          :setRadioBotton="editInfo.balanceType"
+          :setRadioButton="editInfo.balanceType"
           :notSelect="true"
         />
         <p>{{ errorMessage.radioButtonResult }}</p>
@@ -235,7 +235,6 @@ export default {
       <div>
         <label>{{ '収支日付：' }}</label>
         <DateInput
-          id="日付"
           :getDate="editInfo.balanceDate"
           :key="editInfo.balanceDate"
           @execute-method="editSetDate"

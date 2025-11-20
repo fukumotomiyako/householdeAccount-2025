@@ -233,7 +233,7 @@ export default {
       <div>
         <label>{{ '収支区分：' }}</label>
         <RadioButton
-          :setRadioBotton="setSelectRadio"
+          :setRadioButton="setSelectRadio"
           :radioName1="setRadioName1"
           :radioName2="setRadioName2"
           :notSelect="false"
