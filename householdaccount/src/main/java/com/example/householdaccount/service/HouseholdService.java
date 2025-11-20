@@ -118,7 +118,7 @@ public class HouseholdService {
 		return expenditure;
 	}
 
-	// 支出データ取得(編集)
+	// 収支データ取得(編集)
 	@Autowired
 	SearchBalanceIncomeInfoRepository serchBalanceIncomeRepository;
 	@Autowired

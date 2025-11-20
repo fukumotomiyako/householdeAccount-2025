@@ -143,14 +143,14 @@ public class HouseholedController {
 	// 編集
 	//収入
 	@RequestMapping(value = "/income/edit", method = RequestMethod.PATCH)
-	public String incomeEdit(@RequestBody @Validated IncomeEditForm editincomeForm, BindingResult result) {
+	public String incomeEdit(@RequestBody @Validated IncomeEditForm editIncomeForm, BindingResult result) {
 		
 		if(result.hasErrors()) {
 		     return "編集できません";
 		    }
 		
 		//service呼び出し
-		householdService.incomeEdit(editincomeForm);
+		householdService.incomeEdit(editIncomeForm);
 		
 		return "編集が完了しました";
 	}

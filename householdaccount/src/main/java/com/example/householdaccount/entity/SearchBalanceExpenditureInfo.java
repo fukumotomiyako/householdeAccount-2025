@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "expenditure_info")
 public class SearchBalanceExpenditureInfo {
+	
 	@EmbeddedId
 	@Column(name="expenditure_no")
 	private ExpenditureNoVO expenditureNo;
