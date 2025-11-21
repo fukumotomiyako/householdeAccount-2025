@@ -15,7 +15,7 @@ const header = ref([
 import regist from '../src/compomemts/Organisms/Regist.vue'
 import edit from '../src/compomemts/Organisms/Edit.vue'
 import Delete from '../src/compomemts/Organisms/Delete.vue'
-import Detail from '../src/compomemts/Organisms/SearchWithDetailDialog.vue'
+import Detail from '../src/compomemts/Organisms/SearchDetail.vue'
 import axios from 'axios'
 import { createApp, ref } from 'vue'
 
@@ -35,7 +35,7 @@ export default {
       regist_modal: false,
       edit_modal: false,
       delete_modal: false,
-      detail_modal: true,
+      detail_modal: false,
       searchResultBalanceInfo: [
         {
           balanceCode: '',
@@ -132,6 +132,14 @@ export default {
     deleteReturn() {
       this.delete_modal = false
     },
+
+    executeSearch() {
+      this.detail_modal = true
+    },
+
+    detailReturn() {
+      this.detail_modal = false
+    },
   },
 }
 </script>
@@ -153,6 +161,12 @@ export default {
       <regist @execute-method="returnScreen" />
     </div>
 
+    <!-- 詳細検索モーダル表示 -->
+    <span @click="executeSearch">詳細検索▼</span>
+    <div v-if="detail_modal == true">
+      <Detail @execute-method="detailReturn" />
+    </div>
+
     <!-- 編集モーダル表示 -->
     <div v-if="edit_modal == true">
       <edit :balanceNo="setBalanceNo" @executeEdit-method="editReturn" />
@@ -165,11 +179,6 @@ export default {
         :incomeNo="setIncomeNo"
         @executeDelete-method="deleteReturn"
       />
-    </div>
-
-    <!-- 詳細検索モーダル表示 -->
-    <div v-if="detail_modal == true">
-      <Detail />
     </div>
 
     <!-- 検索結果一覧表示 -->
