@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  props: ['getPrice'], //入力されていた金額
+  props: ['getPrice', 'nullFlag'], //入力されていた金額
   emits: ['execute-method'],
 
   data() {
@@ -32,16 +32,26 @@ export default {
     },
 
     priceCheckValidate(price: any) {
-      if (!price || String(price).length > 8 || price == 0) {
-        return '8文字以内で入力してください'
-      } else if (!/^\d+$/.test(String(price))) {
-        //正規表現
-        //^　文字列の先頭
-        //d　数字
-        //$　文字列の末尾　数字だけで構成された文字列
-        return '数字のみ入力できます'
-      } else {
-        return true
+      if (this.nullFlag === true) {
+        if (!price || String(price).length > 8 || price == 0) {
+          return '8文字以内で入力してください'
+        } else if (!/^\d+$/.test(String(price))) {
+          //正規表現
+          //^　文字列の先頭
+          //d　数字
+          //$　文字列の末尾　数字だけで構成された文字列
+          return '数字のみ入力できます'
+        } else {
+          return true
+        }
+      } else if (this.nullFlag === false) {
+        if (String(price).length > 8 || price == 0) {
+          return '8文字以内で入力してください'
+        } else if (!/^\d+$/.test(String(price))) {
+          return '数字のみ入力できます'
+        } else {
+          return true
+        }
       }
     },
   },

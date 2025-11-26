@@ -4,7 +4,7 @@ import RadioButton from '../Atoms/RadioButtonAtoms.vue'
 export default {
   components: { RadioButton },
   emits: ['execute-method'],
-  props: ['setRadioButton', 'radioName1', 'radioName2', 'radioName3', 'notSelect'],
+  props: ['setRadioButton', 'radioName1', 'radioName2', 'radioName3', 'notSelect', 'nullFlag'],
   date() {
     return {
       setRadioName: '',
@@ -30,11 +30,14 @@ export default {
     },
 
     selectRadioCheckValidate(setRadioName: any) {
-      if (!setRadioName) {
-        return '選択してください'
-      } else {
-        return true
+      if (this.nullFlag === true) {
+        if (!setRadioName) {
+          return '選択してください'
+        } else {
+          return true
+        }
       }
+      return true
     },
   },
 }

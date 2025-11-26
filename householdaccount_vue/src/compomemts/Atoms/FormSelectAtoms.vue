@@ -6,6 +6,7 @@ export default {
     selectRadioName: String, //選択されたラジオボタン
     getIncome: String, //選択されていた収入
     getExpenditure: String, //選択されていた支出
+    nullFlag: Boolean,
     items: [
       //配列　支出費目
       {
@@ -116,20 +117,26 @@ export default {
 
     selectIncomeCheckValidate(selectIncome: any) {
       //収入が選択されているかのチェック　”any”はどんな型でもOK
-      if (!selectIncome) {
-        //selectIncomeが未選択の場合
-        return '選択してください'
-      } else {
-        return true
+      if (this.nullFlag === true) {
+        if (!selectIncome) {
+          //selectIncomeが未選択の場合
+          return '選択してください'
+        } else {
+          return true
+        }
       }
+      return true
     },
 
     selectExpenditureCheckValidate(selectExpenditure: any) {
-      if (!selectExpenditure) {
-        return '選択してください'
-      } else {
-        return true
+      if (this.nullFlag === true) {
+        if (!selectExpenditure) {
+          return '選択してください'
+        } else {
+          return true
+        }
       }
+      return true
     },
   },
 }

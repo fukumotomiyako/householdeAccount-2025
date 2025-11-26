@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  props: ['getDate', 'id'],
+  props: ['getDate', 'id', 'nullFlag'],
   emits: ['execute-method'],
 
   data() {
@@ -33,16 +33,24 @@ export default {
     },
 
     dateCheckValidate(date: any) {
-      if (!date) {
-        return '日付を入力してください'
-      } else if (/^\d{4}\/\d{2}\/\d{2}$/.test(date)) {
-        //正規表現　/../の中に書くことで、一致するか判定
-        //^文字列の先頭という意味
-        //d{4}数字が4回繰り返される
-        //test　正規表現に一致するか判定　一致したらtrue 一致しなければfalse
-        return '数字のみ入力できます'
-      } else {
-        return true
+      if (this.nullFlag === true) {
+        if (!date) {
+          return '日付を入力してください'
+        } else if (/^\d{4}\/\d{2}\/\d{2}$/.test(date)) {
+          //正規表現　/../の中に書くことで、一致するか判定
+          //^文字列の先頭という意味
+          //d{4}数字が4回繰り返される
+          //test　正規表現に一致するか判定　一致したらtrue 一致しなければfalse
+          return '数字のみ入力できます'
+        } else {
+          return true
+        }
+      } else if (this.nullFlag === false) {
+        if (/^\d{4}\/\d{2}\/\d{2}$/.test(date)) {
+          return '数字のみ入力できます'
+        } else {
+          return true
+        }
       }
     },
   },
