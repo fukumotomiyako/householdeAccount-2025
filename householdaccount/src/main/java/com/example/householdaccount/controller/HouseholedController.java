@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,6 +34,7 @@ import com.example.householdaccount.form.ExpenditureForm;
 import com.example.householdaccount.form.IncomeForm;
 import com.example.householdaccount.form.SearchBalanceInfo;
 import com.example.householdaccount.form.SearchResultBalanceForm;
+import com.example.householdaccount.form.DetailSearchResultForm;
 import com.example.householdaccount.service.HouseholdService;
 
 @RestController
@@ -101,14 +103,14 @@ public class HouseholedController {
 		// 検索結果を格納するForm
 		SearchBalanceInfo serchBalanceResult = new SearchBalanceInfo();
 
-		//支出(serchBalanceExpenditureResult)がnullの場合
+		// 支出(serchBalanceExpenditureResult)がnullの場合
 		if (serchBalanceExpenditureResult == null) {
-		
-			//日付をYYYY-MM-DDの形に整える
+
+			// 日付をYYYY-MM-DDの形に整える
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String date = sdf.format(serchBalanceIncomeResult.getIncomeDate());
-			
-			//NoをString型に変換(引数に指定した型をString型に変換する)
+
+			// NoをString型に変換(引数に指定した型をString型に変換する)
 			String No = String.valueOf(serchBalanceIncomeResult.getIncoemNo());
 
 			// 検索結果(収入)をセット
@@ -118,14 +120,13 @@ public class HouseholedController {
 			serchBalanceResult.setIncomeType(serchBalanceIncomeResult.getIncomeType());
 			serchBalanceResult.setAmount(serchBalanceIncomeResult.getAmount());
 			serchBalanceResult.setNote(serchBalanceIncomeResult.getNote());
-			
+
 		} else {
-			
+
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String date = sdf.format(serchBalanceExpenditureResult.getExpenditureDate());
-			
-			String No = String.valueOf(serchBalanceExpenditureResult.getExpenditureNo());
 
+			String No = String.valueOf(serchBalanceExpenditureResult.getExpenditureNo());
 
 			// 検索結果(支出)をセット
 			serchBalanceResult.setBalanceType("支出");
@@ -141,50 +142,116 @@ public class HouseholedController {
 	}
 
 	// 編集
-	//収入
+	// 収入
 	@RequestMapping(value = "/income/edit", method = RequestMethod.PATCH)
 	public String incomeEdit(@RequestBody @Validated IncomeEditForm editIncomeForm, BindingResult result) {
-		
-		if(result.hasErrors()) {
-		     return "編集できません";
-		    }
-		
-		//service呼び出し
+
+		if (result.hasErrors()) {
+			return "編集できません";
+		}
+
+		// service呼び出し
 		householdService.incomeEdit(editIncomeForm);
-		
+
 		return "編集が完了しました";
 	}
-	
-	//支出
+
+	// 支出
 	@RequestMapping(value = "/expenditure/edit", method = RequestMethod.PATCH)
-	public String expenditureEdit(@RequestBody @Validated  ExpenditureEditForm expenditureEditForm, BindingResult result) {
-		
-		if(result.hasErrors()) {
-		     return "編集できません";
-		    }
-		
-		//service呼び出し
+	public String expenditureEdit(@RequestBody @Validated ExpenditureEditForm expenditureEditForm,
+			BindingResult result) {
+
+		if (result.hasErrors()) {
+			return "編集できません";
+		}
+
+		// service呼び出し
 		householdService.expenditureEdit(expenditureEditForm);
-		
+
 		return "編集が完了しました";
 	}
-	
-	//削除
-	//収入
-	@RequestMapping(value="/income/{incomeNo}/delete",method=RequestMethod.PUT)
+
+	// 削除
+	// 収入
+	@RequestMapping(value = "/income/{incomeNo}/delete", method = RequestMethod.PUT)
 	public String incomeDelete(@PathVariable String incomeNo) {
-		//service呼び出し
+		// service呼び出し
 		householdService.incomeDelete(incomeNo);
 		return "削除しました";
 	}
-	
-	//支出
-	@RequestMapping(value="/expenditure/{expenditureNo}/delete",method=RequestMethod.PUT)
+
+	// 支出
+	@RequestMapping(value = "/expenditure/{expenditureNo}/delete", method = RequestMethod.PUT)
 	public String expenditureDelete(@PathVariable String expenditureNo) {
-		//service呼び出し
+		// service呼び出し
 		householdService.expenditureDelete(expenditureNo);
 		return "削除しました";
 	}
+
+	// 詳細検索
+	// 収入
+	@RequestMapping(value = "/income/detailSearch", method = RequestMethod.GET)
+	public String incomeDetailSearch(@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate, @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate,
+			@RequestParam("selectIncome") Integer selectIncome,
+			@RequestParam("fromAmount") Integer fromAmount, @RequestParam("toAmount") Integer toAmount,
+			@RequestParam("note") String note) {
+
+		System.out.println(fromDate);
+		System.out.println(toDate);
+		System.out.println(selectIncome);
+		System.out.println(fromAmount);
+		System.out.println(toAmount);
+		System.out.println(note);
+
+		// 引数をもとに収入データを検索して、結果を格納
+		List<SearchResultIncome> searchResultIncomeInfo = householdService.getDetailSearchIncomeList(fromDate,toDate,selectIncome,fromAmount,toAmount,note);
+		
+		// 収入データを格納するlist
+		List<DetailSearchResultForm> searchResultIncomeList = new ArrayList<DetailSearchResultForm>();
+		
+		//searchResultIcomeの回数分searchResultIncomeListに値を入れていく
+		for (int i=0; i<searchResultIncomeInfo.size(); i++) {
+			DetailSearchResultForm searchResultIncome = new DetailSearchResultForm();
+			
+			
+		}
+
+		return "検索できました";
+	}
+
+	// 支出
+	@RequestMapping(value="/expenditure/detailSearch",method=RequestMethod.GET)
+		public String expenditureDetailSearch(@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,@RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate,
+										@RequestParam("selectExpenditure") String selectExpenditure,
+										@RequestParam("fromAmount") Integer fromAmount,@RequestParam("toAmount") Integer toAmount,@RequestParam("note") String note) {
+			
+			System.out.println(fromDate);
+			System.out.println(toDate);
+			System.out.println(selectExpenditure);
+			System.out.println(fromAmount);
+			System.out.println(toAmount);
+			System.out.println(note);
+			
+			return "検索できました";
+	}
+	
+	// 指定なし
+		@RequestMapping(value="/notSpecified/detailSearch",method=RequestMethod.GET)
+			public String notSpecifiedDetailSearch(@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,@RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate,
+											@RequestParam("selectIncome") Integer selectIncome,@RequestParam("selectExpenditure") String selectExpenditure,
+											@RequestParam("fromAmount") Integer fromAmount,@RequestParam("toAmount") Integer toAmount,@RequestParam("note") String note) {
+				
+				System.out.println(fromDate);
+				System.out.println(toDate);
+				System.out.println(selectIncome);
+				System.out.println(selectExpenditure);
+				System.out.println(fromAmount);
+				System.out.println(toAmount);
+				System.out.println(note);
+				
+				return "検索できました";
+		}
+
 
 	// 収入データと支出データを同時に検索して、同時に結果を返す(通常検索)
 	@GetMapping("/searchBalanceList")

@@ -36,14 +36,15 @@ export default {
 
     noteCheckValidate(note: any) {
       if (note) {
-        if (note.length > 200) {
+        if (note.length > 5) {
           //noteが200文字以上
           return '200文字以内で入力してください'
         } else {
           return true
         }
+      } else if (!note) {
+        return true
       }
-      return true
     },
   },
 }

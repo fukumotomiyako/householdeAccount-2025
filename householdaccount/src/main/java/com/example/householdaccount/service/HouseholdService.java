@@ -23,6 +23,7 @@ import com.example.householdaccount.form.ExpenditureForm;
 import com.example.householdaccount.form.IncomeEditForm;
 import com.example.householdaccount.form.IncomeForm;
 import com.example.householdaccount.form.SearchBalanceInfo;
+import com.example.householdaccount.repository.mybatis.DetailSearchIncomeRepository;
 import com.example.householdaccount.repository.mybatis.ExpenditureRepository;
 import com.example.householdaccount.repository.mybatis.GetExpenditureItemsRepository;
 import com.example.householdaccount.repository.mybatis.IncomeRepository;
@@ -188,6 +189,20 @@ public class HouseholdService {
 		Expenditure expenditure = new Expenditure(expenditureInfo);
 		// 保存
 		return expenditureRepository.save(expenditure);
+	}
+	
+//詳細検索
+	
+	@Autowired
+	DetailSearchIncomeRepository detailSearchIncomeRepository;
+	//FormとEntity検索の使いまわしでよい、、、？
+	public List<SearchResultIncome> getDetailSearchIncomeList(Date fromDate,Date toDate,Integer selectIncome,
+															Integer fromAmount,Integer toAmount,String note){
+		
+		//引数をもとに検索を行う
+		List<SearchResultIncome> detailSearchIncomeInfo =  detailSearchIncomeRepository
+		
+		return detailSearchIncomeInfo;
 	}
 
 	// 検索

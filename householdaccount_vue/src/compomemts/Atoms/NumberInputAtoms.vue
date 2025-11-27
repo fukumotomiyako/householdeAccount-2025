@@ -45,7 +45,9 @@ export default {
           return true
         }
       } else if (this.nullFlag === false) {
-        if (String(price).length > 8 || price == 0) {
+        if (!price) {
+          return true
+        } else if (String(price).length > 8) {
           return '8文字以内で入力してください'
         } else if (!/^\d+$/.test(String(price))) {
           return '数字のみ入力できます'

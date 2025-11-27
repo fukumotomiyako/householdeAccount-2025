@@ -17,6 +17,7 @@ export default {
       setRadioName1: '収入',
       setRadioName2: '支出',
       setRadioName3: '指定なし', //ラジオボタン名指定
+      validationCheckFlag: 1, //ボタンの活性化判断のための変数
       validationFlag: true, //ボタンの不活性化判定用
       nullFlag: true,
 
@@ -48,20 +49,21 @@ export default {
         setDateSizeResult: '',
         selectIncomeResult: '',
         selectExpenditureResult: '',
-        setPriceResult: '',
+        setFromPriceResult: '',
+        setToPriceResult: '',
         setAmountResult: '',
         noteResult: '',
       },
       validation: {
         //入力チェックの結果が入る
         radioValidation: false,
-        setDateValidation: false,
-        setDateSizeValidation: false,
-        incomeValidation: false,
-        expenditureValidation: false,
-        amountValidation: false,
-        setPriceSizeValidation: false,
-        noteValidation: false,
+        //   setDateValidation: false,
+        //   setDateSizeValidation: false,
+        //   incomeValidation: false,
+        //   expenditureValidation: false,
+        //   amountValidation: false,
+        //   setPriceSizeValidation: false,
+        //   noteValidation: false,
       },
     }
   },
@@ -86,7 +88,17 @@ export default {
     incomeSearch: function () {
       try {
         axios
-          .get('http://localhost:8080/api/income/detailSearch', this.SearchDetail)
+          .get('http://localhost:8080/api/income/detailSearch', {
+            params: {
+              fromDate: this.SearchDetail.fromDate,
+              toDate: this.SearchDetail.toDate,
+              selectIncome: this.SearchDetail.selectIncome,
+              selectExpenditure: this.SearchDetail.selectExpenditure,
+              fromAmount: this.SearchDetail.fromAmount,
+              toAmount: this.SearchDetail.toAmount,
+              note: this.SearchDetail.note,
+            },
+          })
           .then((response) => {
             console.log(response)
           })
@@ -98,7 +110,17 @@ export default {
     expenditureSearch: function () {
       try {
         axios
-          .get('http://localhost:8080/api/expenditure/detailSearch', this.SearchDetail)
+          .get('http://localhost:8080/api/expenditure/detailSearch', {
+            params: {
+              fromDate: this.SearchDetail.fromDate,
+              toDate: this.SearchDetail.toDate,
+              selectIncome: this.SearchDetail.selectIncome,
+              selectExpenditure: this.SearchDetail.selectExpenditure,
+              fromAmount: this.SearchDetail.fromAmount,
+              toAmount: this.SearchDetail.toAmount,
+              note: this.SearchDetail.note,
+            },
+          })
           .then((response) => {
             console.log(response)
           })
@@ -110,7 +132,17 @@ export default {
     notSpecifiedSearch: function () {
       try {
         axios
-          .get('http://localhost:8080/api/notSpecified/detailSearch', this.SearchDetail)
+          .get('http://localhost:8080/api/notSpecified/detailSearch', {
+            params: {
+              fromDate: this.SearchDetail.fromDate,
+              toDate: this.SearchDetail.toDate,
+              selectIncome: this.SearchDetail.selectIncome,
+              selectExpenditure: this.SearchDetail.selectExpenditure,
+              fromAmount: this.SearchDetail.fromAmount,
+              toAmount: this.SearchDetail.toAmount,
+              note: this.SearchDetail.note,
+            },
+          })
           .then((response) => {
             console.log(response)
           })
@@ -120,7 +152,6 @@ export default {
     },
 
     executeSearch() {
-      this.test = 'aaaaaa'
       if (this.setSelectRadio == '収入') {
         //検索メソッド呼び出し
         this.incomeSearch()
@@ -131,7 +162,6 @@ export default {
         //検索メソッド呼び出し
         this.notSpecifiedSearch()
       }
-      this.test = 'ffffffff'
       this.$emit('execute-method') //モーダル非表示のため、親コンポーネントメソッド呼び出し
     },
 
@@ -157,15 +187,23 @@ export default {
       this.SearchDetail.toDate = toDate
       this.errorMessage.setDateResult = setDateResult
       this.errorMessage.setDateSizeResult = setDateSizeResult
-      this.validation.setDateValidation = setDateValidation
-      this.validation.setDateSizeValidation = setDateSizeValidation
+      if (setDateValidation && setDateSizeValidation) {
+        //両方trueなら
+        this.validationCheckFlag = 0 //validationCheckFlagを０にする
+      } else {
+        this.validationCheckFlag = 1 //それ以外ならfalse
+      }
       this.validationCheck()
     },
 
     finalSelectIncomeType(selectIncome: any, selectIncomeResult: any, incomeValidation: any) {
       this.SearchDetail.selectIncome = selectIncome
       this.errorMessage.selectIncomeResult = selectIncomeResult
-      this.validation.incomeValidation = incomeValidation
+      if (incomeValidation) {
+        this.validationCheckFlag = 0
+      } else {
+        this.validationCheckFlag = 1
+      }
       this.validationCheck()
     },
 
@@ -176,7 +214,11 @@ export default {
     ) {
       this.SearchDetail.selectExpenditure = selectExpenditure
       this.errorMessage.selectExpenditureResult = selectExpenditureResult
-      this.validation.expenditureValidation = expenditureValidation
+      if (expenditureValidation) {
+        this.validationCheckFlag = 0
+      } else {
+        this.validationCheckFlag = 1
+      }
       this.validationCheck()
     },
 
@@ -190,93 +232,82 @@ export default {
     ) {
       this.SearchDetail.selectIncome = selectIncome
       this.errorMessage.selectIncomeResult = selectIncomeResult
-      this.validation.incomeValidation = incomeValidation
       this.SearchDetail.selectExpenditure = selectExpenditure
       this.errorMessage.selectExpenditureResult = selectExpenditureResult
-      this.validation.expenditureValidation = expenditureValidation
+      if (incomeValidation && expenditureValidation) {
+        this.validationCheckFlag = 0
+      } else {
+        this.validationCheckFlag = 1
+      }
       this.validationCheck()
     },
 
     finalSetAmount(
       fromAmount: any,
       toAmount: any,
-      setPriceResult: any,
+      setFromPriceResult: any,
+      setToPriceResult: any,
       setAmountResult: any,
       setPriceValidation: any,
       setPriceSizeValidation: any
     ) {
       this.SearchDetail.fromAmount = fromAmount
       this.SearchDetail.toAmount = toAmount
-      this.errorMessage.setPriceResult = setPriceResult
+      this.errorMessage.setFromPriceResult = setFromPriceResult
+      this.errorMessage.setToPriceResult = setToPriceResult
       this.errorMessage.setAmountResult = setAmountResult
-      this.validation.amountValidation = setPriceValidation
-      this.validation.setPriceSizeValidation = setPriceSizeValidation
+      if (setPriceValidation && setPriceSizeValidation) {
+        this.validationCheckFlag = 0
+      } else {
+        this.validationCheckFlag = 1
+      }
       this.validationCheck()
     },
 
     finalSetNote(note: any, noteResult: any, noteValidation: any) {
       this.SearchDetail.note = note
       this.errorMessage.noteResult = noteResult
-      this.validation.noteValidation = noteValidation
+      if (noteValidation) {
+        this.validationCheckFlag = 0
+      } else {
+        this.validationCheckFlag = 1
+      }
       this.validationCheck()
     },
 
     validationCheck() {
-      //入力チェックの結果からボタンを押せるようにするかどうか判断
-      if (this.setSelectRadio == '収入') {
+      if (this.validationCheckFlag == 1) {
+        //validationCheckFlagが1なら
+        this.validationFlag = true //validationFlagをtrue(ボタンを押せない)にする
+      } else if (this.validationCheckFlag == 0) {
         if (
-          //どれか一つでもValidationに引っかかったら分岐に入るif文を作成
-          //初期値trueにする
-          //どれか一つでもfalseだったらvalidationFlag = true
-          //validationを呼ぶ関数の中で分岐に入るかどうかの判断を行う (this.validation.setDateSizeValidation && this.validation.setDateValidation) ||
-          //エラーメッセージで判別を行うようにする
-          (this.validation.setDateSizeValidation && this.validation.setDateValidation) ||
-          (this.validation.setPriceSizeValidation && this.validation.amountValidation) ||
-          this.validation.incomeValidation ||
-          this.validation.noteValidation
+          //ひとつでも値が入っていたら
+          this.SearchDetail.fromDate ||
+          this.SearchDetail.toDate ||
+          this.SearchDetail.selectIncome ||
+          this.SearchDetail.selectExpenditure ||
+          this.SearchDetail.fromAmount ||
+          this.SearchDetail.toAmount ||
+          this.SearchDetail.note
         ) {
-          this.validationFlag = false
+          if (
+            !this.errorMessage.radioButtonResult &&
+            !this.errorMessage.setDateResult &&
+            !this.errorMessage.setDateSizeResult &&
+            !this.errorMessage.selectIncomeResult &&
+            !this.errorMessage.selectExpenditureResult &&
+            !this.errorMessage.setFromPriceResult &&
+            !this.errorMessage.setToPriceResult &&
+            !this.errorMessage.setAmountResult &&
+            !this.errorMessage.noteResult
+          ) {
+            this.validationFlag = false //validationFlagをfalse(ボタンを押せる)にする
+          } else {
+            this.validationFlag = true //validationFlagをtrue(ボタンを押せない)にする
+          }
         } else {
-          this.validationFlag = true
+          this.validationFlag = true //validationFlagをtrue(ボタンを押せない)にする
         }
-      } else if (this.setSelectRadio == '支出') {
-        if (
-          (this.validation.setDateSizeValidation && this.validation.setDateValidation) ||
-          (this.validation.setPriceSizeValidation && this.validation.amountValidation) ||
-          this.validation.expenditureValidation ||
-          this.validation.noteValidation
-          //どれか一つでもtrueだったら　true=正常な入力　false=不正な入力
-        ) {
-          this.validationFlag = false //押せる
-        } else {
-          this.validationFlag = true //押せない
-        }
-      } else if (this.setSelectRadio == '指定なし') {
-        if (
-          (this.validation.setDateSizeValidation && this.validation.setDateValidation) ||
-          (this.validation.setPriceSizeValidation && this.validation.amountValidation) ||
-          this.validation.incomeValidation ||
-          this.validation.expenditureValidation ||
-          this.validation.noteValidation
-        ) {
-          this.validationFlag = false
-        } else {
-          this.validationFlag = true
-        }
-      }
-
-      if (
-        this.SearchDetail.fromDate ||
-        this.SearchDetail.toDate ||
-        this.SearchDetail.selectIncome ||
-        this.SearchDetail.selectExpenditure ||
-        this.SearchDetail.fromAmount ||
-        this.SearchDetail.toAmount ||
-        this.SearchDetail.note
-      ) {
-        this.validationFlag = false
-      } else {
-        this.validationFlag = true
       }
     },
   },
@@ -285,7 +316,6 @@ export default {
 <template>
   <div id="modal">
     <div id="modal-content" class="modal">
-      <p>{{ validation }}</p>
       <div>
         <label>収支区分：</label>
         <RadioButton
@@ -344,7 +374,8 @@ export default {
       <div>
         <label>金額：</label>
         <NumberInput :setNullFlag="false" @execute-method="finalSetAmount" />
-        <p>{{ errorMessage.setPriceResult }}</p>
+        <p>{{ errorMessage.setFromPriceResult }}</p>
+        <p>{{ errorMessage.setToPriceResult }}</p>
         <p>{{ errorMessage.setAmountResult }}</p>
       </div>
       <div>
@@ -352,10 +383,11 @@ export default {
         <TextArea @execute-method="finalSetNote" />
         <p>{{ errorMessage.noteResult }}</p>
       </div>
+
       <div>
-        <p>{{ test }}</p>
-        <Button buttonName="検索" @blur="executeSearch" :disabled="validationFlag" />
+        <Button buttonName="検索" @click="executeSearch" :disabled="validationFlag" />
       </div>
+      <p>{{ validationCheckFlag }}</p>
     </div>
   </div>
 </template>

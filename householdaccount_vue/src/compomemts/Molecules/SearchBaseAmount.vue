@@ -8,7 +8,8 @@ export default {
     return {
       fromAmount: '',
       toAmount: '', //Atomsから受け取った金額
-      setPriceResult: '', //Atomsから受け取ったエラーメッセージ
+      setFromPriceResult: '', //Atomsから受け取ったエラーメッセージ
+      setToPriceResult: '',
       setAmountResult: '', //Moleculesで出るエラーメッセージ
       setPriceValidation: '', //Atomsから受けとった入力チェックの結果
       setPriceSizeValidation: '', //Moleculesでの入力チェックの結果
@@ -16,14 +17,20 @@ export default {
   },
   methods: {
     setAmount(price: any, priceResult: any, priceValidation: any) {
-      this.setPriceResult = priceResult
+      if (price == this.fromAmount) {
+        //priceとfromAmountの値が同じだったら、
+        this.setFromPriceResult = priceResult //setFromPriceResultにpriceResultをいれる
+      } else {
+        this.setToPriceResult = priceResult //それ以外はsetToPriceResultにpriceResultをいれる
+      }
       this.setPriceValidation = priceValidation
       this.amountValidate()
       this.$emit(
         'execute-method',
         this.fromAmount,
         this.toAmount,
-        this.setPriceResult,
+        this.setFromPriceResult,
+        this.setToPriceResult,
         this.setAmountResult,
         this.setPriceValidation,
         this.setPriceSizeValidation
