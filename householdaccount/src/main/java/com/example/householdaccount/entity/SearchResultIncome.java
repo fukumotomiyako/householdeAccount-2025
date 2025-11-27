@@ -11,12 +11,16 @@ import com.example.householdaccount.entity.Income.IncomeNoVO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "income_info")
 public class SearchResultIncome {
 	//private String balanceClassification = "収入";
@@ -36,6 +40,6 @@ public class SearchResultIncome {
 		private String note;
 
 		@Column(name="delete_frag")
-		private boolean deleteFlag;
+		private boolean deleteFrag;
 
 }

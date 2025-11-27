@@ -4,15 +4,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.example.householdaccount.entity.Expenditure;
 import com.example.householdaccount.entity.ExpenditureItems;
 import com.example.householdaccount.entity.ExpenditureItems.ExpenditureExpenseItemCodeVO;
-import com.example.householdaccount.entity.Income.IncomeNoVO;
 import com.example.householdaccount.entity.Income;
 import com.example.householdaccount.entity.SearchBalanceExpenditureInfo;
 import com.example.householdaccount.entity.SearchBalanceIncomeInfo;
@@ -22,7 +21,6 @@ import com.example.householdaccount.form.ExpenditureEditForm;
 import com.example.householdaccount.form.ExpenditureForm;
 import com.example.householdaccount.form.IncomeEditForm;
 import com.example.householdaccount.form.IncomeForm;
-import com.example.householdaccount.form.SearchBalanceInfo;
 import com.example.householdaccount.repository.mybatis.DetailSearchIncomeRepository;
 import com.example.householdaccount.repository.mybatis.ExpenditureRepository;
 import com.example.householdaccount.repository.mybatis.GetExpenditureItemsRepository;
@@ -31,6 +29,7 @@ import com.example.householdaccount.repository.mybatis.SearchBalanceExpenditureR
 import com.example.householdaccount.repository.mybatis.SearchBalanceIncomeInfoRepository;
 import com.example.householdaccount.repository.mybatis.SearchExpenditureHouseholdRepository;
 import com.example.householdaccount.repository.mybatis.SearchIncomeHouseholdRepository;
+import com.example.householdaccount.specification.DetailSearchIncomeSpecification;
 
 @Service
 public class HouseholdService {
@@ -195,12 +194,26 @@ public class HouseholdService {
 	
 	@Autowired
 	DetailSearchIncomeRepository detailSearchIncomeRepository;
-	//FormとEntity検索の使いまわしでよい、、、？
-	public List<SearchResultIncome> getDetailSearchIncomeList(Date fromDate,Date toDate,Integer selectIncome,
+	
+//	@Autowired
+//	DetailSearchIncomeSpecification<SearchBalanceIncomeInfo> spec;
+
+	//収入検索
+	public List<SearchBalanceIncomeInfo> getDetailSearchIncomeList(Date fromDate,Date toDate,Integer selectIncome,
 															Integer fromAmount,Integer toAmount,String note){
+		//Specification生成
+		DetailSearchIncomeSpecification<SearchBalanceIncomeInfo> spec = new DetailSearchIncomeSpecification<>();
+		
+//		boolean deleteFlag = false;
 		
 		//引数をもとに検索を行う
-		List<SearchResultIncome> detailSearchIncomeInfo =  detailSearchIncomeRepository
+		List<SearchBalanceIncomeInfo> detailSearchIncomeInfo =  detailSearchIncomeRepository.findAll(//Specification spec
+				Specification.where(spec.dateGreaterThanLessThan(fromDate, toDate))
+				.and(spec.incomeTypeMatch(selectIncome))
+				.and(spec.amountGreaterThanLessThan(fromAmount, toAmount))
+				.and(spec.noteMatch(note))
+				.and(spec.deleteFlagCheck())
+				);
 		
 		return detailSearchIncomeInfo;
 	}
