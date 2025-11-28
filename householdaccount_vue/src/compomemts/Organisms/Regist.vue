@@ -237,19 +237,21 @@ export default {
           :radioName1="setRadioName1"
           :radioName2="setRadioName2"
           :notSelect="false"
+          :nullFlag="true"
           @execute-method="finalSelectRadio"
         />
         <p>{{ errorMessage.radioButtonResult }}</p>
       </div>
       <div>
         <label>{{ '収支日付：' }}</label>
-        <DateInput @execute-method="finalSetDate" />
+        <DateInput :nullFlag="true" @execute-method="finalSetDate" />
         <p>{{ errorMessage.dateResult }}</p>
       </div>
       <div>
         <FormSelect
           :selectRadioName="setSelectRadio"
           :items="expenditureItems"
+          :nullFlag="true"
           @executeIncome-method="finalselectIncomeType"
           @executeExpenditure-method="finalselectExpenditureType"
         />
@@ -262,7 +264,7 @@ export default {
       </div>
       <div>
         <label>{{ '金額：' }}</label>
-        <NumberInput @execute-method="finalSetNumber" />
+        <NumberInput :nullFlag="true" @execute-method="finalSetNumber" />
         <p>{{ errorMessage.priceResult }}</p>
       </div>
       <div>

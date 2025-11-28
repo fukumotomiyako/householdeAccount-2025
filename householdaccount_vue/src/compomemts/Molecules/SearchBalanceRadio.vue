@@ -36,8 +36,9 @@ export default {
         } else {
           return true
         }
+      } else {
+        return true
       }
-      return true
     },
   },
 }

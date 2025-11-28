@@ -10,6 +10,7 @@ export default {
     radioName1: String, //表示するラジオボタンの名前
     radioName2: String, //表示するラジオボタンの名前
     notSelect: Boolean, //選択可否のtrueかfalse
+    nullFlag: Boolean,
   },
   data() {
     return {
@@ -38,8 +39,12 @@ export default {
     },
 
     selectRadioCheckValidate(setRadioName: any) {
-      if (!setRadioName) {
-        return '選択してください'
+      if (this.nullFlag === true) {
+        if (!setRadioName) {
+          return '選択してください'
+        } else {
+          return true
+        }
       } else {
         return true
       }

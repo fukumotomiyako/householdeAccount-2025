@@ -29,6 +29,7 @@ import com.example.householdaccount.entity.SearchBalanceIncomeInfo;
 import com.example.householdaccount.entity.SearchResultExpenditure;
 import com.example.householdaccount.entity.SearchResultIncome;
 import com.example.householdaccount.form.IncomeEditForm;
+import com.example.householdaccount.form.DetailSearchForm;
 import com.example.householdaccount.form.ExpenditureEditForm;
 import com.example.householdaccount.form.ExpenditureForm;
 import com.example.householdaccount.form.IncomeForm;
@@ -190,7 +191,7 @@ public class HouseholedController {
 	// 詳細検索
 	// 収入
 	@RequestMapping(value = "/income/detailSearch", method = RequestMethod.GET)
-	public String incomeDetailSearch(
+	public List<DetailSearchForm> incomeDetailSearch(
 			@RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern = "yy-MM-dd") Date fromDate,
 			@RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = "yy-MM-dd") Date toDate,
 			@RequestParam(value = "selectIncome", required = false) Integer selectIncome,
@@ -203,7 +204,7 @@ public class HouseholedController {
 				selectIncome, fromAmount, toAmount, note);
 
 		// 収入データを格納するformを用意
-		List<SearchBalanceInfo> searchBalanceResult = new ArrayList<SearchBalanceInfo>();
+		List<DetailSearchForm> searchBalanceResult = new ArrayList<DetailSearchForm>();
 
 		// searchResultIncomeInfoの数分searchResultIncomeに値を入れ、searchBalanceResultにセットしていく
 		for (int i = 0; i < searchResultIncomeInfo.size(); i++) {
@@ -215,9 +216,9 @@ public class HouseholedController {
 			// NoをString型に変換(引数に指定した型をString型に変換する)
 			String No = String.valueOf(searchResultIncomeInfo.get(i).getIncomeNo());
 
-			SearchBalanceInfo searchResultIncome = new SearchBalanceInfo();
+			DetailSearchForm searchResultIncome = new DetailSearchForm();
 			searchResultIncome.setBalanceType("収入");
-			searchResultIncome.setBalanceNo(No);
+			searchResultIncome.setBalanceCode(No);
 			searchResultIncome.setBalanceDate(date);
 			searchResultIncome.setIncomeType(searchResultIncomeInfo.get(i).getIncomeType());
 			searchResultIncome.setAmount(searchResultIncomeInfo.get(i).getAmount());
@@ -226,7 +227,7 @@ public class HouseholedController {
 
 			// 確認用
 			System.out.println(searchResultIncome.getBalanceType());
-			System.out.println(searchResultIncome.getBalanceNo());
+			System.out.println(searchResultIncome.getBalanceCode());
 			System.out.println(searchResultIncome.getBalanceDate());
 			System.out.println(searchResultIncome.getIncomeType());
 			System.out.println(searchResultIncome.getAmount());
@@ -234,12 +235,12 @@ public class HouseholedController {
 		}
 		System.out.println(searchBalanceResult);
 
-		return "検索できました";
+		return searchBalanceResult;
 	}
 
 	// 支出
 	@RequestMapping(value = "/expenditure/detailSearch", method = RequestMethod.GET)
-	public String expenditureDetailSearch(
+	public List<DetailSearchForm> expenditureDetailSearch(
 			@RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern = "yy-MM-dd") Date fromDate,
 			@RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = "yy-MM-dd") Date toDate,
 			@RequestParam(value = "selectExpenditure", required = false) String selectExpenditure,
@@ -259,7 +260,7 @@ public class HouseholedController {
 				.getDetailSearchExpenditureList(fromDate, toDate, selectExpenditure, fromAmount, toAmount, note);
 
 		// 収入データを格納するformを用意
-		List<SearchBalanceInfo> searchBalanceResult = new ArrayList<SearchBalanceInfo>();
+		List<DetailSearchForm> searchBalanceResult = new ArrayList<DetailSearchForm>();
 
 		// searchResultIncomeInfoの数分searchResultIncomeに値を入れ、searchBalanceResultにセットしていく
 		for (int i = 0; i < SearchResultExpenditureInfo.size(); i++) {
@@ -271,9 +272,9 @@ public class HouseholedController {
 			// NoをString型に変換(引数に指定した型をString型に変換する)
 			String No = String.valueOf(SearchResultExpenditureInfo.get(i).getExpenditureNo());
 
-			SearchBalanceInfo searchResultExpenditure = new SearchBalanceInfo();
+			DetailSearchForm searchResultExpenditure = new DetailSearchForm();
 			searchResultExpenditure.setBalanceType("支出");
-			searchResultExpenditure.setBalanceNo(No);
+			searchResultExpenditure.setBalanceCode(No);
 			searchResultExpenditure.setBalanceDate(date);
 			searchResultExpenditure
 					.setExpenditureExpenseItemName(SearchResultExpenditureInfo.get(i).getExpenditureExpenseItemName());
@@ -283,7 +284,7 @@ public class HouseholedController {
 
 			// 確認用
 			System.out.println(searchResultExpenditure.getBalanceType());
-			System.out.println(searchResultExpenditure.getBalanceNo());
+			System.out.println(searchResultExpenditure.getBalanceCode());
 			System.out.println(searchResultExpenditure.getBalanceDate());
 			System.out.println(searchResultExpenditure.getExpenditureExpenseItemName());
 			System.out.println(searchResultExpenditure.getAmount());
@@ -291,12 +292,12 @@ public class HouseholedController {
 		}
 		System.out.println(searchBalanceResult);
 
-		return "検索できました";
+		return searchBalanceResult;
 	}
 
 	// 指定なし
 	@RequestMapping(value = "/notSpecified/detailSearch", method = RequestMethod.GET)
-	public String notSpecifiedDetailSearch(
+	public List<DetailSearchForm> notSpecifiedDetailSearch(
 			@RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern = "yy-MM-dd") Date fromDate,
 			@RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = "yy-MM-dd") Date toDate,
 			@RequestParam(value = "selectIncome", required = false) Integer selectIncome,
@@ -313,7 +314,7 @@ public class HouseholedController {
 				.getDetailSearchExpenditureList(fromDate, toDate, selectExpenditure, fromAmount, toAmount, note);
 
 		// 収入データを格納するformを用意
-		List<SearchBalanceInfo> searchBalanceResult = new ArrayList<SearchBalanceInfo>();
+		List<DetailSearchForm> searchBalanceResult = new ArrayList<DetailSearchForm>();
 
 		// searchResultIncomeInfoの数分searchResultIncomeに値を入れ、searchBalanceResultにセットしていく
 		for (int i = 0; i < searchResultIncomeInfo.size(); i++) {
@@ -325,9 +326,9 @@ public class HouseholedController {
 			// NoをString型に変換(引数に指定した型をString型に変換する)
 			String No = String.valueOf(searchResultIncomeInfo.get(i).getIncomeNo());
 
-			SearchBalanceInfo searchResultIncome = new SearchBalanceInfo();
+			DetailSearchForm searchResultIncome = new DetailSearchForm();
 			searchResultIncome.setBalanceType("収入");
-			searchResultIncome.setBalanceNo(No);
+			searchResultIncome.setBalanceCode(No);
 			searchResultIncome.setBalanceDate(date);
 			searchResultIncome.setIncomeType(searchResultIncomeInfo.get(i).getIncomeType());
 			searchResultIncome.setAmount(searchResultIncomeInfo.get(i).getAmount());
@@ -336,7 +337,7 @@ public class HouseholedController {
 
 			// 確認用
 			System.out.println(searchResultIncome.getBalanceType());
-			System.out.println(searchResultIncome.getBalanceNo());
+			System.out.println(searchResultIncome.getBalanceCode());
 			System.out.println(searchResultIncome.getBalanceDate());
 			System.out.println(searchResultIncome.getIncomeType());
 			System.out.println(searchResultIncome.getAmount());
@@ -352,9 +353,9 @@ public class HouseholedController {
 			// NoをString型に変換(引数に指定した型をString型に変換する)
 			String No = String.valueOf(SearchResultExpenditureInfo.get(i).getExpenditureNo());
 
-			SearchBalanceInfo searchResultExpenditure = new SearchBalanceInfo();
+			DetailSearchForm searchResultExpenditure = new DetailSearchForm();
 			searchResultExpenditure.setBalanceType("支出");
-			searchResultExpenditure.setBalanceNo(No);
+			searchResultExpenditure.setBalanceCode(No);
 			searchResultExpenditure.setBalanceDate(date);
 			searchResultExpenditure
 					.setExpenditureExpenseItemName(SearchResultExpenditureInfo.get(i).getExpenditureExpenseItemName());
@@ -364,7 +365,7 @@ public class HouseholedController {
 
 			// 確認用
 			System.out.println(searchResultExpenditure.getBalanceType());
-			System.out.println(searchResultExpenditure.getBalanceNo());
+			System.out.println(searchResultExpenditure.getBalanceCode());
 			System.out.println(searchResultExpenditure.getBalanceDate());
 			System.out.println(searchResultExpenditure.getExpenditureExpenseItemName());
 			System.out.println(searchResultExpenditure.getAmount());
@@ -372,7 +373,7 @@ public class HouseholedController {
 		}
 		System.out.println(searchBalanceResult);
 
-		return "検索できました";
+		return searchBalanceResult;
 	}
 
 	// 収入データと支出データを同時に検索して、同時に結果を返す(通常検索)

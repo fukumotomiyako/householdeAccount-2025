@@ -229,6 +229,7 @@ export default {
           :radioName2="setRadioName2"
           :setRadioButton="editInfo.balanceType"
           :notSelect="true"
+          :nullFlag="true"
         />
         <p>{{ errorMessage.radioButtonResult }}</p>
       </div>
@@ -237,6 +238,7 @@ export default {
         <DateInput
           :getDate="editInfo.balanceDate"
           :key="editInfo.balanceDate"
+          :nullFlag="true"
           @execute-method="editSetDate"
         />
         <p>{{ errorMessage.dateResult }}</p>
@@ -247,6 +249,7 @@ export default {
             :selectRadioName="editInfo.balanceType"
             :getIncome="editInfo.incomeType"
             :items="expenditureItems"
+            :nullFlag="true"
             :key="editInfo.incomeType"
             @executeIncome-method="editSelectIncome"
           />
@@ -258,6 +261,7 @@ export default {
             :selectRadioName="editInfo.balanceType"
             :getExpenditure="editInfo.expenditureExpenseItemName"
             :items="expenditureItems"
+            :nullFlag="true"
             :key="editInfo.expenditureExpenseItemName"
             @executeExpenditure-method="editSelectExpenditure"
           />
@@ -268,6 +272,7 @@ export default {
         <label>{{ '金額：' }}</label>
         <NumberInput
           :getPrice="editInfo.amount"
+          :nullFlag="true"
           :key="editInfo.amount"
           @execute-method="editSetNumber"
         />

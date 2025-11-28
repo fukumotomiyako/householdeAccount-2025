@@ -9,7 +9,7 @@ import axios from 'axios'
 
 export default {
   components: { RadioButton, NumberInput, FormSelect, Button, TextArea, Date },
-  emits: ['execute-method'],
+  emits: ['executeDetail-method'],
   data() {
     return {
       test: 'gggggg', //デバック用
@@ -20,6 +20,12 @@ export default {
       validationCheckFlag: 1, //ボタンの活性化判断のための変数
       validationFlag: true, //ボタンの不活性化判定用
       nullFlag: true,
+      i: [
+        {
+          incomeNo: '',
+          incomeDate: '',
+        },
+      ],
 
       expenditureItems: [
         //支出費目
@@ -32,6 +38,16 @@ export default {
           //支出費目　カナ
         },
       ],
+      searchDetailInfo: {
+        balanceCode: '',
+        balanceType: '',
+        balanceDate: '',
+        incomeType: '',
+        incomeTypeName: '',
+        expenditureExpenseItemName: '',
+        amount: '',
+        note: '',
+      },
       SearchDetail: {
         //検索情報が入る
         fromDate: '',
@@ -57,13 +73,6 @@ export default {
       validation: {
         //入力チェックの結果が入る
         radioValidation: false,
-        //   setDateValidation: false,
-        //   setDateSizeValidation: false,
-        //   incomeValidation: false,
-        //   expenditureValidation: false,
-        //   amountValidation: false,
-        //   setPriceSizeValidation: false,
-        //   noteValidation: false,
       },
     }
   },
@@ -85,23 +94,22 @@ export default {
       }
     },
 
-    incomeSearch: function () {
+    incomeSearch: async function () {
       try {
-        axios
-          .get('http://localhost:8080/api/income/detailSearch', {
-            params: {
-              fromDate: this.SearchDetail.fromDate,
-              toDate: this.SearchDetail.toDate,
-              selectIncome: this.SearchDetail.selectIncome,
-              selectExpenditure: this.SearchDetail.selectExpenditure,
-              fromAmount: this.SearchDetail.fromAmount,
-              toAmount: this.SearchDetail.toAmount,
-              note: this.SearchDetail.note,
-            },
-          })
-          .then((response) => {
-            console.log(response)
-          })
+        const response = await axios.get('http://localhost:8080/api/income/detailSearch', {
+          params: {
+            fromDate: this.SearchDetail.fromDate,
+            toDate: this.SearchDetail.toDate,
+            selectIncome: this.SearchDetail.selectIncome,
+            selectExpenditure: this.SearchDetail.selectExpenditure,
+            fromAmount: this.SearchDetail.fromAmount,
+            toAmount: this.SearchDetail.toAmount,
+            note: this.SearchDetail.note,
+          },
+        })
+        console.log(response)
+        this.searchDetailInfo = response.data
+        this.$emit('executeDetail-method', this.searchDetailInfo)
       } catch (error) {
         console.log(error)
       }
@@ -123,6 +131,8 @@ export default {
           })
           .then((response) => {
             console.log(response)
+            this.searchDetailInfo = response.data
+            this.$emit('executeDetail-method', this.searchDetailInfo)
           })
       } catch (error) {
         console.log(error)
@@ -145,6 +155,8 @@ export default {
           })
           .then((response) => {
             console.log(response)
+            this.searchDetailInfo = response.data
+            this.$emit('executeDetail-method', this.searchDetailInfo)
           })
       } catch (error) {
         console.log(error)
@@ -162,7 +174,6 @@ export default {
         //検索メソッド呼び出し
         this.notSpecifiedSearch()
       }
-      this.$emit('execute-method') //モーダル非表示のため、親コンポーネントメソッド呼び出し
     },
 
     finalSelectRadio(setRadioName: any, radioButtonResult: any, radioValidation: any) {

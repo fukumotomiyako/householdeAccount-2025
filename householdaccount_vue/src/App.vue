@@ -137,7 +137,9 @@ export default {
       this.detail_modal = true
     },
 
-    detailReturn() {
+    detailSet(searchDetailInfo: any) {
+      this.searchResultBalanceInfo = searchDetailInfo
+      this.searchResultChangeFormat()
       this.detail_modal = false
     },
   },
@@ -164,7 +166,7 @@ export default {
     <!-- 詳細検索モーダル表示 -->
     <span @click="executeSearch">詳細検索▼</span>
     <div v-if="detail_modal == true">
-      <Detail @execute-method="detailReturn" />
+      <Detail @executeDetail-method="detailSet" />
     </div>
 
     <!-- 編集モーダル表示 -->
