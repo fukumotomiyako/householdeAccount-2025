@@ -4,25 +4,10 @@ import java.util.Date;
 
 import org.springframework.data.jpa.domain.Specification;
 
-public class DetailSearchIncomeSpecification<SearchBalanceIncomeInfo> {
-
-//	// 日付(from以降の検索)
-//	public Specification<T> fromDateGreaterThanEqual(Date fromDate) {
-//		return fromDate == null ? null : (root, query, builder) -> {
-//			return builder.greaterThanOrEqualTo(root.get("fromDate"), fromDate);
-//			// fromDateがnullの場合ではない場合は、fromDate以降の日付を検索する
-//		};
-//	}
-//
-//	// 日付(to以前の検索)
-//	public Specification<T> toDateLessThanEqual(Date toDate) {
-//		return toDate == null ? null : (root, query, builder) -> {
-//			return builder.lessThanOrEqualTo(root.get("toDate"), toDate);
-//		};
-//	}
+public class DetailSearchIncomeSpecification<SearchResultIncome> {
 
 	// 日付(from~toの検索)
-	public Specification<SearchBalanceIncomeInfo> dateGreaterThanLessThan(Date fromDate, Date toDate) {
+	public Specification<SearchResultIncome> dateGreaterThanLessThan(Date fromDate, Date toDate) {
 		return (root, query, builder) -> {
 			// root:Entityのルート Entityのフィールド
 			// query:CriteriaQuery SQLのSELECT文を表す
@@ -48,7 +33,7 @@ public class DetailSearchIncomeSpecification<SearchBalanceIncomeInfo> {
 	}
 
 	// 収入費目検索
-	public Specification<SearchBalanceIncomeInfo> incomeTypeMatch(Integer selectIncome) {
+	public Specification<SearchResultIncome> incomeTypeMatch(Integer selectIncome) {
 		return selectIncome == null ? null : (root, query, builder) -> {
 			return builder.equal(root.get("incomeType"), selectIncome);
 		};
@@ -62,7 +47,7 @@ public class DetailSearchIncomeSpecification<SearchBalanceIncomeInfo> {
 //	}
 
 	// 金額(from~toの検索)
-	public Specification<SearchBalanceIncomeInfo> amountGreaterThanLessThan(Integer fromAmount, Integer toAmount) {
+	public Specification<SearchResultIncome> amountGreaterThanLessThan(Integer fromAmount, Integer toAmount) {
 		return (root, query, builder) -> {
 			if (fromAmount != null && toAmount != null) {
 				return builder.and(builder.greaterThanOrEqualTo(root.get("amount"), fromAmount),
@@ -78,22 +63,20 @@ public class DetailSearchIncomeSpecification<SearchBalanceIncomeInfo> {
 		};
 	}
 
-	// 備考検索
-//	public Specification<SearchBalanceIncomeInfo> noteMatch(String note){
-//		return note == null ? null : (root,equal,builder) -> {
-//			return builder.equal(root.get("note"), note);
-//		};
-
-	public Specification<SearchBalanceIncomeInfo> noteMatch(String note) {
+	// 備考検索(部分一致)
+	public Specification<SearchResultIncome> noteLikeContains(String note) {
 		return (root, equal, builder) -> {
 			if(note == null||note == "") {
 				return null;
 			}
-			return builder.equal(root.get("note"), note);
+			String containNote = "%" + note + "%";
+			//noteを含む文字列
+			return builder.like(root.get("note"), containNote);
 		};
 	}
 	
-	public Specification<SearchBalanceIncomeInfo> deleteFlagCheck(){
+	//deleteFlagチェック
+	public Specification<SearchResultIncome> deleteFlagCheck(){
 		return (root,equal,builder) -> {
 			return builder.equal(root.get("deleteFrag"), false);
 		};

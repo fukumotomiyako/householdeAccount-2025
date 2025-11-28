@@ -35,7 +35,4 @@ public class SearchBalanceIncomeInfo {
 	
 	@Column(name="note")
 	private String note;
-	
-	@Column(name="delete_frag")
-	private boolean deleteFrag;
 }
