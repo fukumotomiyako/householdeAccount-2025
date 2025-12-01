@@ -63,7 +63,24 @@ export default {
 </script>
 
 <template>
-  <NumberInput v-model="fromAmount" :nullFlag="setNullFlag" @execute-method="setAmount" />
+  <NumberInput
+    class="modal_size"
+    v-model="fromAmount"
+    :nullFlag="setNullFlag"
+    @execute-method="setAmount"
+  />
   <label>{{ '~' }}</label>
-  <NumberInput v-model="toAmount" :nullFlag="setNullFlag" @execute-method="setAmount" />
+  <NumberInput
+    class="modal_size"
+    v-model="toAmount"
+    :nullFlag="setNullFlag"
+    @execute-method="setAmount"
+  />
 </template>
+
+<style scoped>
+.modal_size {
+  width: 150px; /* 横幅 */
+  height: 30px; /* 高さ */
+}
+</style>

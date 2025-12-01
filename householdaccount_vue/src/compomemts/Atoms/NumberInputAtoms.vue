@@ -61,5 +61,18 @@ export default {
 </script>
 
 <template>
-  <input type="number" v-model="price" placeholder="8桁以内で入力" @blur="setPrice" />
+  <input
+    class="amount"
+    type="number"
+    v-model="price"
+    placeholder="8桁以内で入力"
+    @blur="setPrice"
+  />
 </template>
+
+<style scoped>
+.amount {
+  width: 300px; /* 横幅 */
+  height: 35px; /* 高さ */
+}
+</style>

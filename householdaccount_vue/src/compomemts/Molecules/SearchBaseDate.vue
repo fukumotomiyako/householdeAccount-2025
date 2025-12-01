@@ -58,7 +58,14 @@ export default {
 }
 </script>
 <template>
-  <date v-model="fromDate" :nullFlag="setNullFlag" @execute-method="setDate" />
+  <date class="modal_size" v-model="fromDate" :nullFlag="setNullFlag" @execute-method="setDate" />
   <label>{{ '~' }}</label>
-  <date v-model="toDate" :nullFlag="setNullFlag" @execute-method="setDate" />
+  <date class="modal_size" v-model="toDate" :nullFlag="setNullFlag" @execute-method="setDate" />
 </template>
+
+<style scoped>
+.modal_size {
+  width: 150px; /* 横幅 */
+  height: 30px; /* 高さ */
+}
+</style>

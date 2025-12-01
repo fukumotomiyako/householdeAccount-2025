@@ -24,7 +24,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="modal_btn">
     <ButtonAtoms
       :buttonName="setButtonName1"
       @click="executeButton1"
@@ -33,3 +33,6 @@ export default {
     <ButtonAtoms :buttonName="setButtonName2" @click="executeButton2" />
   </div>
 </template>
+
+<style scoped>
+</style>

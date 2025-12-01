@@ -58,5 +58,12 @@ export default {
 </script>
 
 <template>
-  <input type="date" v-model="date" @blur="setDate" placeholder="YYYY/MM/DD" />
+  <input class="date" type="date" v-model="date" @blur="setDate" placeholder="YYYY/MM/DD" />
 </template>
+
+<style scoped>
+.date {
+  width: 300px; /* 横幅 */
+  height: 35px; /* 高さ */
+}
+</style>

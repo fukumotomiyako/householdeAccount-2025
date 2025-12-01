@@ -45,7 +45,7 @@ export default {
       this.$emit('executeDelete-method')
     },
 
-    excecuteDelete() {
+    executeDelete() {
       if (this.incomeNo) {
         //incomeNoに値が入っていたら
         this.incomeDelete(this.incomeNo)
@@ -60,23 +60,25 @@ export default {
 </script>
 
 <template>
-  <div id="model">
+  <div id="modal">
     <div id="modal-content" class="modal">
       <p>1件のデータを削除します。よろしいですか？</p>
-      <Button
-        setButtonName1="キャンセル"
-        setButtonName2="削除"
-        @executeButton1-method="executeCancel"
-        @executeButton2-method="excecuteDelete"
-      />
+      <div class="modal__btn">
+        <Button
+          setButtonName1="キャンセル"
+          setButtonName2="削除"
+          @executeButton1-method="executeCancel"
+          @executeButton2-method="executeDelete"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .modal {
-  padding: 10px 20px;
-  border: 2px solid #a5272a;
+  padding: 10px 20px; /*枠の余白*/
+  border: 2px solid #a5272a; /*枠線*/
   background: #faebd7;
   z-index: 2;
   display: block;
@@ -86,54 +88,5 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 10px;
-}
-
-.modal__message {
-  margin-top: 10px;
-}
-
-.modal__cancel {
-  margin-right: 30px;
-  font-size: 15px;
-}
-
-.modal__cancel:hover {
-  cursor: pointer;
-  color: rgb(14, 48, 240);
-  font-weight: bold;
-}
-
-.modal__btn {
-  display: inline-block;
-  margin: 30px auto;
-  text-decoration: none;
-  width: 80px;
-  height: 30px;
-  text-decoration: none;
-  color: #000000;
-  border: solid 2px #a5272a;
-  border-radius: 3px;
-  transition: 0.4s;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 15px;
-  background-color: #faebd7;
-}
-
-.modal__btn:hover {
-  background: #a5272a;
-  color: white;
-  cursor: pointer;
-}
-
-#modal-overlay {
-  z-index: 1;
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 120%;
-  background-color: rgba(0, 0, 0, 0.75);
 }
 </style>

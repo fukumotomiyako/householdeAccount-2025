@@ -51,5 +51,12 @@ export default {
 </script>
 
 <template>
-  <textarea v-model="note" @blur="setNote" placeholder="200文字以内で入力"> </textarea>
+  <textarea class="text" v-model="note" @blur="setNote" placeholder="200文字以内で入力"> </textarea>
 </template>
+
+<style scoped>
+.text {
+  width: 300px; /* 横幅 */
+  height: 100px; /* 高さ */
+}
+</style>

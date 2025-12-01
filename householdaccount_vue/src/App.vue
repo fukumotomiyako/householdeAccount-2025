@@ -157,6 +157,21 @@ export default {
       @keyup.enter="searchBalanceInfo"
     />
 
+    <!-- 施策 -->
+    <div
+      contenteditable="true"
+      id="detailSearch"
+      class="search_text"
+      placeholder="Type here"
+      @keyup.enter="searchBalanceInfo"
+    >
+      <!-- 詳細検索モーダル表示 -->
+      <span @click="executeSearch" contenteditable="false">詳細検索▼</span>
+      <div v-if="detail_modal == true">
+        <Detail @executeDetail-method="detailSet" />
+      </div>
+    </div>
+
     <!-- 登録モーダル表示 -->
     <button @click="excuteRegist">収支登録</button>
     <div v-if="regist_modal == true">

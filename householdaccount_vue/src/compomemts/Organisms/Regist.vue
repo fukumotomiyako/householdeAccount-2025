@@ -232,15 +232,17 @@ export default {
       <h6>登録情報</h6>
       <div>
         <label>{{ '収支区分：' }}</label>
-        <RadioButton
-          :setRadioButton="setSelectRadio"
-          :radioName1="setRadioName1"
-          :radioName2="setRadioName2"
-          :notSelect="false"
-          :nullFlag="true"
-          @execute-method="finalSelectRadio"
-        />
-        <p>{{ errorMessage.radioButtonResult }}</p>
+        <div class="modal_action">
+          <RadioButton
+            :setRadioButton="setSelectRadio"
+            :radioName1="setRadioName1"
+            :radioName2="setRadioName2"
+            :notSelect="false"
+            :nullFlag="true"
+            @execute-method="finalSelectRadio"
+          />
+          <p>{{ errorMessage.radioButtonResult }}</p>
+        </div>
       </div>
       <div>
         <label>{{ '収支日付：' }}</label>
@@ -273,8 +275,9 @@ export default {
         <p>{{ errorMessage.noteResult }}</p>
       </div>
 
-      <div>
+      <div class="modal__btn">
         <Button
+          class="modal_action_btn"
           :validatedNull="validationFlag"
           setButtonName1="保存"
           setButtonName2="キャンセル"
@@ -294,7 +297,7 @@ export default {
   background: #faebd7;
   z-index: 2;
   display: block;
-  text-align: center;
+  text-align: left;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -317,29 +320,6 @@ export default {
   font-weight: bold;
 }
 
-.modal__btn {
-  display: inline-block;
-  margin: 30px auto;
-  text-decoration: none;
-  width: 80px;
-  height: 30px;
-  text-decoration: none;
-  color: #000000;
-  border: solid 2px #a5272a;
-  border-radius: 3px;
-  transition: 0.4s;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 15px;
-  background-color: #faebd7;
-}
-
-.modal__btn:hover {
-  background: #a5272a;
-  color: white;
-  cursor: pointer;
-}
-
 #modal-overlay {
   z-index: 1;
   display: block;
@@ -349,5 +329,13 @@ export default {
   width: 100%;
   height: 120%;
   background-color: rgba(0, 0, 0, 0.75);
+}
+
+.modal_action_btn {
+  text-align: right;
+}
+
+.modal_action {
+  text-align: center;
 }
 </style>

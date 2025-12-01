@@ -23,12 +23,18 @@ export default {
 </script>
 
 <template>
-  <span v-if="radioName == setRadio">
+  <span class="radio" v-if="radioName == setRadio">
     <input type="radio" name="radioCategory" @change="setRadioButton" checked :disabled="select" />
     {{ radioName }}
   </span>
-  <span v-else>
+  <span class="radio" v-else>
     <input type="radio" name="radioCategory" @change="setRadioButton" :disabled="select" />
     {{ radioName }}
   </span>
 </template>
+
+<style scoped>
+.radio {
+  font-size: 20px;
+}
+</style>

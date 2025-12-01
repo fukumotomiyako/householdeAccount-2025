@@ -285,6 +285,7 @@ export default {
       </div>
 
       <Button
+        class="modal_action_btn"
         setButtonName1="保存"
         setButtonName2="キャンセル"
         :validatedNull="validationFlag"
@@ -302,7 +303,7 @@ export default {
   background: #faebd7;
   z-index: 2;
   display: block;
-  text-align: center;
+  text-align: left;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -325,7 +326,7 @@ export default {
   font-weight: bold;
 }
 
-.modal__btn {
+/* .modal__btn {
   display: inline-block;
   margin: 30px auto;
   text-decoration: none;
@@ -345,7 +346,10 @@ export default {
 .modal__btn:hover {
   background: #a5272a;
   color: white;
-  cursor: pointer;
+  cursor: pointer; */
+/* } */
+.modal_action_btn {
+  text-align: right;
 }
 
 #modal-overlay {

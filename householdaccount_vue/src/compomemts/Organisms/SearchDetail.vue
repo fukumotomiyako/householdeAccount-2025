@@ -327,6 +327,7 @@ export default {
 <template>
   <div id="modal">
     <div id="modal-content" class="modal">
+      <p class="modal__message">検索条件</p>
       <div>
         <label>収支区分：</label>
         <RadioButton
@@ -395,10 +396,14 @@ export default {
         <p>{{ errorMessage.noteResult }}</p>
       </div>
 
-      <div>
-        <Button buttonName="検索" @click="executeSearch" :disabled="validationFlag" />
+      <div class="modal_action_btn">
+        <Button
+          class="modal__btn"
+          buttonName="検索"
+          @click="executeSearch"
+          :disabled="validationFlag"
+        />
       </div>
-      <p>{{ validationCheckFlag }}</p>
     </div>
   </div>
 </template>
@@ -410,7 +415,7 @@ export default {
   background: #faebd7;
   z-index: 2;
   display: block;
-  text-align: center;
+  text-align: left;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -419,7 +424,7 @@ export default {
 }
 
 .modal__message {
-  margin-top: 10px;
+  margin-top: 5px;
 }
 
 .modal__cancel {
@@ -435,25 +440,37 @@ export default {
 
 .modal__btn {
   display: inline-block;
-  margin: 30px auto;
-  text-decoration: none;
-  width: 80px;
-  height: 30px;
+  margin: 0;
   text-decoration: none;
   color: #000000;
-  border: solid 2px #a5272a;
+  border: solid 2px #42a4f5;
   border-radius: 3px;
   transition: 0.4s;
   text-align: center;
   vertical-align: middle;
   font-size: 15px;
-  background-color: #faebd7;
+  background-color: #8dc0e9;
 }
 
 .modal__btn:hover {
-  background: #a5272a;
+  background: #42a4f5;
   color: white;
   cursor: pointer;
+}
+
+.btn:disabled {
+  border-color: #c7c7c7;
+  background-color: #eeeeee;
+  color: #9b9b9b;
+}
+
+.btn:disabled:hover {
+  background: #eeeeee;
+  color: --btn-fg-disabled, #9b9b9b;
+}
+
+.modal_action_btn {
+  text-align: right;
 }
 
 #modal-overlay {

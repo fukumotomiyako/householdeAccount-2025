@@ -147,7 +147,12 @@ export default {
     <div v-if="selectRadioName == '収入'">
       <div>
         <label>{{ '収入種別：' }}</label>
-        <select v-model="selectIncome" @blur="setSelectIncome" placeholder="選択してください">
+        <select
+          class="select"
+          v-model="selectIncome"
+          @blur="setSelectIncome"
+          placeholder="選択してください"
+        >
           <!-- イベント発生したら、選択された収入種別をv-modelに入れて、blurの関数を呼ぶ -->
           <option
             v-for="select_income in selects"
@@ -159,9 +164,15 @@ export default {
           </option>
         </select>
       </div>
+      <br />
       <div>
-        <label>{{ '支出費目：' }}</label>
-        <select v-model="selectExpenditure" @blur="setSelectExpenditure" :disabled="true">
+        <label class="select_color">{{ '支出費目：' }}</label>
+        <select
+          class="select"
+          v-model="selectExpenditure"
+          @blur="setSelectExpenditure"
+          :disabled="true"
+        >
           <!-- ture　常に無効化 -->
           <option
             v-for="select_expenditure in items"
@@ -177,8 +188,8 @@ export default {
 
     <div v-if="selectRadioName == '支出'">
       <div>
-        <label>{{ '収入種別：' }}</label>
-        <select v-model="selectIncome" @blur="setSelectIncome" :disabled="true">
+        <label class="select_color">{{ '収入種別：' }}</label>
+        <select class="select" v-model="selectIncome" @blur="setSelectIncome" :disabled="true">
           <!-- イベント発生したら、選択された収入種別をv-modelに入れて、blurの関数を呼ぶ -->
           <option
             v-for="select_income in selects"
@@ -191,9 +202,10 @@ export default {
         </select>
         <div>{{}}</div>
       </div>
+      <br />
       <div>
         <label>{{ '支出費目：' }}</label>
-        <select v-model="selectExpenditure" @blur="setSelectExpenditure">
+        <select class="select" v-model="selectExpenditure" @blur="setSelectExpenditure">
           <option
             v-for="select_expenditure in items"
             :value="select_expenditure.expenditure_expense_item_name"
@@ -208,7 +220,7 @@ export default {
     <div v-if="selectRadioName == '指定なし'">
       <div>
         <label>{{ '収入種別：' }}</label>
-        <select v-model="selectIncome" @blur="setNotSpecified">
+        <select class="select" v-model="selectIncome" @blur="setNotSpecified">
           <!-- イベント発生したら、選択された収入種別をv-modelに入れて、blurの関数を呼ぶ -->
           <option
             v-for="select_income in selects"
@@ -220,9 +232,10 @@ export default {
           </option>
         </select>
       </div>
+      <br />
       <div>
         <label>{{ '支出費目：' }}</label>
-        <select v-model="selectExpenditure" @blur="setNotSpecified">
+        <select class="select" v-model="selectExpenditure" @blur="setNotSpecified">
           <option
             v-for="select_expenditure in items"
             :value="select_expenditure.expenditure_expense_item_name"
@@ -235,3 +248,13 @@ export default {
     </div>
   </div>
 </template>
+<style scoped>
+.select {
+  width: 300px; /* 横幅 */
+  height: 35px; /* 高さ */
+  font-size: 15px; /* 文字サイズ */
+}
+.select_color {
+  color: #9b9b9b;
+}
+</style>
