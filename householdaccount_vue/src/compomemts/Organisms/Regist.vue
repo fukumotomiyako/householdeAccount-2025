@@ -232,22 +232,20 @@ export default {
       <h6>登録情報</h6>
       <div>
         <label>{{ '収支区分：' }}</label>
-        <div class="modal_action">
-          <RadioButton
-            :setRadioButton="setSelectRadio"
-            :radioName1="setRadioName1"
-            :radioName2="setRadioName2"
-            :notSelect="false"
-            :nullFlag="true"
-            @execute-method="finalSelectRadio"
-          />
-          <p>{{ errorMessage.radioButtonResult }}</p>
-        </div>
+        <RadioButton
+          :setRadioButton="setSelectRadio"
+          :radioName1="setRadioName1"
+          :radioName2="setRadioName2"
+          :notSelect="false"
+          :nullFlag="true"
+          @execute-method="finalSelectRadio"
+        />
+        <p class="errorMessage">{{ errorMessage.radioButtonResult }}</p>
       </div>
       <div>
         <label>{{ '収支日付：' }}</label>
         <DateInput :nullFlag="true" @execute-method="finalSetDate" />
-        <p>{{ errorMessage.dateResult }}</p>
+        <p class="errorMessage">{{ errorMessage.dateResult }}</p>
       </div>
       <div>
         <FormSelect
@@ -258,26 +256,26 @@ export default {
           @executeExpenditure-method="finalselectExpenditureType"
         />
         <div v-if="setSelectRadio == '収入'">
-          <P>{{ errorMessage.selectIncomeResult }}</P>
+          <P class="errorMessage">{{ errorMessage.selectIncomeResult }}</P>
         </div>
         <div v-if="setSelectRadio == '支出'">
-          <p>{{ errorMessage.selectExpenditureResult }}</p>
+          <p class="errorMessage">{{ errorMessage.selectExpenditureResult }}</p>
         </div>
       </div>
       <div>
-        <label>{{ '金額：' }}</label>
+        <label>{{ '金額　　：' }}</label>
         <NumberInput :nullFlag="true" @execute-method="finalSetNumber" />
-        <p>{{ errorMessage.priceResult }}</p>
+        <p class="errorMessage">{{ errorMessage.priceResult }}</p>
       </div>
       <div>
-        <label>備考：</label>
+        <label>{{ '備考　　：' }}</label>
         <TextArea @execute-method="finalSetNote" />
-        <p>{{ errorMessage.noteResult }}</p>
+        <p class="errorMessage">{{ errorMessage.noteResult }}</p>
       </div>
 
       <div class="modal__btn">
         <Button
-          class="modal_action_btn"
+          class="button"
           :validatedNull="validationFlag"
           setButtonName1="保存"
           setButtonName2="キャンセル"
@@ -291,6 +289,16 @@ export default {
 </template>
 
 <style scoped>
+.button {
+  text-align: right;
+}
+.button .button1 {
+  background-color: #8dc0e9;
+}
+.button .button2 {
+  background-color: #8dc0e9;
+}
+
 .modal {
   padding: 10px 20px;
   border: 2px solid #a5272a;
@@ -303,6 +311,10 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 10px;
+}
+
+.errorMessage {
+  text-align: center;
 }
 
 .modal__message {
@@ -329,13 +341,5 @@ export default {
   width: 100%;
   height: 120%;
   background-color: rgba(0, 0, 0, 0.75);
-}
-
-.modal_action_btn {
-  text-align: right;
-}
-
-.modal_action {
-  text-align: center;
 }
 </style>

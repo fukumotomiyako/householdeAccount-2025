@@ -63,7 +63,7 @@ export default {
   <div id="modal">
     <div id="modal-content" class="modal">
       <p>1件のデータを削除します。よろしいですか？</p>
-      <div class="modal__btn">
+      <div class="button">
         <Button
           setButtonName1="キャンセル"
           setButtonName2="削除"
@@ -88,5 +88,24 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 10px;
+}
+
+.button .button1 {
+  display: inline-block;
+  margin: 0;
+  text-decoration: none;
+  color: #000000;
+  border: solid 2px #738b9e !important;
+  border-radius: 3px;
+  transition: 0.4s;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 15px;
+  background-color: #738b9e !important;
+}
+.button.button1:hover {
+  background: #50616e;
+  color: white;
+  cursor: pointer;
 }
 </style>

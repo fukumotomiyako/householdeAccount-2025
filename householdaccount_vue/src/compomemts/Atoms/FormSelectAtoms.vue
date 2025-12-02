@@ -250,7 +250,7 @@ export default {
 </template>
 <style scoped>
 .select {
-  width: 300px; /* 横幅 */
+  width: 305px; /* 横幅 */
   height: 35px; /* 高さ */
   font-size: 15px; /* 文字サイズ */
 }

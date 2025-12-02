@@ -80,7 +80,7 @@ export default {
 
 <style scoped>
 .modal_size {
-  width: 150px; /* 横幅 */
+  width: 140px; /* 横幅 */
   height: 30px; /* 高さ */
 }
 </style>

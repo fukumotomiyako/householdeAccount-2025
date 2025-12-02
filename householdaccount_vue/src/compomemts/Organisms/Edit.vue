@@ -269,7 +269,7 @@ export default {
         </div>
       </div>
       <div>
-        <label>{{ '金額：' }}</label>
+        <label>{{ '金額　　：' }}</label>
         <NumberInput
           :getPrice="editInfo.amount"
           :nullFlag="true"
@@ -279,7 +279,7 @@ export default {
         <p>{{ errorMessage.priceResult }}</p>
       </div>
       <div>
-        <label>備考：</label>
+        <label>{{ '備考　　：' }}</label>
         <TextArea :getNote="editInfo.note" :key="editInfo.note" @execute-method="editSetNote" />
         <p>{{ errorMessage.noteResult }}</p>
       </div>

@@ -81,6 +81,7 @@ export default {
     },
 
     searchBalanceInfo: function () {
+      this.test = 'ggggg'
       try {
         axios
           .get('http://localhost:8080/api/searchBalanceList/', {
@@ -142,6 +143,12 @@ export default {
       this.searchResultChangeFormat()
       this.detail_modal = false
     },
+
+    onBeforeInput(e: any) {
+      if (e.inputType === 'insertParagraph' && !e.shiftKey) {
+        e.preventDefault()
+      }
+    },
   },
 }
 </script>
@@ -149,40 +156,48 @@ export default {
 <template>
   <div>
     <!-- 検索値入力テキストエリア -->
-    <input
-      type="text"
-      v-model="searchBalanceCode"
-      class="search_text"
-      placeholder="Type here"
-      @keyup.enter="searchBalanceInfo"
-    />
+    <div class="text">
+      <input
+        type="text"
+        v-model="searchBalanceCode"
+        class="search_text"
+        placeholder="Type here"
+        @keyup.enter="searchBalanceInfo"
+      />
+    </div>
 
-    <!-- 施策 -->
-    <div
-      contenteditable="true"
-      id="detailSearch"
-      class="search_text"
-      placeholder="Type here"
-      @keyup.enter="searchBalanceInfo"
-    >
-      <!-- 詳細検索モーダル表示 -->
-      <span @click="executeSearch" contenteditable="false">詳細検索▼</span>
-      <div v-if="detail_modal == true">
-        <Detail @executeDetail-method="detailSet" />
-      </div>
+    <!-- 詳細検索モーダル表示 -->
+    <span class="detail" @click="executeSearch">詳細検索▼</span>
+    <div v-if="detail_modal == true">
+      <Detail @executeDetail-method="detailSet" />
     </div>
 
     <!-- 登録モーダル表示 -->
-    <button @click="excuteRegist">収支登録</button>
+    <div class="regist">
+      <button @click="excuteRegist">収支登録</button>
+    </div>
     <div v-if="regist_modal == true">
       <regist @execute-method="returnScreen" />
     </div>
 
+    <!-- 試作 -->
+    <!-- <div class="detailSearch">
+      <div
+        contenteditable="true"
+        class="search_text"
+        placeholder="Type here"
+        :textContent="searchBalanceCode"
+        @input="searchBalanceCode = $event.target.textContent"
+        @beforeinput="onBeforeInput"
+        @keyup.enter.exact.prevent="searchBalanceInfo()"
+      ></div> -->
+    <!-- エンター押下で即発火させる(改行させない) -->
     <!-- 詳細検索モーダル表示 -->
-    <span @click="executeSearch">詳細検索▼</span>
-    <div v-if="detail_modal == true">
-      <Detail @executeDetail-method="detailSet" />
-    </div>
+    <!-- <span @click="executeSearch" contenteditable="false">{{ '詳細検索▼' }}</span>
+      <div v-if="detail_modal == true">
+        <Detail @executeDetail-method="detailSet" />
+      </div>
+    </div> -->
 
     <!-- 編集モーダル表示 -->
     <div v-if="edit_modal == true">
@@ -312,6 +327,21 @@ table {
   height: 100%;
   background: #d0cece;
   z-index: -1;
+}
+
+.regist {
+  text-align: center;
+}
+
+.text {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.detail {
+  position: absolute;
+  top: 5px;
+  left: 210px;
 }
 
 table td {

@@ -339,13 +339,13 @@ export default {
           :nullFlag="false"
           @execute-method="finalSelectRadio"
         />
-        <p>{{ errorMessage.radioButtonResult }}</p>
+        <p class="errorMessage">{{ errorMessage.radioButtonResult }}</p>
       </div>
       <div>
-        <label>日付：</label>
+        <label>{{ '収支日付：' }}</label>
         <Date :setNullFlag="false" @execute-method="finalSetDate" />
-        <p>{{ errorMessage.setDateResult }}</p>
-        <p>{{ errorMessage.setDateSizeResult }}</p>
+        <p class="errorMessage">{{ errorMessage.setDateResult }}</p>
+        <p class="errorMessage">{{ errorMessage.setDateSizeResult }}</p>
       </div>
       <div>
         <div v-if="setSelectRadio == '収入'">
@@ -355,7 +355,7 @@ export default {
             :nullFlag="false"
             @executeIncome-method="finalSelectIncomeType"
           />
-          <p>{{ errorMessage.selectIncomeResult }}</p>
+          <p class="errorMessage">{{ errorMessage.selectIncomeResult }}</p>
         </div>
 
         <div v-if="setSelectRadio == '支出'">
@@ -365,7 +365,7 @@ export default {
             :nullFlag="false"
             @executeExpenditure-method="finalSelectExpenditureType"
           />
-          <p>{{ errorMessage.selectExpenditureResult }}</p>
+          <p class="errorMessage">{{ errorMessage.selectExpenditureResult }}</p>
         </div>
 
         <div v-if="setSelectRadio == '指定なし'">
@@ -376,27 +376,27 @@ export default {
             @executeNotSpecified-method="finalSelectNotSpecifiedType"
           />
           <div v-if="!errorMessage.selectIncomeResult">
-            <p>{{ errorMessage.selectExpenditureResult }}</p>
+            <p class="errorMessage">{{ errorMessage.selectExpenditureResult }}</p>
           </div>
           <div v-else>
-            <p>{{ errorMessage.selectIncomeResult }}</p>
+            <p class="errorMessage">{{ errorMessage.selectIncomeResult }}</p>
           </div>
         </div>
       </div>
       <div>
-        <label>金額：</label>
-        <NumberInput :setNullFlag="false" @execute-method="finalSetAmount" />
-        <p>{{ errorMessage.setFromPriceResult }}</p>
-        <p>{{ errorMessage.setToPriceResult }}</p>
-        <p>{{ errorMessage.setAmountResult }}</p>
+        <label>{{ '金額　　：' }}</label>
+        <NumberInput class="modal_action" :setNullFlag="false" @execute-method="finalSetAmount" />
+        <p class="errorMessage">{{ errorMessage.setFromPriceResult }}</p>
+        <p class="errorMessage">{{ errorMessage.setToPriceResult }}</p>
+        <p class="errorMessage">{{ errorMessage.setAmountResult }}</p>
       </div>
       <div>
-        <label>備考：</label>
+        <label>{{ '備考　　：' }}</label>
         <TextArea @execute-method="finalSetNote" />
-        <p>{{ errorMessage.noteResult }}</p>
+        <p class="errorMessage">{{ errorMessage.noteResult }}</p>
       </div>
 
-      <div class="modal_action_btn">
+      <div class="modal_action">
         <Button
           class="modal__btn"
           buttonName="検索"
@@ -469,8 +469,12 @@ export default {
   color: --btn-fg-disabled, #9b9b9b;
 }
 
-.modal_action_btn {
+.modal_action {
   text-align: right;
+}
+
+.errorMessage {
+  text-align: center;
 }
 
 #modal-overlay {
