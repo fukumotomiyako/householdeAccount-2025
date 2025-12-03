@@ -329,16 +329,18 @@ export default {
     <div id="modal-content" class="modal">
       <p class="modal__message">検索条件</p>
       <div>
-        <label>収支区分：</label>
-        <RadioButton
-          :setRadioButton="setSelectRadio"
-          :radioName1="setRadioName1"
-          :radioName2="setRadioName2"
-          :radioName3="setRadioName3"
-          :notSelect="false"
-          :nullFlag="false"
-          @execute-method="finalSelectRadio"
-        />
+        <div class="row">
+          <label>収支区分：</label>
+          <RadioButton
+            :setRadioButton="setSelectRadio"
+            :radioName1="setRadioName1"
+            :radioName2="setRadioName2"
+            :radioName3="setRadioName3"
+            :notSelect="false"
+            :nullFlag="false"
+            @execute-method="finalSelectRadio"
+          />
+        </div>
         <p class="errorMessage">{{ errorMessage.radioButtonResult }}</p>
       </div>
       <div>
@@ -391,7 +393,7 @@ export default {
         <p class="errorMessage">{{ errorMessage.setAmountResult }}</p>
       </div>
       <div>
-        <label>{{ '備考　　：' }}</label>
+        <label class="text">{{ '備考　　：' }}</label>
         <TextArea @execute-method="finalSetNote" />
         <p class="errorMessage">{{ errorMessage.noteResult }}</p>
       </div>
@@ -475,6 +477,19 @@ export default {
 
 .errorMessage {
   text-align: center;
+}
+
+.radio {
+  text-align: center;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 21% 79%; /* 2列。比率 */
+  align-items: center; /* 高さ方向の中央揃え */
+}
+.text {
+  vertical-align: top;
 }
 
 #modal-overlay {

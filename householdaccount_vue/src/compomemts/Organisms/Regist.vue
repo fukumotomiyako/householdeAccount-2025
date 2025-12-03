@@ -231,15 +231,18 @@ export default {
     <div id="modal-content" class="modal">
       <h6>登録情報</h6>
       <div>
-        <label>{{ '収支区分：' }}</label>
-        <RadioButton
-          :setRadioButton="setSelectRadio"
-          :radioName1="setRadioName1"
-          :radioName2="setRadioName2"
-          :notSelect="false"
-          :nullFlag="true"
-          @execute-method="finalSelectRadio"
-        />
+        <div class="row">
+          <label>{{ '収支区分：' }}</label>
+          <RadioButton
+            :setRadioButton="setSelectRadio"
+            :radioName1="setRadioName1"
+            :radioName2="setRadioName2"
+            :notSelect="false"
+            :nullFlag="true"
+            @execute-method="finalSelectRadio"
+          />
+        </div>
+
         <p class="errorMessage">{{ errorMessage.radioButtonResult }}</p>
       </div>
       <div>
@@ -268,7 +271,7 @@ export default {
         <p class="errorMessage">{{ errorMessage.priceResult }}</p>
       </div>
       <div>
-        <label>{{ '備考　　：' }}</label>
+        <label class="text">{{ '備考　　：' }}</label>
         <TextArea @execute-method="finalSetNote" />
         <p class="errorMessage">{{ errorMessage.noteResult }}</p>
       </div>
@@ -291,12 +294,6 @@ export default {
 <style scoped>
 .button {
   text-align: right;
-}
-.button .button1 {
-  background-color: #8dc0e9;
-}
-.button .button2 {
-  background-color: #8dc0e9;
 }
 
 .modal {
@@ -330,6 +327,14 @@ export default {
   cursor: pointer;
   color: rgb(14, 48, 240);
   font-weight: bold;
+}
+.row {
+  display: grid;
+  grid-template-columns: 21% 79%; /* 2列。比率 */
+  align-items: center; /* 高さ方向の中央揃え */
+}
+.text {
+  vertical-align: top;
 }
 
 #modal-overlay {

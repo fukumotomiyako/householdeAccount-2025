@@ -223,14 +223,16 @@ export default {
     <div id="modal-content" class="modal">
       <h6>編集情報</h6>
       <div>
-        <label>{{ '収支区分：' }}</label>
-        <RadioButton
-          :radioName1="setRadioName1"
-          :radioName2="setRadioName2"
-          :setRadioButton="editInfo.balanceType"
-          :notSelect="true"
-          :nullFlag="true"
-        />
+        <div class="row">
+          <label>{{ '収支区分：' }}</label>
+          <RadioButton
+            :radioName1="setRadioName1"
+            :radioName2="setRadioName2"
+            :setRadioButton="editInfo.balanceType"
+            :notSelect="true"
+            :nullFlag="true"
+          />
+        </div>
         <p>{{ errorMessage.radioButtonResult }}</p>
       </div>
       <div>
@@ -279,7 +281,7 @@ export default {
         <p>{{ errorMessage.priceResult }}</p>
       </div>
       <div>
-        <label>{{ '備考　　：' }}</label>
+        <label class="text">{{ '備考　　：' }}</label>
         <TextArea :getNote="editInfo.note" :key="editInfo.note" @execute-method="editSetNote" />
         <p>{{ errorMessage.noteResult }}</p>
       </div>
@@ -350,6 +352,15 @@ export default {
 /* } */
 .modal_action_btn {
   text-align: right;
+}
+.row {
+  display: grid;
+  grid-template-columns: 21% 79%; /* 2列。比率 */
+  align-items: center; /* 高さ方向の中央揃え */
+}
+
+.text {
+  vertical-align: top;
 }
 
 #modal-overlay {

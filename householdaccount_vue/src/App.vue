@@ -231,8 +231,14 @@ export default {
             <td>{{ balancedata.incomeTypeName }}</td>
             <td>{{ balancedata.amount }}</td>
             <td>{{ balancedata.note }}</td>
-            <td><button @click="executeEdit(balancedata.balanceCode)">編集</button></td>
-            <td><button @click="executeIncomeDelete(balancedata.balanceCode)">削除</button></td>
+            <td>
+              <button class="editButton" @click="executeEdit(balancedata.balanceCode)">編集</button>
+            </td>
+            <td>
+              <button class="deleteButton" @click="executeIncomeDelete(balancedata.balanceCode)">
+                削除
+              </button>
+            </td>
           </tr>
           <tr v-if="balancedata.balanceType == '支出'">
             <td>{{ balancedata.balanceCode }}</td>
@@ -241,9 +247,16 @@ export default {
             <td>{{ balancedata.expenditureExpenseItemName }}</td>
             <td>{{ balancedata.amount }}</td>
             <td>{{ balancedata.note }}</td>
-            <td><button @click="executeEdit(balancedata.balanceCode)">編集</button></td>
             <td>
-              <button @click="executeExpenditureDelete(balancedata.balanceCode)">削除</button>
+              <button class="editButton" @click="executeEdit(balancedata.balanceCode)">編集</button>
+            </td>
+            <td>
+              <button
+                class="deleteButton"
+                @click="executeExpenditureDelete(balancedata.balanceCode)"
+              >
+                削除
+              </button>
             </td>
           </tr>
         </tbody>
@@ -256,6 +269,50 @@ export default {
 </template>
  
 <style scoped>
+.editButton {
+  width: 120px;
+  border-radius: 6px;
+  padding: 8px 16px;
+  display: inline-block;
+  margin: 0;
+  text-decoration: none;
+  color: #000000;
+  border: solid 2px #42a4f5;
+  border-radius: 3px;
+  transition: 0.4s;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 15px;
+  background-color: #8dc0e9;
+}
+.editButton:hover {
+  background: #42a4f5;
+  color: white;
+  cursor: pointer;
+}
+
+.deleteButton {
+  width: 120px;
+  border-radius: 6px;
+  padding: 8px 8px;
+  display: inline-block;
+  margin: 0%;
+  text-decoration: none;
+  color: #000000;
+  border: solid 2px #e07777;
+  border-radius: 3px;
+  transition: 0.4s;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 15px;
+  background-color: #e07777;
+}
+.deleteButton:hover {
+  background: #c75050;
+  color: white;
+  cursor: pointer;
+}
+
 header {
   line-height: 1.5;
   max-height: 100ch;

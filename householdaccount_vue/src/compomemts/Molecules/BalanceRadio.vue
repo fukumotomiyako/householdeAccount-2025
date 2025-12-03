@@ -54,17 +54,24 @@ export default {
 </script>
 
 <template>
-  <RadioButtonAtoms
-    :radioName="radioName1"
-    :setRadio="setRadioButton"
-    :select="notSelect"
-    @execute-method="setSelectRadio"
-  />
-  <!-- radioNameはAtomsに渡しているだけ -->
-  <RadioButtonAtoms
-    :radioName="radioName2"
-    :setRadio="setRadioButton"
-    :select="notSelect"
-    @execute-method="setSelectRadio"
-  />
+  <div class="radio">
+    <RadioButtonAtoms
+      :radioName="radioName1"
+      :setRadio="setRadioButton"
+      :select="notSelect"
+      @execute-method="setSelectRadio"
+    />
+    <!-- radioNameはAtomsに渡しているだけ -->
+    <RadioButtonAtoms
+      :radioName="radioName2"
+      :setRadio="setRadioButton"
+      :select="notSelect"
+      @execute-method="setSelectRadio"
+    />
+  </div>
 </template>
+<style scoped>
+.radio {
+  text-align: center;
+}
+</style>

@@ -44,22 +44,29 @@ export default {
 }
 </script>
 <template>
-  <RadioButton
-    :setRadio="setRadioButton"
-    :radioName="radioName1"
-    :select="notSelect"
-    @execute-method="setSelectRadio"
-  />
-  <RadioButton
-    :setRadio="setRadioButton"
-    :radioName="radioName2"
-    :select="notSelect"
-    @execute-method="setSelectRadio"
-  />
-  <RadioButton
-    :setRadio="setRadioButton"
-    :radioName="radioName3"
-    :select="notSelect"
-    @execute-method="setSelectRadio"
-  />
+  <div class="radio">
+    <RadioButton
+      :setRadio="setRadioButton"
+      :radioName="radioName1"
+      :select="notSelect"
+      @execute-method="setSelectRadio"
+    />
+    <RadioButton
+      :setRadio="setRadioButton"
+      :radioName="radioName2"
+      :select="notSelect"
+      @execute-method="setSelectRadio"
+    />
+    <RadioButton
+      :setRadio="setRadioButton"
+      :radioName="radioName3"
+      :select="notSelect"
+      @execute-method="setSelectRadio"
+    />
+  </div>
 </template>
+<style scoped>
+.radio {
+  text-align: center;
+}
+</style>

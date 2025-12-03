@@ -63,14 +63,13 @@ export default {
   <div id="modal">
     <div id="modal-content" class="modal">
       <p>1件のデータを削除します。よろしいですか？</p>
-      <div class="button">
-        <Button
-          setButtonName1="キャンセル"
-          setButtonName2="削除"
-          @executeButton1-method="executeCancel"
-          @executeButton2-method="executeDelete"
-        />
-      </div>
+      <Button
+        class="button"
+        setButtonName1="キャンセル"
+        setButtonName2="削除"
+        @executeButton1-method="executeCancel"
+        @executeButton2-method="executeDelete"
+      />
     </div>
   </div>
 </template>
@@ -90,22 +89,26 @@ export default {
   border-radius: 10px;
 }
 
-.button .button1 {
+:deep(.button1) {
   display: inline-block;
   margin: 0;
   text-decoration: none;
   color: #000000;
-  border: solid 2px #738b9e !important;
+  border: solid 2px #96989e !important;
   border-radius: 3px;
   transition: 0.4s;
   text-align: center;
   vertical-align: middle;
   font-size: 15px;
-  background-color: #738b9e !important;
+  background-color: #96989e !important;
 }
-.button.button1:hover {
-  background: #50616e;
+:deep(.button1:hover) {
+  background: #36424b;
   color: white;
   cursor: pointer;
+}
+
+.button {
+  text-align: left;
 }
 </style>
