@@ -72,6 +72,7 @@ export default {
 </template>
 <style scoped>
 .radio {
-  text-align: center;
+  margin-right: 45px;
+  text-align: right;
 }
 </style>

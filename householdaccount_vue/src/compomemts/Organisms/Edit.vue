@@ -221,7 +221,12 @@ export default {
 <template>
   <div id="model">
     <div id="modal-content" class="modal">
-      <h6>編集情報</h6>
+      <div class="top">
+        <h4>編集情報</h4>
+        <div class="X_Text">
+          <span @click="executeCancel">{{ '×' }}</span>
+        </div>
+      </div>
       <div>
         <div class="row">
           <label>{{ '収支区分：' }}</label>
@@ -233,7 +238,7 @@ export default {
             :nullFlag="true"
           />
         </div>
-        <p>{{ errorMessage.radioButtonResult }}</p>
+        <p class="errorMessage">{{ errorMessage.radioButtonResult }}</p>
       </div>
       <div>
         <label>{{ '収支日付：' }}</label>
@@ -243,7 +248,7 @@ export default {
           :nullFlag="true"
           @execute-method="editSetDate"
         />
-        <p>{{ errorMessage.dateResult }}</p>
+        <p class="errorMessage">{{ errorMessage.dateResult }}</p>
       </div>
       <div>
         <div v-if="editInfo.balanceType == '収入'">
@@ -255,7 +260,7 @@ export default {
             :key="editInfo.incomeType"
             @executeIncome-method="editSelectIncome"
           />
-          <p>{{ errorMessage.selectIncomeResult }}</p>
+          <p class="errorMessage">{{ errorMessage.selectIncomeResult }}</p>
         </div>
 
         <div v-if="editInfo.balanceType == '支出'">
@@ -267,7 +272,7 @@ export default {
             :key="editInfo.expenditureExpenseItemName"
             @executeExpenditure-method="editSelectExpenditure"
           />
-          <p>{{ errorMessage.selectExpenditureResult }}</p>
+          <p class="errorMessage">{{ errorMessage.selectExpenditureResult }}</p>
         </div>
       </div>
       <div>
@@ -278,12 +283,12 @@ export default {
           :key="editInfo.amount"
           @execute-method="editSetNumber"
         />
-        <p>{{ errorMessage.priceResult }}</p>
+        <p class="errorMessage">{{ errorMessage.priceResult }}</p>
       </div>
       <div>
         <label class="text">{{ '備考　　：' }}</label>
         <TextArea :getNote="editInfo.note" :key="editInfo.note" @execute-method="editSetNote" />
-        <p>{{ errorMessage.noteResult }}</p>
+        <p class="errorMessage">{{ errorMessage.noteResult }}</p>
       </div>
 
       <Button
@@ -327,40 +332,23 @@ export default {
   color: rgb(14, 48, 240);
   font-weight: bold;
 }
-
-/* .modal__btn {
-  display: inline-block;
-  margin: 30px auto;
-  text-decoration: none;
-  width: 80px;
-  height: 30px;
-  text-decoration: none;
-  color: #000000;
-  border: solid 2px #a5272a;
-  border-radius: 3px;
-  transition: 0.4s;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 15px;
-  background-color: #faebd7;
-}
-
-.modal__btn:hover {
-  background: #a5272a;
-  color: white;
-  cursor: pointer; */
-/* } */
 .modal_action_btn {
   text-align: right;
 }
 .row {
   display: grid;
-  grid-template-columns: 21% 79%; /* 2列。比率 */
+  grid-template-columns: 1fr 2fr; /* 2列。比率 */
   align-items: center; /* 高さ方向の中央揃え */
 }
 
 .text {
   vertical-align: top;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 21% 79%; /* 2列。比率 */
+  align-items: center;
 }
 
 #modal-overlay {
@@ -372,5 +360,16 @@ export default {
   width: 100%;
   height: 120%;
   background-color: rgba(0, 0, 0, 0.75);
+}
+
+.X_Text {
+  text-align: right;
+}
+.X_Text:hover {
+  cursor: pointer;
+}
+
+.errorMessage {
+  text-align: center;
 }
 </style>

@@ -71,7 +71,7 @@ export default {
         } else if (this.searchResultBalanceInfo[i].incomeType == '5') {
           this.searchResultBalanceInfo[i].incomeTypeName = '臨時収入'
         } else if (this.searchResultBalanceInfo[i].incomeType == '6') {
-          this.searchResultBalanceInfo[i].incomeTypeName = '投資'
+          this.searchResultBalanceInfo[i].incomeTypeName = '投資（Enum）'
         }
         const incomeYYYY = this.searchResultBalanceInfo[i].balanceDate.substring(0, 4)
         const incomeMM = this.searchResultBalanceInfo[i].balanceDate.substring(5, 7)
@@ -81,20 +81,25 @@ export default {
     },
 
     searchBalanceInfo: function () {
-      this.test = 'ggggg'
-      try {
-        axios
-          .get('http://localhost:8080/api/searchBalanceList/', {
-            params: { ID: this.searchBalanceCode },
-          })
-          .then((response) => {
-            console.log(response),
-              (this.searchResultBalanceInfo = response.data),
-              this.searchResultChangeFormat()
-          })
-      } catch (error) {
-        console.error('There was an error fetching the users!', error)
-        alert(error)
+      this.test = 'gggggggggggg'
+      if (!this.searchBalanceCode) {
+        this.searchResultBalanceInfo = ''
+        this.searchResultChangeFormat()
+      } else {
+        try {
+          axios
+            .get('http://localhost:8080/api/searchBalanceList/', {
+              params: { ID: this.searchBalanceCode },
+            })
+            .then((response) => {
+              console.log(response),
+                (this.searchResultBalanceInfo = response.data),
+                this.searchResultChangeFormat()
+            })
+        } catch (error) {
+          console.error('There was an error fetching the users!', error)
+          alert(error)
+        }
       }
     },
 
@@ -144,6 +149,10 @@ export default {
       this.detail_modal = false
     },
 
+    detailCancel() {
+      this.detail_modal = false
+    },
+
     onBeforeInput(e: any) {
       if (e.inputType === 'insertParagraph' && !e.shiftKey) {
         e.preventDefault()
@@ -155,13 +164,16 @@ export default {
  
 <template>
   <div>
+    <div>
+      <header>家計簿システム</header>
+    </div>
     <!-- 検索値入力テキストエリア -->
     <div class="text">
       <input
         type="text"
         v-model="searchBalanceCode"
         class="search_text"
-        placeholder="Type here"
+        placeholder="収支Noを入力"
         @keyup.enter="searchBalanceInfo"
       />
     </div>
@@ -169,35 +181,16 @@ export default {
     <!-- 詳細検索モーダル表示 -->
     <span class="detail" @click="executeSearch">詳細検索▼</span>
     <div v-if="detail_modal == true">
-      <Detail @executeDetail-method="detailSet" />
+      <Detail @executeDetail-method="detailSet" @executeCancel-method="detailCancel" />
     </div>
 
     <!-- 登録モーダル表示 -->
-    <div class="regist">
-      <button @click="excuteRegist">収支登録</button>
+    <div class="registButton">
+      <button class="regist" @click="excuteRegist">収支登録</button>
     </div>
     <div v-if="regist_modal == true">
       <regist @execute-method="returnScreen" />
     </div>
-
-    <!-- 試作 -->
-    <!-- <div class="detailSearch">
-      <div
-        contenteditable="true"
-        class="search_text"
-        placeholder="Type here"
-        :textContent="searchBalanceCode"
-        @input="searchBalanceCode = $event.target.textContent"
-        @beforeinput="onBeforeInput"
-        @keyup.enter.exact.prevent="searchBalanceInfo()"
-      ></div> -->
-    <!-- エンター押下で即発火させる(改行させない) -->
-    <!-- 詳細検索モーダル表示 -->
-    <!-- <span @click="executeSearch" contenteditable="false">{{ '詳細検索▼' }}</span>
-      <div v-if="detail_modal == true">
-        <Detail @executeDetail-method="detailSet" />
-      </div>
-    </div> -->
 
     <!-- 編集モーダル表示 -->
     <div v-if="edit_modal == true">
@@ -215,7 +208,17 @@ export default {
 
     <!-- 検索結果一覧表示 -->
     <div class="table_box" v-if="searchFrag == true">
-      <table class="table_style">
+      <table class="fixed">
+        <colgroup>
+          <col style="width: 200px" />
+          <col style="width: 150px" />
+          <col style="width: 200px" />
+          <col style="width: 150px" />
+          <col style="width: 150px" />
+          <col style="width: 550px" />
+          <col style="width: 100px" />
+          <col style="width: 100px" />
+        </colgroup>
         <thead>
           <tr>
             <th class="sticky" v-for="label in header" :key="label.key">
@@ -271,7 +274,6 @@ export default {
 <style scoped>
 .editButton {
   width: 120px;
-  border-radius: 6px;
   padding: 8px 16px;
   display: inline-block;
   margin: 0;
@@ -314,20 +316,18 @@ export default {
 }
 
 header {
-  line-height: 1.5;
+  font-size: 40px;
+  color: white;
+  line-height: 2.5;
   max-height: 100ch;
   background: #000000;
   width: 100%;
 }
 
 .logo {
+  font-size: 25px;
   display: block;
-  margin: 0 auto 2rem;
-}
-
-.search_text {
-  width: 300px;
-  height: 30px;
+  margin-left: 15px;
 }
 
 #app {
@@ -339,40 +339,48 @@ header {
   margin-top: 60px;
 }
 
-.table_box {
-  overflow-y: auto;
-  height: 300px;
-  width: auto;
-  -webkit-overflow-scrolling: touch;
-  border-top: 0;
-  border-spacing: 0;
-  border-bottom: #000;
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-table {
-  border-spacing: 0;
+.table_box {
+  height: 600px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table.fixed {
+  table-layout: fixed;
   width: 100%;
-  height: 100%;
-  display: table;
-  border-collapse: collapse;
-  box-sizing: border-box;
-  text-indent: initial;
-  unicode-bidi: isolate;
-  border-color: gray;
+  border-collapse: collaps;
+}
+
+table th {
+  text-align: center;
+  border: 3px solid #fff;
+  font-size: 20px;
+  color: #fff;
+  padding: 10px 10px;
+}
+
+table td {
+  text-align: center;
+  background: #f5f5f5;
+  border: 3px solid #fff;
+  font-size: 20px;
+  padding: 10px 10px;
 }
 
 /*スクロールバー*/
 .sticky {
   position: sticky;
   top: 0;
-  left: 1;
-  background: none;
+  left: 0;
+  background: #a0d1d1;
   border-top: none;
   border-bottom: none;
-  background-color: #d0cece;
-  box-shadow: 1px 0 0 #d0cece;
-  height: 100%;
-  text-wrap: wrap;
+  overflow-wrap: normal;
 }
 
 .sticky:before {
@@ -382,29 +390,56 @@ table {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #d0cece;
-  z-index: -1;
 }
 
 .regist {
+  width: 180px;
+  height: 70px;
+  padding: 8px 16px;
+  display: inline-block;
+  margin: 6px;
+  text-decoration: none;
+  color: #000000;
+  border: solid 2px #42a4f5;
+  transition: 0.4s;
+  border-radius: 3px;
   text-align: center;
+  vertical-align: middle;
+  font-size: 30px;
+  background-color: #8dc0e9;
+}
+.regist:hover {
+  background: #42a4f5;
+  color: white;
+  cursor: pointer;
 }
 
+.registButton {
+  text-align: right;
+  margin-top: 3px;
+  margin-right: 200px;
+}
+
+.search_text {
+  font-size: 25px;
+  width: 600px;
+  height: 60px;
+}
+/* テキストボックスサイズ */
 .text {
   position: absolute;
-  top: 0px;
-  left: 0px;
-}
-.detail {
-  position: absolute;
-  top: 5px;
-  left: 210px;
+  top: 121px;
+  left: 15px;
 }
 
-table td {
-  text-align: center;
-  background: #f5f5f5;
-  border: 3px solid white;
-  border-spacing: 10px;
+.detail {
+  position: absolute;
+  top: 134px;
+  left: 485px;
+  font-size: 25px;
+}
+
+.detail:hover {
+  cursor: pointer;
 }
 </style>

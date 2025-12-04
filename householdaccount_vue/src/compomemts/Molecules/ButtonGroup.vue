@@ -24,7 +24,7 @@ export default {
 </script>
 
 <template>
-  <div class="modal_btn">
+  <div class="btn">
     <ButtonAtoms
       class="button1"
       :buttonName="setButtonName1"
@@ -38,7 +38,7 @@ export default {
 <style scoped>
 .button1 {
   display: inline-block;
-  margin: 0;
+  margin-right: 15px;
   text-decoration: none;
   color: #000000;
   border: solid 2px #42a4f5;

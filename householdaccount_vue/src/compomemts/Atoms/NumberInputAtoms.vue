@@ -32,22 +32,23 @@ export default {
     },
 
     priceCheckValidate(price: any) {
+      const NoNumber = /[^\d\s]/
       if (this.nullFlag === true) {
-        if (!price || String(price).length > 8 || price == 0) {
-          return '8文字以内で入力してください'
-        } else if (!/^\d+$/.test(String(price))) {
+        if (NoNumber.test(price)) {
           //正規表現
           //^　文字列の先頭
           //d　数字
           //$　文字列の末尾　数字だけで構成された文字列
           return '数字のみ入力できます'
+        } else if (!price || String(price).length > 8 || price == 0) {
+          return '8文字以内で入力してください'
         } else {
           return true
         }
       } else if (this.nullFlag === false) {
         if (!price) {
           return true
-        } else if (String(price).length > 8) {
+        } else if (String(price).length > 8 || price == 0) {
           return '8文字以内で入力してください'
         } else if (!/^\d+$/.test(String(price))) {
           return '数字のみ入力できます'
@@ -68,6 +69,8 @@ export default {
     placeholder="8桁以内で入力"
     @blur="setPrice"
   />
+  <!-- <p>{{ priceResult }}</p>
+  <p>{{ priceValidation }}</p> -->
 </template>
 
 <style scoped>

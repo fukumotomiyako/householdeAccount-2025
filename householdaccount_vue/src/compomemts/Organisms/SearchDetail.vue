@@ -164,6 +164,7 @@ export default {
     },
 
     executeSearch() {
+      this.test = 'aaaaaaaaaaa'
       if (this.setSelectRadio == '収入') {
         //検索メソッド呼び出し
         this.incomeSearch()
@@ -321,13 +322,22 @@ export default {
         }
       }
     },
+
+    executeCancel() {
+      this.$emit('executeCancel-method')
+    },
   },
 }
 </script>
 <template>
   <div id="modal">
     <div id="modal-content" class="modal">
-      <p class="modal__message">検索条件</p>
+      <div class="top">
+        <h4>検索条件</h4>
+        <div class="X_Text">
+          <span @click="executeCancel">{{ '×' }}</span>
+        </div>
+      </div>
       <div>
         <div class="row">
           <label>収支区分：</label>
@@ -425,21 +435,6 @@ export default {
   border-radius: 10px;
 }
 
-.modal__message {
-  margin-top: 5px;
-}
-
-.modal__cancel {
-  margin-right: 30px;
-  font-size: 15px;
-}
-
-.modal__cancel:hover {
-  cursor: pointer;
-  color: rgb(14, 48, 240);
-  font-weight: bold;
-}
-
 .modal__btn {
   display: inline-block;
   margin: 0;
@@ -488,6 +483,11 @@ export default {
   grid-template-columns: 21% 79%; /* 2列。比率 */
   align-items: center; /* 高さ方向の中央揃え */
 }
+.top {
+  display: grid;
+  grid-template-columns: 21% 79%; /* 2列。比率 */
+  align-items: center;
+}
 .text {
   vertical-align: top;
 }
@@ -501,5 +501,11 @@ export default {
   width: 100%;
   height: 120%;
   background-color: rgba(0, 0, 0, 0.75);
+}
+.X_Text {
+  text-align: right;
+}
+.X_Text:hover {
+  cursor: pointer;
 }
 </style>

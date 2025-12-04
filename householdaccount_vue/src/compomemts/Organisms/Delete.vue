@@ -62,7 +62,10 @@ export default {
 <template>
   <div id="modal">
     <div id="modal-content" class="modal">
-      <p>1件のデータを削除します。よろしいですか？</p>
+      <div class="X_Text">
+        <span @click="executeCancel">{{ '×' }}</span>
+      </div>
+      <h3>1件のデータを削除します。よろしいですか？</h3>
       <Button
         class="button"
         setButtonName1="キャンセル"
@@ -91,7 +94,7 @@ export default {
 
 :deep(.button1) {
   display: inline-block;
-  margin: 0;
+  margin-right: 15px;
   text-decoration: none;
   color: #000000;
   border: solid 2px #96989e !important;
@@ -103,12 +106,19 @@ export default {
   background-color: #96989e !important;
 }
 :deep(.button1:hover) {
-  background: #36424b;
+  background: #41505a !important;
   color: white;
   cursor: pointer;
 }
 
 .button {
   text-align: left;
+}
+
+.X_Text {
+  text-align: right;
+}
+.X_Text:hover {
+  cursor: pointer;
 }
 </style>

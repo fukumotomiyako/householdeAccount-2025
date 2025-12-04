@@ -229,7 +229,12 @@ export default {
 <template>
   <div id="modal">
     <div id="modal-content" class="modal">
-      <h6>登録情報</h6>
+      <div class="top">
+        <h4>登録情報</h4>
+        <div class="X_Text">
+          <span @click="executeCancel">{{ '×' }}</span>
+        </div>
+      </div>
       <div>
         <div class="row">
           <label>{{ '収支区分：' }}</label>
@@ -330,11 +335,17 @@ export default {
 }
 .row {
   display: grid;
-  grid-template-columns: 21% 79%; /* 2列。比率 */
+  grid-template-columns: 1fr 2fr; /* 2列。比率 */
   align-items: center; /* 高さ方向の中央揃え */
 }
 .text {
   vertical-align: top;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 21% 79%; /* 2列。比率 */
+  align-items: center;
 }
 
 #modal-overlay {
@@ -346,5 +357,11 @@ export default {
   width: 100%;
   height: 120%;
   background-color: rgba(0, 0, 0, 0.75);
+}
+.X_Text {
+  text-align: right;
+}
+.X_Text:hover {
+  cursor: pointer;
 }
 </style>

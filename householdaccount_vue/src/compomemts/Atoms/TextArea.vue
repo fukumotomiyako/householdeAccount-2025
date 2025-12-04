@@ -36,7 +36,7 @@ export default {
 
     noteCheckValidate(note: any) {
       if (note) {
-        if (note.length > 5) {
+        if (note.length > 200) {
           //noteが200文字以上
           return '200文字以内で入力してください'
         } else {
@@ -56,6 +56,7 @@ export default {
 
 <style scoped>
 .text {
+  resize: none;
   width: 300px; /* 横幅 */
   height: 100px; /* 高さ */
 }
