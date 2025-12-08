@@ -32,29 +32,29 @@ export default {
     },
 
     priceCheckValidate(price: any) {
-      const NoNumber = /[^\d\s]/
+      // const s = String(price ?? '').trim()
       if (this.nullFlag === true) {
-        if (NoNumber.test(price)) {
-          //正規表現
-          //^　文字列の先頭
-          //d　数字
-          //$　文字列の末尾　数字だけで構成された文字列
-          return '数字のみ入力できます'
-        } else if (!price || String(price).length > 8 || price == 0) {
+        if (!price) {
           return '8文字以内で入力してください'
-        } else {
-          return true
         }
+        if (!/^\d+$/.test(price)) {
+          return '数字のみ入力できます'
+        }
+        if (price.length > 8) {
+          return '8文字以内で入力してください'
+        }
+        return true
       } else if (this.nullFlag === false) {
         if (!price) {
           return true
-        } else if (String(price).length > 8 || price == 0) {
-          return '8文字以内で入力してください'
-        } else if (!/^\d+$/.test(String(price))) {
-          return '数字のみ入力できます'
-        } else {
-          return true
         }
+        if (!/^\d+$/.test(price)) {
+          return '数字のみ入力できます'
+        }
+        if (price.length > 8) {
+          return '8文字以内で入力してください'
+        }
+        return true
       }
     },
   },
@@ -62,15 +62,7 @@ export default {
 </script>
 
 <template>
-  <input
-    class="amount"
-    type="number"
-    v-model="price"
-    placeholder="8桁以内で入力"
-    @blur="setPrice"
-  />
-  <!-- <p>{{ priceResult }}</p>
-  <p>{{ priceValidation }}</p> -->
+  <input class="amount" type="text" v-model="price" placeholder="8桁以内で入力" @blur="setPrice" />
 </template>
 
 <style scoped>

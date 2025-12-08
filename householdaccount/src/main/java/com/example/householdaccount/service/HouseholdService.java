@@ -51,6 +51,14 @@ public class HouseholdService {
 
 	// 収入登録
 	public Income createIncomeInfo(IncomeForm incomeCommand) {
+		if(incomeCommand.getPrice()==null||incomeCommand.getDate()==null||incomeCommand.getSelectIncome()==null) {
+			throw new BusinessExcetion("値がNULLです");
+		}else if( ! String.valueOf(incomeCommand.getPrice()).trim().matches("^\\d+$") 
+				||! String.valueOf(incomeCommand.getDate()).trim().matches("^\\d+$")){
+			throw new BusinessExcetion("数字のみ入力できます");
+		}else if(String.valueOf(incomeCommand.getPrice()).length() > 8 ||incomeCommand.getNote().length()>200) {
+			throw new BusinessExcetion("不正な桁数です");
+		}
 
 		// 入力された日付をyyyy/mm/ddにしたい
 //		Date date = incomeCommand.getDate();
@@ -92,6 +100,16 @@ public class HouseholdService {
 
 	// 支出登録
 	public Expenditure createExpenditureInfo(ExpenditureForm expenditureCommand) {
+		
+		if(expenditureCommand.getPrice()==null||expenditureCommand.getDate()==null||expenditureCommand.getSelectExpenditure()==null) {
+			throw new BusinessExcetion;
+		}else if( ! String.valueOf(expenditureCommand.getPrice()).trim().matches("^\\d+$") 
+				||! String.valueOf(expenditureCommand.getDate()).trim().matches("^\\d+$")){
+			throw new BusinessExcetion("数字のみ入力できます");
+		}else if(String.valueOf(expenditureCommand.getPrice()).length() > 8 ||expenditureCommand.getNote().length()>200) {
+			throw new BusinessExcetion("不正な桁数です");
+		}
+
 
 //		Date date = expenditureCommand.getDate();
 //		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
@@ -143,6 +161,15 @@ public class HouseholdService {
 	// 編集データ登録
 	// 収入
 	public Income incomeEdit(IncomeEditForm incomeEditForm) {
+		
+		if(incomeEditForm.getAmount()==null||incomeEditForm.getBalanceDate()==null||incomeEditForm.getIncomeType()==null) {
+			throw new BusinessExcetion;
+		}else if( ! String.valueOf(incomeEditForm.getBalanceDate()).trim().matches("^\\d+$") 
+				||! String.valueOf(incomeEditForm.getAmount()).trim().matches("^\\d+$")){
+			throw new BusinessExcetion("数字のみ入力できます");
+		}else if(String.valueOf(incomeEditForm.getAmount()).length() > 8 ||incomeEditForm.getNote().length()>200) {
+			throw new BusinessExcetion("不正な桁数です");
+		}
 
 		// バージョン取得して、＋１する
 		String incomeNo = incomeEditForm.getBalanceNo();
@@ -156,6 +183,15 @@ public class HouseholdService {
 
 //	支出
 	public Expenditure expenditureEdit(ExpenditureEditForm expenditureEditForm) {
+		
+		if(expenditureEditForm.getAmount()==null||expenditureEditForm.getBalanceDate()==null||expenditureEditForm.getExpenditureExpenseItemName()==null) {
+			throw new BusinessExcetion;
+		}else if( ! String.valueOf(expenditureEditForm.getBalanceDate()).trim().matches("^\\d+$") 
+				||! String.valueOf(expenditureEditForm.getAmount()).trim().matches("^\\d+$")){
+			throw new BusinessExcetion("数字のみ入力できます");
+		}else if(String.valueOf(expenditureEditForm.getAmount()).length() > 8 ||expenditureEditForm.getNote().length()>200) {
+			throw new BusinessExcetion("不正な桁数です");
+		}
 		// アイテムコード取得
 		String expenditureItemName = expenditureEditForm.getExpenditureExpenseItemName();
 		ExpenditureItems expenditureItems = expenditureItemRepository
