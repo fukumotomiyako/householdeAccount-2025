@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.example.householdaccount.common.HouseholdaccountSystemException;
 import com.example.householdaccount.entity.Expenditure;
 import com.example.householdaccount.entity.ExpenditureItems;
 import com.example.householdaccount.entity.ExpenditureItems.ExpenditureExpenseItemCodeVO;
@@ -50,70 +51,63 @@ public class HouseholdService {
 	}
 
 	// 収入登録
-	public Income createIncomeInfo(IncomeForm incomeCommand) {
-		if(incomeCommand.getPrice()==null||incomeCommand.getDate()==null||incomeCommand.getSelectIncome()==null) {
-			throw new BusinessExcetion("値がNULLです");
-		}else if( ! String.valueOf(incomeCommand.getPrice()).trim().matches("^\\d+$") 
-				||! String.valueOf(incomeCommand.getDate()).trim().matches("^\\d+$")){
-			throw new BusinessExcetion("数字のみ入力できます");
-		}else if(String.valueOf(incomeCommand.getPrice()).length() > 8 ||incomeCommand.getNote().length()>200) {
-			throw new BusinessExcetion("不正な桁数です");
+	public Income createIncomeInfo(IncomeForm incomeCommand) throws Exception{
+		
+		if (incomeCommand.getPrice() == null || incomeCommand.getDate() == null
+				|| incomeCommand.getSelectIncome() == null) {
+			throw new IllegalArgumentException("値がNULLです");
+		} else if (!String.valueOf(incomeCommand.getPrice()).trim().matches("^\\d+$")) {
+			throw new IllegalArgumentException("数字のみ入力できます");
+		} else if (String.valueOf(incomeCommand.getPrice()).length() > 8 || incomeCommand.getNote().length() > 200) {
+			throw new IllegalArgumentException("不正な桁数です");
 		}
 
-		// 入力された日付をyyyy/mm/ddにしたい
-//		Date date = incomeCommand.getDate();
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-//		String strDate = sdf.format(date);
-//		
-//		System.out.println("mmmmmmmmmm");
-//		System.out.println(strDate);
+		try {
+			// incomeNo(I+YYMM登録時点の年月+00000)を作成する
+			Calendar cl = Calendar.getInstance();
 
-		// incomeNo(I+YYMM登録時点の年月+00000)を作成する
-		Calendar cl = Calendar.getInstance();
+			// 現時点の年取得
+			SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
+			String strYear = sdfYear.format(cl.getTime());
+			// 3番目の文字列から最後までを抽出
+			String strfYear = strYear.substring(2);
 
-		// 現時点の年取得
-		SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
-		String strYear = sdfYear.format(cl.getTime());
-		// 3番目の文字列から最後までを抽出
-		String strfYear = strYear.substring(2);
+			// 現時点の月取得
+			SimpleDateFormat sdfMonth = new SimpleDateFormat("MM");
+			String strMonth = sdfMonth.format(cl.getTime());
 
-		// 現時点の月取得
-		SimpleDateFormat sdfMonth = new SimpleDateFormat("MM");
-		String strMonth = sdfMonth.format(cl.getTime());
+			// テーブルのデータ数をJPARepositoryで取得
+			Long dateNumber = incomeRepository.count();
+			// %→フォーマット指定の開始 0→ゼロ埋め 5→最小桁数 d→整数
+			// 取得したデータ数＋1したものを返す
+			String incomeNumber = String.format("%05d", dateNumber + 1);
 
-		// テーブルのデータ数をJPARepositoryで取得
-		Long dateNumber = incomeRepository.count();
-		// %→フォーマット指定の開始 0→ゼロ埋め 5→最小桁数 d→整数
-		// 取得したデータ数＋1したものを返す
-		String incomeNumber = String.format("%05d", dateNumber + 1);
+			String incomeNo = "I" + strfYear + strMonth + incomeNumber;
 
-		String incomeNo = "I" + strfYear + strMonth + incomeNumber;
+			Income income = new Income(incomeNo, incomeCommand);
+			// コンストラクタを呼び出し、引数にincomeNoなど不足しているものを入れる
 
-		Income income = new Income(incomeNo, incomeCommand);
-		// コンストラクタを呼び出し、引数にincomeNoなど不足しているものを入れる
-
-		// Entity側で必要なものをセッターでデータを入れる
-		// 不要なものは記述しない
-		incomeRepository.save(income);
-		return income;
-	}
+			// Entity側で必要なものをセッターでデータを入れる
+			// 不要なものは記述しない
+			incomeRepository.save(income);
+			return income;
+		}catch(Exception e){
+			throw new Exception("システムエラーが発生しました");
+		}
+			}
 
 	// 支出登録
-	public Expenditure createExpenditureInfo(ExpenditureForm expenditureCommand) {
-		
-		if(expenditureCommand.getPrice()==null||expenditureCommand.getDate()==null||expenditureCommand.getSelectExpenditure()==null) {
-			throw new BusinessExcetion;
-		}else if( ! String.valueOf(expenditureCommand.getPrice()).trim().matches("^\\d+$") 
-				||! String.valueOf(expenditureCommand.getDate()).trim().matches("^\\d+$")){
-			throw new BusinessExcetion("数字のみ入力できます");
-		}else if(String.valueOf(expenditureCommand.getPrice()).length() > 8 ||expenditureCommand.getNote().length()>200) {
-			throw new BusinessExcetion("不正な桁数です");
+	public Expenditure createExpenditureInfo(ExpenditureForm expenditureCommand){
+
+		if (expenditureCommand.getPrice() == null || expenditureCommand.getDate() == null
+				|| expenditureCommand.getSelectExpenditure() == null) {
+			throw new IllegalArgumentException("値がNULLです");
+		} else if (!String.valueOf(expenditureCommand.getPrice()).trim().matches("^\\d+$")) {
+			throw new IllegalArgumentException("数字のみ入力できます");
+		} else if (String.valueOf(expenditureCommand.getPrice()).length() > 8
+				|| expenditureCommand.getNote().length() > 200) {
+			throw new IllegalArgumentException("不正な桁数です");
 		}
-
-
-//		Date date = expenditureCommand.getDate();
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-//		String strDate = sdf.format(date);
 
 		String expenditureItemName = expenditureCommand.getSelectExpenditure();
 		ExpenditureItems expenditureItems = expenditureItemRepository
@@ -160,15 +154,16 @@ public class HouseholdService {
 
 	// 編集データ登録
 	// 収入
-	public Income incomeEdit(IncomeEditForm incomeEditForm) {
-		
-		if(incomeEditForm.getAmount()==null||incomeEditForm.getBalanceDate()==null||incomeEditForm.getIncomeType()==null) {
-			throw new BusinessExcetion;
-		}else if( ! String.valueOf(incomeEditForm.getBalanceDate()).trim().matches("^\\d+$") 
-				||! String.valueOf(incomeEditForm.getAmount()).trim().matches("^\\d+$")){
-			throw new BusinessExcetion("数字のみ入力できます");
-		}else if(String.valueOf(incomeEditForm.getAmount()).length() > 8 ||incomeEditForm.getNote().length()>200) {
-			throw new BusinessExcetion("不正な桁数です");
+	public Income incomeEdit(IncomeEditForm incomeEditForm){
+
+		if (incomeEditForm.getAmount() == null || incomeEditForm.getBalanceDate() == null
+				|| incomeEditForm.getIncomeType() == null) {
+			throw new IllegalArgumentException("値がNULLです");
+		} else if (!String.valueOf(incomeEditForm.getBalanceDate()).trim().matches("^\\d+$")
+				|| !String.valueOf(incomeEditForm.getAmount()).trim().matches("^\\d+$")) {
+			throw new IllegalArgumentException("数字のみ入力できます");
+		} else if (String.valueOf(incomeEditForm.getAmount()).length() > 8 || incomeEditForm.getNote().length() > 200) {
+			throw new IllegalArgumentException("不正な桁数です");
 		}
 
 		// バージョン取得して、＋１する
@@ -182,15 +177,17 @@ public class HouseholdService {
 	}
 
 //	支出
-	public Expenditure expenditureEdit(ExpenditureEditForm expenditureEditForm) {
-		
-		if(expenditureEditForm.getAmount()==null||expenditureEditForm.getBalanceDate()==null||expenditureEditForm.getExpenditureExpenseItemName()==null) {
-			throw new BusinessExcetion;
-		}else if( ! String.valueOf(expenditureEditForm.getBalanceDate()).trim().matches("^\\d+$") 
-				||! String.valueOf(expenditureEditForm.getAmount()).trim().matches("^\\d+$")){
-			throw new BusinessExcetion("数字のみ入力できます");
-		}else if(String.valueOf(expenditureEditForm.getAmount()).length() > 8 ||expenditureEditForm.getNote().length()>200) {
-			throw new BusinessExcetion("不正な桁数です");
+	public Expenditure expenditureEdit(ExpenditureEditForm expenditureEditForm){
+
+		if (expenditureEditForm.getAmount() == null || expenditureEditForm.getBalanceDate() == null
+				|| expenditureEditForm.getExpenditureExpenseItemName() == null) {
+			throw new IllegalArgumentException("値がNULLです");
+		} else if (!String.valueOf(expenditureEditForm.getBalanceDate()).trim().matches("^\\d+$")
+				|| !String.valueOf(expenditureEditForm.getAmount()).trim().matches("^\\d+$")) {
+			throw new IllegalArgumentException("数字のみ入力できます");
+		} else if (String.valueOf(expenditureEditForm.getAmount()).length() > 8
+				|| expenditureEditForm.getNote().length() > 200) {
+			throw new IllegalArgumentException("不正な桁数です");
 		}
 		// アイテムコード取得
 		String expenditureItemName = expenditureEditForm.getExpenditureExpenseItemName();
@@ -210,10 +207,10 @@ public class HouseholdService {
 
 //削除
 	// 収入
-	public Income incomeDelete(String incomeNo) {
-		//incomeNoを引数に、テーブルの１行も取得するリポジトリ呼び出し
+	public Income incomeDelete(String incomeNo){
+		// incomeNoを引数に、テーブルの１行も取得するリポジトリ呼び出し
 		Income incomeInfo = incomeRepository.findById(incomeNo);
-		//コンストラクタ呼び出し
+		// コンストラクタ呼び出し
 		Income income = new Income(incomeInfo);
 		// 保存
 		return incomeRepository.save(income);
@@ -227,47 +224,43 @@ public class HouseholdService {
 		// 保存
 		return expenditureRepository.save(expenditure);
 	}
-	
+
 //詳細検索
-	
+
 	@Autowired
 	DetailSearchIncomeRepository detailSearchIncomeRepository;
 	@Autowired
 	DetailSearchExpenditureRepository detailSearchExpenditureRepository;
 
-	//収入検索
-	public List<SearchResultIncome> getDetailSearchIncomeList(Date fromDate,Date toDate,Integer selectIncome,
-															Integer fromAmount,Integer toAmount,String note){
-		//Specification生成
+	// 収入検索
+	public List<SearchResultIncome> getDetailSearchIncomeList(Date fromDate, Date toDate, Integer selectIncome,
+			Integer fromAmount, Integer toAmount, String note) {
+		// Specification生成
 		DetailSearchIncomeSpecification<SearchResultIncome> spec = new DetailSearchIncomeSpecification<>();
-		
-		//引数をもとに検索を行う
-		List<SearchResultIncome> detailSearchIncomeInfo =  detailSearchIncomeRepository.findAll(
-				Specification.where(spec.dateGreaterThanLessThan(fromDate, toDate))
-				.and(spec.incomeTypeMatch(selectIncome))
-				.and(spec.amountGreaterThanLessThan(fromAmount, toAmount))
-				.and(spec.noteLikeContains(note))
-				.and(spec.deleteFlagCheck())
-				);
-		
+
+		// 引数をもとに検索を行う
+		List<SearchResultIncome> detailSearchIncomeInfo = detailSearchIncomeRepository.findAll(Specification
+				.where(spec.dateGreaterThanLessThan(fromDate, toDate)).and(spec.incomeTypeMatch(selectIncome))
+				.and(spec.amountGreaterThanLessThan(fromAmount, toAmount)).and(spec.noteLikeContains(note))
+				.and(spec.deleteFlagCheck()));
+
 		return detailSearchIncomeInfo;
 	}
-	
-	//支出検索
-	public List<SearchResultExpenditure> getDetailSearchExpenditureList(Date fromDate,Date toDate,String selectExpenditure,Integer fromAmount,Integer toAmount,String note){
-		
-		//Specification生成
-		DetailSearchExpenditureSpecification<SearchResultExpenditure>  spec = new DetailSearchExpenditureSpecification<SearchResultExpenditure>();
-		
-		//引数をもとに検索を行う
-		List<SearchResultExpenditure> detailSearchExpenditureInfo = detailSearchExpenditureRepository.findAll(
-				Specification.where(spec.dateGreaterThanLessThan(fromDate, toDate))
-				.and(spec.expenditureMatch(selectExpenditure))
-				.and(spec.amountGreaterThanLessThan(fromAmount, toAmount))
-				.and(spec.noteLikeContains(note))
-				.and(spec.deleteFlagCheck())
-				);
-		
+
+	// 支出検索
+	public List<SearchResultExpenditure> getDetailSearchExpenditureList(Date fromDate, Date toDate,
+			String selectExpenditure, Integer fromAmount, Integer toAmount, String note) {
+
+		// Specification生成
+		DetailSearchExpenditureSpecification<SearchResultExpenditure> spec = new DetailSearchExpenditureSpecification<SearchResultExpenditure>();
+
+		// 引数をもとに検索を行う
+		List<SearchResultExpenditure> detailSearchExpenditureInfo = detailSearchExpenditureRepository
+				.findAll(Specification.where(spec.dateGreaterThanLessThan(fromDate, toDate))
+						.and(spec.expenditureMatch(selectExpenditure))
+						.and(spec.amountGreaterThanLessThan(fromAmount, toAmount)).and(spec.noteLikeContains(note))
+						.and(spec.deleteFlagCheck()));
+
 		return detailSearchExpenditureInfo;
 	}
 

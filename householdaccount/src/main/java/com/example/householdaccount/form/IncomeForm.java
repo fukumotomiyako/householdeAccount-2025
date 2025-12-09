@@ -22,8 +22,6 @@ public class IncomeForm {
 	private Integer selectIncome;
 	
 	@NotNull
-	@Pattern(regexp = "\\d+")
-	@NotNull
 	@Digits(integer = 8, fraction = 0)
 	@Positive
 	private  Integer price;

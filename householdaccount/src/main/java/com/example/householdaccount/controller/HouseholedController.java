@@ -2,19 +2,14 @@ package com.example.householdaccount.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.householdaccount.common.HouseholdaccountSystemException;
 import com.example.householdaccount.entity.ExpenditureItems;
 import com.example.householdaccount.entity.SearchBalanceExpenditureInfo;
 import com.example.householdaccount.entity.SearchBalanceIncomeInfo;
@@ -54,22 +50,27 @@ public class HouseholedController {
 
 	// 登録(収入)
 	@RequestMapping(value = "/income", method = RequestMethod.POST)
-	public String incomeCreate(@RequestBody @Validated IncomeForm incomeCommmand, BindingResult result) {
+	public String incomeCreate(@RequestBody @Validated IncomeForm incomeCommmand, BindingResult result) throws Exception
+			{
 
-		if (result.hasErrors()) {
-			return "登録できません";
+		try {
+			if (result.hasErrors()) {
+				return "登録できません";
+			}
+
+			System.out.println("収入");
+			System.out.println(incomeCommmand.getRadioName());
+			System.out.println(incomeCommmand.getSelectIncome());
+			System.out.println(incomeCommmand.getDate());
+			System.out.println(incomeCommmand.getPrice());
+			System.out.println(incomeCommmand.getNote());
+
+			householdService.createIncomeInfo(incomeCommmand);
+
+			return "登録しました";
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
 		}
-
-		System.out.println("収入");
-		System.out.println(incomeCommmand.getRadioName());
-		System.out.println(incomeCommmand.getSelectIncome());
-		System.out.println(incomeCommmand.getDate());
-		System.out.println(incomeCommmand.getPrice());
-		System.out.println(incomeCommmand.getNote());
-
-		householdService.createIncomeInfo(incomeCommmand);
-
-		return "登録しました";
 	}
 
 	// 登録(支出)

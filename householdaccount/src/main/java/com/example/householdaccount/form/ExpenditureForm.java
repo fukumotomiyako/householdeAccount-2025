@@ -22,7 +22,6 @@ public class ExpenditureForm {
 	
 	@NotNull
 	@Pattern(regexp = "\\d+")
-	@NotNull
 	@Digits(integer = 8, fraction = 0)
 	@Positive
 	private  Integer price;

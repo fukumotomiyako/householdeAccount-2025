@@ -1,5 +1,6 @@
 package com.example.householdaccount.service;
 
+
 public class Tamesi {
 
 	//単体テスト動くかテスト
