@@ -13,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class ExpenditureForm {
 	@NotNull
 	private String radioName;
+	
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date;

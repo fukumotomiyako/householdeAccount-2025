@@ -50,8 +50,8 @@ public class HouseholedController {
 
 	// 登録(収入)
 	@RequestMapping(value = "/income", method = RequestMethod.POST)
-	public String incomeCreate(@RequestBody @Validated IncomeForm incomeCommmand, BindingResult result) throws Exception
-			{
+	public String incomeCreate(@RequestBody @Validated IncomeForm incomeCommmand, BindingResult result)
+			throws Exception {
 
 		try {
 			if (result.hasErrors()) {
@@ -75,21 +75,26 @@ public class HouseholedController {
 
 	// 登録(支出)
 	@RequestMapping(value = "/expenditure", method = RequestMethod.POST)
-	public String expenditureCreate(@RequestBody @Validated ExpenditureForm expenditureCommand, BindingResult result) {
+	public String expenditureCreate(@RequestBody @Validated ExpenditureForm expenditureCommand, BindingResult result)
+			throws Exception {
 
-		if (result.hasErrors()) {
-			return "登録できません";
+		try {
+			if (result.hasErrors()) {
+				return "登録できません";
+			}
+
+			System.out.println("支出");
+			System.out.println(expenditureCommand.getRadioName());
+			System.out.println(expenditureCommand.getDate());
+			System.out.println(expenditureCommand.getSelectExpenditure());
+			System.out.println(expenditureCommand.getPrice());
+			System.out.println(expenditureCommand.getNote());
+			householdService.createExpenditureInfo(expenditureCommand);
+
+			return "登録しました";
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
 		}
-
-		System.out.println("支出");
-		System.out.println(expenditureCommand.getRadioName());
-		System.out.println(expenditureCommand.getDate());
-		System.out.println(expenditureCommand.getSelectExpenditure());
-		System.out.println(expenditureCommand.getPrice());
-		System.out.println(expenditureCommand.getNote());
-		householdService.createExpenditureInfo(expenditureCommand);
-
-		return "登録しました";
 	}
 
 	// 金額情報検索(編集)
@@ -145,48 +150,67 @@ public class HouseholedController {
 	// 編集
 	// 収入
 	@RequestMapping(value = "/income/edit", method = RequestMethod.PATCH)
-	public String incomeEdit(@RequestBody @Validated IncomeEditForm editIncomeForm, BindingResult result) {
+	public String incomeEdit(@RequestBody @Validated IncomeEditForm editIncomeForm, BindingResult result)
+			throws Exception {
 
-		if (result.hasErrors()) {
-			return "編集できません";
+		try {
+			if (result.hasErrors()) {
+				return "編集できません";
+			}
+
+			// service呼び出し
+			householdService.incomeEdit(editIncomeForm);
+
+			return "編集が完了しました";
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
 		}
-
-		// service呼び出し
-		householdService.incomeEdit(editIncomeForm);
-
-		return "編集が完了しました";
 	}
 
 	// 支出
 	@RequestMapping(value = "/expenditure/edit", method = RequestMethod.PATCH)
-	public String expenditureEdit(@RequestBody @Validated ExpenditureEditForm expenditureEditForm,
-			BindingResult result) {
+	public String expenditureEdit(@RequestBody @Validated ExpenditureEditForm expenditureEditForm, BindingResult result)
+			throws Exception {
 
-		if (result.hasErrors()) {
-			return "編集できません";
+		try {
+			if (result.hasErrors()) {
+				return "編集できません";
+			}
+
+			// service呼び出し
+			householdService.expenditureEdit(expenditureEditForm);
+
+			return "編集が完了しました";
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
 		}
-
-		// service呼び出し
-		householdService.expenditureEdit(expenditureEditForm);
-
-		return "編集が完了しました";
 	}
 
 	// 削除
 	// 収入
 	@RequestMapping(value = "/income/{incomeNo}/delete", method = RequestMethod.PUT)
-	public String incomeDelete(@PathVariable String incomeNo) {
-		// service呼び出し
-		householdService.incomeDelete(incomeNo);
-		return "削除しました";
+	public String incomeDelete(@PathVariable String incomeNo) throws Exception {
+
+		try {
+			// service呼び出し
+			householdService.incomeDelete(incomeNo);
+			return "削除しました";
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
+		}
 	}
 
 	// 支出
 	@RequestMapping(value = "/expenditure/{expenditureNo}/delete", method = RequestMethod.PUT)
-	public String expenditureDelete(@PathVariable String expenditureNo) {
-		// service呼び出し
-		householdService.expenditureDelete(expenditureNo);
-		return "削除しました";
+	public String expenditureDelete(@PathVariable String expenditureNo) throws Exception {
+
+		try {
+			// service呼び出し
+			householdService.expenditureDelete(expenditureNo);
+			return "削除しました";
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
+		}
 	}
 
 	// 詳細検索

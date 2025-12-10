@@ -51,15 +51,24 @@ public class HouseholdService {
 	}
 
 	// 収入登録
-	public Income createIncomeInfo(IncomeForm incomeCommand) throws Exception{
-		
+	public Income createIncomeInfo(IncomeForm incomeCommand) throws Exception {
+
 		if (incomeCommand.getPrice() == null || incomeCommand.getDate() == null
 				|| incomeCommand.getSelectIncome() == null) {
 			throw new IllegalArgumentException("値がNULLです");
-		} else if (!String.valueOf(incomeCommand.getPrice()).trim().matches("^\\d+$")) {
+
+		} else if (!String.valueOf(incomeCommand.getPrice()).trim().matches("^\\d+$")|| !String.valueOf(incomeCommand.getDate()).matches("^\\d{4}-\\d{2}-\\d{2}")) {
 			throw new IllegalArgumentException("数字のみ入力できます");
-		} else if (String.valueOf(incomeCommand.getPrice()).length() > 8 || incomeCommand.getNote().length() > 200) {
-			throw new IllegalArgumentException("不正な桁数です");
+
+		} else if (incomeCommand.getNote() == null || incomeCommand.getNote() == "") {
+			if (String.valueOf(incomeCommand.getPrice()).length() > 8) {
+				throw new IllegalArgumentException("不正な桁数です");
+			}
+
+		} else if (incomeCommand.getNote() != null) {
+			if (String.valueOf(incomeCommand.getPrice()).length() > 8 || incomeCommand.getNote().length() > 200) {
+				throw new IllegalArgumentException("不正な桁数です");
+			}
 		}
 
 		try {
@@ -91,45 +100,59 @@ public class HouseholdService {
 			// 不要なものは記述しない
 			incomeRepository.save(income);
 			return income;
-		}catch(Exception e){
+		} catch (Exception e) {
 			throw new Exception("システムエラーが発生しました");
 		}
-			}
+	}
 
 	// 支出登録
-	public Expenditure createExpenditureInfo(ExpenditureForm expenditureCommand){
+	public Expenditure createExpenditureInfo(ExpenditureForm expenditureCommand) throws Exception {
 
 		if (expenditureCommand.getPrice() == null || expenditureCommand.getDate() == null
-				|| expenditureCommand.getSelectExpenditure() == null) {
+				|| expenditureCommand.getSelectExpenditure() == null || expenditureCommand.getSelectExpenditure() == "") {
 			throw new IllegalArgumentException("値がNULLです");
+
 		} else if (!String.valueOf(expenditureCommand.getPrice()).trim().matches("^\\d+$")) {
 			throw new IllegalArgumentException("数字のみ入力できます");
-		} else if (String.valueOf(expenditureCommand.getPrice()).length() > 8
-				|| expenditureCommand.getNote().length() > 200) {
-			throw new IllegalArgumentException("不正な桁数です");
+
+		} else if (expenditureCommand.getNote() == null || expenditureCommand.getNote() == "") {
+			if (String.valueOf(expenditureCommand.getPrice()).length() > 8) {
+				throw new IllegalArgumentException("不正な桁数です");
+			}
+
+		} else if (expenditureCommand.getNote() != null) {
+			if (String.valueOf(expenditureCommand.getPrice()).length() > 8
+					|| expenditureCommand.getNote().length() > 200) {
+				throw new IllegalArgumentException("不正な桁数です");
+			}
 		}
 
-		String expenditureItemName = expenditureCommand.getSelectExpenditure();
-		ExpenditureItems expenditureItems = expenditureItemRepository
-				.findByExpenditureExpenseItemName(expenditureItemName);
-		ExpenditureExpenseItemCodeVO expenditureExpenseItemCode = expenditureItems.getExpenditure_expense_item_code();
+		try {
+			String expenditureItemName = expenditureCommand.getSelectExpenditure();
+			ExpenditureItems expenditureItems = expenditureItemRepository
+					.findByExpenditureExpenseItemName(expenditureItemName);
+			ExpenditureExpenseItemCodeVO expenditureExpenseItemCode = expenditureItems
+					.getExpenditure_expense_item_code();
 
-		// String expenditureExpenseItemCode="EI001";
+			// String expenditureExpenseItemCode="EI001";
 
-		Calendar cl = Calendar.getInstance();
-		SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
-		String strYear = sdfYear.format(cl.getTime());
-		String strfYear = strYear.substring(2);
-		SimpleDateFormat sdfMonth = new SimpleDateFormat("MM");
-		String strMonth = sdfMonth.format(cl.getTime());
-		Long dateNumber = expenditureRepository.count();
-		String expenditureNumber = String.format("%05d", dateNumber + 1);
-		String expenditureNo = "E" + strfYear + strMonth + expenditureNumber;
+			Calendar cl = Calendar.getInstance();
+			SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
+			String strYear = sdfYear.format(cl.getTime());
+			String strfYear = strYear.substring(2);
+			SimpleDateFormat sdfMonth = new SimpleDateFormat("MM");
+			String strMonth = sdfMonth.format(cl.getTime());
+			Long dateNumber = expenditureRepository.count();
+			String expenditureNumber = String.format("%05d", dateNumber + 1);
+			String expenditureNo = "E" + strfYear + strMonth + expenditureNumber;
 
-		Expenditure expenditure = new Expenditure(expenditureNo, expenditureCommand, expenditureExpenseItemCode);
+			Expenditure expenditure = new Expenditure(expenditureNo, expenditureCommand, expenditureExpenseItemCode);
 
-		expenditureRepository.save(expenditure);
-		return expenditure;
+			expenditureRepository.save(expenditure);
+			return expenditure;
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
+		}
 	}
 
 	// 収支データ取得(編集)
@@ -154,41 +177,63 @@ public class HouseholdService {
 
 	// 編集データ登録
 	// 収入
-	public Income incomeEdit(IncomeEditForm incomeEditForm){
+	public Income incomeEdit(IncomeEditForm incomeEditForm) throws Exception {
 
 		if (incomeEditForm.getAmount() == null || incomeEditForm.getBalanceDate() == null
 				|| incomeEditForm.getIncomeType() == null) {
 			throw new IllegalArgumentException("値がNULLです");
-		} else if (!String.valueOf(incomeEditForm.getBalanceDate()).trim().matches("^\\d+$")
-				|| !String.valueOf(incomeEditForm.getAmount()).trim().matches("^\\d+$")) {
+
+		} else if (!String.valueOf(incomeEditForm.getAmount()).trim().matches("^\\d+$")) {
 			throw new IllegalArgumentException("数字のみ入力できます");
-		} else if (String.valueOf(incomeEditForm.getAmount()).length() > 8 || incomeEditForm.getNote().length() > 200) {
-			throw new IllegalArgumentException("不正な桁数です");
+
+		} else if (incomeEditForm.getNote() == null || incomeEditForm.getNote() == "") {
+			if (String.valueOf(incomeEditForm.getAmount()).length() > 8) {
+				throw new IllegalArgumentException("不正な桁数です");
+			}
+
+		} else if (incomeEditForm.getNote() != null) {
+			if (String.valueOf(incomeEditForm.getAmount()).length() > 8 || incomeEditForm.getNote().length() > 200) {
+				throw new IllegalArgumentException("不正な桁数です");
+			}
 		}
 
-		// バージョン取得して、＋１する
-		String incomeNo = incomeEditForm.getBalanceNo();
-		Integer incomeVersion = incomeRepository.findByIncomeNo(incomeNo);
-		incomeVersion = incomeVersion + 1;
+		try {
+			// バージョン取得して、＋１する
+			String incomeNo = incomeEditForm.getBalanceNo();
+			Integer incomeVersion = incomeRepository.findByIncomeNo(incomeNo);
+			incomeVersion = incomeVersion + 1;
 
-		Income income = new Income(incomeEditForm, incomeVersion);
-		incomeRepository.save(income);
-		return income;
+			Income income = new Income(incomeEditForm, incomeVersion);
+			incomeRepository.save(income);
+			return income;
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
+		}
 	}
 
 //	支出
-	public Expenditure expenditureEdit(ExpenditureEditForm expenditureEditForm){
+	public Expenditure expenditureEdit(ExpenditureEditForm expenditureEditForm) throws Exception {
 
 		if (expenditureEditForm.getAmount() == null || expenditureEditForm.getBalanceDate() == null
-				|| expenditureEditForm.getExpenditureExpenseItemName() == null) {
+				|| expenditureEditForm.getExpenditureExpenseItemName() == null || expenditureEditForm.getExpenditureExpenseItemName() == "") {
 			throw new IllegalArgumentException("値がNULLです");
+
 		} else if (!String.valueOf(expenditureEditForm.getBalanceDate()).trim().matches("^\\d+$")
 				|| !String.valueOf(expenditureEditForm.getAmount()).trim().matches("^\\d+$")) {
 			throw new IllegalArgumentException("数字のみ入力できます");
-		} else if (String.valueOf(expenditureEditForm.getAmount()).length() > 8
-				|| expenditureEditForm.getNote().length() > 200) {
-			throw new IllegalArgumentException("不正な桁数です");
-		}
+
+		} else if (expenditureEditForm.getNote() == null || expenditureEditForm.getNote() == "")
+			if (String.valueOf(expenditureEditForm.getAmount()).length() > 8) {
+				throw new IllegalArgumentException("不正な桁数です");
+
+			} else if (expenditureEditForm.getNote() != null) {
+				if (String.valueOf(expenditureEditForm.getAmount()).length() > 8
+						|| expenditureEditForm.getNote().length() > 200) {
+					throw new IllegalArgumentException("不正な桁数です");
+				}
+			}
+
+		try {
 		// アイテムコード取得
 		String expenditureItemName = expenditureEditForm.getExpenditureExpenseItemName();
 		ExpenditureItems expenditureItems = expenditureItemRepository
@@ -203,26 +248,38 @@ public class HouseholdService {
 		Expenditure expenditure = new Expenditure(expenditureEditForm, expenditureExpenseItemCode, expenditureVersion);
 		expenditureRepository.save(expenditure);
 		return expenditure;
+		}catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
+		}
 	}
 
 //削除
 	// 収入
-	public Income incomeDelete(String incomeNo){
+	public Income incomeDelete(String incomeNo) throws Exception {
+		
+		try {
 		// incomeNoを引数に、テーブルの１行も取得するリポジトリ呼び出し
 		Income incomeInfo = incomeRepository.findById(incomeNo);
 		// コンストラクタ呼び出し
 		Income income = new Income(incomeInfo);
 		// 保存
 		return incomeRepository.save(income);
+		}catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
+		}
 	}
 
 	// 支出
-	public Expenditure expenditureDelete(String expenditureNo) {
+	public Expenditure expenditureDelete(String expenditureNo) throws Exception {
 
+		try {
 		Expenditure expenditureInfo = expenditureRepository.findById(expenditureNo);
 		Expenditure expenditure = new Expenditure(expenditureInfo);
 		// 保存
 		return expenditureRepository.save(expenditure);
+		}catch (Exception e){
+			throw new Exception("システムエラーが発生しました");
+		}
 	}
 
 //詳細検索
