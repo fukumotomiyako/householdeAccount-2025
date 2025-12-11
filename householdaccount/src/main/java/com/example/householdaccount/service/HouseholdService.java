@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.example.householdaccount.common.HouseholdaccountSystemException;
 import com.example.householdaccount.entity.Expenditure;
 import com.example.householdaccount.entity.ExpenditureItems;
 import com.example.householdaccount.entity.ExpenditureItems.ExpenditureExpenseItemCodeVO;
@@ -51,13 +50,14 @@ public class HouseholdService {
 	}
 
 	// 収入登録
-	public Income createIncomeInfo(IncomeForm incomeCommand) throws Exception {
+	public Income createIncomeInfo(IncomeForm incomeCommand) throws IllegalStateException {
 
 		if (incomeCommand.getPrice() == null || incomeCommand.getDate() == null
 				|| incomeCommand.getSelectIncome() == null) {
 			throw new IllegalArgumentException("値がNULLです");
 
-		} else if (!String.valueOf(incomeCommand.getPrice()).trim().matches("^\\d+$")|| !String.valueOf(incomeCommand.getDate()).matches("^\\d{4}-\\d{2}-\\d{2}")) {
+		} else if (!String.valueOf(incomeCommand.getPrice()).trim().matches("^\\d+$")
+				|| !String.valueOf(incomeCommand.getDate()).matches("^\\d{4}-\\d{2}-\\d{2}")) {
 			throw new IllegalArgumentException("数字のみ入力できます");
 
 		} else if (incomeCommand.getNote() == null || incomeCommand.getNote() == "") {
@@ -100,8 +100,9 @@ public class HouseholdService {
 			// 不要なものは記述しない
 			incomeRepository.save(income);
 			return income;
-		} catch (Exception e) {
-			throw new Exception("システムエラーが発生しました");
+		} catch (IllegalStateException e) {
+			System.out.println("システムエラーが発生しました");
+			throw new IllegalStateException("システムエラーが発生しました");
 		}
 	}
 
@@ -109,10 +110,12 @@ public class HouseholdService {
 	public Expenditure createExpenditureInfo(ExpenditureForm expenditureCommand) throws Exception {
 
 		if (expenditureCommand.getPrice() == null || expenditureCommand.getDate() == null
-				|| expenditureCommand.getSelectExpenditure() == null || expenditureCommand.getSelectExpenditure() == "") {
+				|| expenditureCommand.getSelectExpenditure() == null
+				|| expenditureCommand.getSelectExpenditure() == "") {
 			throw new IllegalArgumentException("値がNULLです");
 
-		} else if (!String.valueOf(expenditureCommand.getPrice()).trim().matches("^\\d+$")) {
+		} else if (!String.valueOf(expenditureCommand.getPrice()).trim().matches("^\\d+$")
+				|| !String.valueOf(expenditureCommand.getDate()).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
 			throw new IllegalArgumentException("数字のみ入力できます");
 
 		} else if (expenditureCommand.getNote() == null || expenditureCommand.getNote() == "") {
@@ -183,7 +186,8 @@ public class HouseholdService {
 				|| incomeEditForm.getIncomeType() == null) {
 			throw new IllegalArgumentException("値がNULLです");
 
-		} else if (!String.valueOf(incomeEditForm.getAmount()).trim().matches("^\\d+$")) {
+		} else if (!String.valueOf(incomeEditForm.getAmount()).trim().matches("^\\d+$")
+				|| !String.valueOf(incomeEditForm.getBalanceDate()).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
 			throw new IllegalArgumentException("数字のみ入力できます");
 
 		} else if (incomeEditForm.getNote() == null || incomeEditForm.getNote() == "") {
@@ -215,10 +219,11 @@ public class HouseholdService {
 	public Expenditure expenditureEdit(ExpenditureEditForm expenditureEditForm) throws Exception {
 
 		if (expenditureEditForm.getAmount() == null || expenditureEditForm.getBalanceDate() == null
-				|| expenditureEditForm.getExpenditureExpenseItemName() == null || expenditureEditForm.getExpenditureExpenseItemName() == "") {
+				|| expenditureEditForm.getExpenditureExpenseItemName() == null
+				|| expenditureEditForm.getExpenditureExpenseItemName() == "") {
 			throw new IllegalArgumentException("値がNULLです");
 
-		} else if (!String.valueOf(expenditureEditForm.getBalanceDate()).trim().matches("^\\d+$")
+		} else if (!String.valueOf(expenditureEditForm.getBalanceDate()).matches("^\\d{4}-\\d{2}-\\d{2}$")
 				|| !String.valueOf(expenditureEditForm.getAmount()).trim().matches("^\\d+$")) {
 			throw new IllegalArgumentException("数字のみ入力できます");
 
@@ -234,21 +239,23 @@ public class HouseholdService {
 			}
 
 		try {
-		// アイテムコード取得
-		String expenditureItemName = expenditureEditForm.getExpenditureExpenseItemName();
-		ExpenditureItems expenditureItems = expenditureItemRepository
-				.findByExpenditureExpenseItemName(expenditureItemName);
-		ExpenditureExpenseItemCodeVO expenditureExpenseItemCode = expenditureItems.getExpenditure_expense_item_code();
+			// アイテムコード取得
+			String expenditureItemName = expenditureEditForm.getExpenditureExpenseItemName();
+			ExpenditureItems expenditureItems = expenditureItemRepository
+					.findByExpenditureExpenseItemName(expenditureItemName);
+			ExpenditureExpenseItemCodeVO expenditureExpenseItemCode = expenditureItems
+					.getExpenditure_expense_item_code();
 
-		// バージョン取得して、＋１する
-		String expenditureNo = expenditureEditForm.getBalanceNo();
-		Integer expenditureVersion = expenditureRepository.findByExpenditureNo(expenditureNo);
-		expenditureVersion = expenditureVersion + 1;
+			// バージョン取得して、＋１する
+			String expenditureNo = expenditureEditForm.getBalanceNo();
+			Integer expenditureVersion = expenditureRepository.findByExpenditureNo(expenditureNo);
+			expenditureVersion = expenditureVersion + 1;
 
-		Expenditure expenditure = new Expenditure(expenditureEditForm, expenditureExpenseItemCode, expenditureVersion);
-		expenditureRepository.save(expenditure);
-		return expenditure;
-		}catch (Exception e) {
+			Expenditure expenditure = new Expenditure(expenditureEditForm, expenditureExpenseItemCode,
+					expenditureVersion);
+			expenditureRepository.save(expenditure);
+			return expenditure;
+		} catch (Exception e) {
 			throw new Exception("システムエラーが発生しました");
 		}
 	}
@@ -256,15 +263,15 @@ public class HouseholdService {
 //削除
 	// 収入
 	public Income incomeDelete(String incomeNo) throws Exception {
-		
+
 		try {
-		// incomeNoを引数に、テーブルの１行も取得するリポジトリ呼び出し
-		Income incomeInfo = incomeRepository.findById(incomeNo);
-		// コンストラクタ呼び出し
-		Income income = new Income(incomeInfo);
-		// 保存
-		return incomeRepository.save(income);
-		}catch (Exception e) {
+			// incomeNoを引数に、テーブルの１行も取得するリポジトリ呼び出し
+			Income incomeInfo = incomeRepository.findById(incomeNo);
+			// コンストラクタ呼び出し
+			Income income = new Income(incomeInfo);
+			// 保存
+			return incomeRepository.save(income);
+		} catch (Exception e) {
 			throw new Exception("システムエラーが発生しました");
 		}
 	}
@@ -273,11 +280,11 @@ public class HouseholdService {
 	public Expenditure expenditureDelete(String expenditureNo) throws Exception {
 
 		try {
-		Expenditure expenditureInfo = expenditureRepository.findById(expenditureNo);
-		Expenditure expenditure = new Expenditure(expenditureInfo);
-		// 保存
-		return expenditureRepository.save(expenditure);
-		}catch (Exception e){
+			Expenditure expenditureInfo = expenditureRepository.findById(expenditureNo);
+			Expenditure expenditure = new Expenditure(expenditureInfo);
+			// 保存
+			return expenditureRepository.save(expenditure);
+		} catch (Exception e) {
 			throw new Exception("システムエラーが発生しました");
 		}
 	}

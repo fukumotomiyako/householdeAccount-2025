@@ -51,7 +51,7 @@ public class HouseholedController {
 	// 登録(収入)
 	@RequestMapping(value = "/income", method = RequestMethod.POST)
 	public String incomeCreate(@RequestBody @Validated IncomeForm incomeCommmand, BindingResult result)
-			throws Exception {
+			throws IllegalStateException {
 
 		try {
 			if (result.hasErrors()) {
@@ -68,8 +68,8 @@ public class HouseholedController {
 			householdService.createIncomeInfo(incomeCommmand);
 
 			return "登録しました";
-		} catch (Exception e) {
-			throw new Exception("システムエラーが発生しました");
+		} catch (IllegalStateException e) {
+			throw new IllegalStateException("システムエラーが発生しました");
 		}
 	}
 
