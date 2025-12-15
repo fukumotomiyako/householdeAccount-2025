@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.householdaccount.common.HouseholdaccountSystemException;
 import com.example.householdaccount.entity.ExpenditureItems;
 import com.example.householdaccount.entity.SearchBalanceExpenditureInfo;
 import com.example.householdaccount.entity.SearchBalanceIncomeInfo;
@@ -50,26 +49,34 @@ public class HouseholedController {
 
 	// 登録(収入)
 	@RequestMapping(value = "/income", method = RequestMethod.POST)
-	public String incomeCreate(@RequestBody @Validated IncomeForm incomeCommmand, BindingResult result)
-			throws IllegalStateException {
+	public String incomeCreate(@RequestBody @Validated IncomeForm incomeCommand, BindingResult result)
+			throws Exception {
 
 		try {
 			if (result.hasErrors()) {
 				return "登録できません";
 			}
-
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String date = sdf.format(incomeCommand.getDate());
+			String strDate = date;
+			Date sqlDate = java.sql.Date.valueOf(strDate);
+			
+			System.out.println("ああああああああああああああああああああああ");
+			System.out.println(sqlDate);
+			incomeCommand.setDate(sqlDate);
+			
 			System.out.println("収入");
-			System.out.println(incomeCommmand.getRadioName());
-			System.out.println(incomeCommmand.getSelectIncome());
-			System.out.println(incomeCommmand.getDate());
-			System.out.println(incomeCommmand.getPrice());
-			System.out.println(incomeCommmand.getNote());
+			System.out.println(incomeCommand.getRadioName());
+			System.out.println(incomeCommand.getSelectIncome());
+			System.out.println(incomeCommand.getDate());
+			System.out.println(incomeCommand.getPrice());
+			System.out.println(incomeCommand.getNote());
 
-			householdService.createIncomeInfo(incomeCommmand);
+			householdService.createIncomeInfo(incomeCommand);
 
 			return "登録しました";
-		} catch (IllegalStateException e) {
-			throw new IllegalStateException("システムエラーが発生しました");
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
 		}
 	}
 
@@ -82,6 +89,12 @@ public class HouseholedController {
 			if (result.hasErrors()) {
 				return "登録できません";
 			}
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String date = sdf.format(expenditureCommand.getDate());
+			String strDate = date;
+			Date sqlDate = java.sql.Date.valueOf(strDate);
+			expenditureCommand.setDate(sqlDate);
+			
 
 			System.out.println("支出");
 			System.out.println(expenditureCommand.getRadioName());
@@ -89,6 +102,7 @@ public class HouseholedController {
 			System.out.println(expenditureCommand.getSelectExpenditure());
 			System.out.println(expenditureCommand.getPrice());
 			System.out.println(expenditureCommand.getNote());
+
 			householdService.createExpenditureInfo(expenditureCommand);
 
 			return "登録しました";
@@ -157,6 +171,11 @@ public class HouseholedController {
 			if (result.hasErrors()) {
 				return "編集できません";
 			}
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String date = sdf.format(editIncomeForm.getBalanceDate());
+			String strDate = date;
+			Date sqlDate = java.sql.Date.valueOf(strDate);
+			editIncomeForm.setBalanceDate(sqlDate);
 
 			// service呼び出し
 			householdService.incomeEdit(editIncomeForm);
@@ -176,6 +195,10 @@ public class HouseholedController {
 			if (result.hasErrors()) {
 				return "編集できません";
 			}
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String date = sdf.format(expenditureEditForm.getBalanceDate());
+			Date sqlDate = java.sql.Date.valueOf(date);
+			expenditureEditForm.setBalanceDate(sqlDate);
 
 			// service呼び出し
 			householdService.expenditureEdit(expenditureEditForm);

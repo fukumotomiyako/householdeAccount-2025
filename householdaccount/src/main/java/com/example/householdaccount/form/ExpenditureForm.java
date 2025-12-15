@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
@@ -22,7 +21,6 @@ public class ExpenditureForm {
 	private String selectExpenditure;
 	
 	@NotNull
-	@Pattern(regexp = "\\d+")
 	@Digits(integer = 8, fraction = 0)
 	@Positive
 	private  Integer price;
