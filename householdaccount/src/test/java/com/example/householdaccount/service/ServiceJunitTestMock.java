@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.householdaccount.entity.Expenditure;
 import com.example.householdaccount.entity.Income;
 import com.example.householdaccount.form.ExpenditureEditForm;
 import com.example.householdaccount.form.ExpenditureForm;
@@ -34,10 +33,9 @@ public class ServiceJunitTestMock {
 	@Mock
 	private Income income;
 	@Mock
-	private Expenditure expenditure;
-	@Mock
 	private GetExpenditureItemsRepository expenditureItemRepository;
 
+//登録
 	@Test
 	void DB停止時の収入登録() throws Exception {
 

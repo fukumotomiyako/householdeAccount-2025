@@ -60,11 +60,11 @@ public class HouseholedController {
 			String date = sdf.format(incomeCommand.getDate());
 			String strDate = date;
 			Date sqlDate = java.sql.Date.valueOf(strDate);
-			
+
 			System.out.println("ああああああああああああああああああああああ");
 			System.out.println(sqlDate);
 			incomeCommand.setDate(sqlDate);
-			
+
 			System.out.println("収入");
 			System.out.println(incomeCommand.getRadioName());
 			System.out.println(incomeCommand.getSelectIncome());
@@ -91,10 +91,8 @@ public class HouseholedController {
 			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String date = sdf.format(expenditureCommand.getDate());
-			String strDate = date;
-			Date sqlDate = java.sql.Date.valueOf(strDate);
+			Date sqlDate = java.sql.Date.valueOf(date);
 			expenditureCommand.setDate(sqlDate);
-			
 
 			System.out.println("支出");
 			System.out.println(expenditureCommand.getRadioName());
@@ -173,8 +171,7 @@ public class HouseholedController {
 			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String date = sdf.format(editIncomeForm.getBalanceDate());
-			String strDate = date;
-			Date sqlDate = java.sql.Date.valueOf(strDate);
+			Date sqlDate = java.sql.Date.valueOf(date);
 			editIncomeForm.setBalanceDate(sqlDate);
 
 			// service呼び出し
@@ -240,188 +237,251 @@ public class HouseholedController {
 	// 収入
 	@RequestMapping(value = "/income/detailSearch", method = RequestMethod.GET)
 	public List<DetailSearchForm> incomeDetailSearch(
-			@RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern = "yy-MM-dd") Date fromDate,
-			@RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = "yy-MM-dd") Date toDate,
+			@RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
+			@RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate,
 			@RequestParam(value = "selectIncome", required = false) Integer selectIncome,
+			@RequestParam(value = "selectExpenditure", required = false) String selectExpenditure,
 			@RequestParam(value = "fromAmount", required = false) Integer fromAmount,
 			@RequestParam(value = "toAmount", required = false) Integer toAmount,
-			@RequestParam(value = "note", required = false) String note) {
+			@RequestParam(value = "note", required = false) String note) throws Exception {
 
-		// 引数をもとに収入データを検索して、結果をsearchResultIncomeInfo(Entity)に格納
-		List<SearchResultIncome> searchResultIncomeInfo = householdService.getDetailSearchIncomeList(fromDate, toDate,
-				selectIncome, fromAmount, toAmount, note);
+		try {
+			if (fromDate != null) {
+				SimpleDateFormat fromSdf = new SimpleDateFormat("yyyy-MM-dd");
+				String fromStr = fromSdf.format(fromDate);
+				Date fromSql = java.sql.Date.valueOf(fromStr);
+				fromDate = fromSql;
+			}
+			if (toDate != null) {
+				SimpleDateFormat toSdf = new SimpleDateFormat("yyyy-MM-dd");
+				String toStr = toSdf.format(toDate);
+				Date toSql = java.sql.Date.valueOf(toStr);
+				toDate = toSql;
+			}
 
-		// 収入データを格納するformを用意
-		List<DetailSearchForm> searchBalanceResult = new ArrayList<DetailSearchForm>();
+			System.out.println("ああああああああああああああああああああああああああああああああああ");
+			System.out.println(fromDate);
+			System.out.println(toDate);
 
-		// searchResultIncomeInfoの数分searchResultIncomeに値を入れ、searchBalanceResultにセットしていく
-		for (int i = 0; i < searchResultIncomeInfo.size(); i++) {
+			// 引数をもとに収入データを検索して、結果をsearchResultIncomeInfo(Entity)に格納
+			List<SearchResultIncome> searchResultIncomeInfo = householdService.getDetailSearchIncomeList(fromDate,
+					toDate, selectIncome, selectExpenditure, fromAmount, toAmount, note);
 
-			// 日付をYYYY-MM-DDの形に整える
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			String date = sdf.format(searchResultIncomeInfo.get(i).getIncomeDate());
+			// 収入データを格納するformを用意
+			List<DetailSearchForm> searchBalanceResult = new ArrayList<DetailSearchForm>();
 
-			// NoをString型に変換(引数に指定した型をString型に変換する)
-			String No = String.valueOf(searchResultIncomeInfo.get(i).getIncomeNo());
+			// searchResultIncomeInfoの数分searchResultIncomeに値を入れ、searchBalanceResultにセットしていく
+			for (int i = 0; i < searchResultIncomeInfo.size(); i++) {
 
-			DetailSearchForm searchResultIncome = new DetailSearchForm();
-			searchResultIncome.setBalanceType("収入");
-			searchResultIncome.setBalanceCode(No);
-			searchResultIncome.setBalanceDate(date);
-			searchResultIncome.setIncomeType(searchResultIncomeInfo.get(i).getIncomeType());
-			searchResultIncome.setAmount(searchResultIncomeInfo.get(i).getAmount());
-			searchResultIncome.setNote(searchResultIncomeInfo.get(i).getNote());
-			searchBalanceResult.add(searchResultIncome);
+				// 日付をYYYY-MM-DDの形に整える
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String date = sdf.format(searchResultIncomeInfo.get(i).getIncomeDate());
 
-			// 確認用
-			System.out.println(searchResultIncome.getBalanceType());
-			System.out.println(searchResultIncome.getBalanceCode());
-			System.out.println(searchResultIncome.getBalanceDate());
-			System.out.println(searchResultIncome.getIncomeType());
-			System.out.println(searchResultIncome.getAmount());
-			System.out.println(searchResultIncome.getNote());
+				// NoをString型に変換(引数に指定した型をString型に変換する)
+				String No = String.valueOf(searchResultIncomeInfo.get(i).getIncomeNo());
+
+				DetailSearchForm searchResultIncome = new DetailSearchForm();
+				searchResultIncome.setBalanceType("収入");
+				searchResultIncome.setBalanceCode(No);
+				searchResultIncome.setBalanceDate(date);
+				searchResultIncome.setIncomeType(searchResultIncomeInfo.get(i).getIncomeType());
+				searchResultIncome.setAmount(searchResultIncomeInfo.get(i).getAmount());
+				searchResultIncome.setNote(searchResultIncomeInfo.get(i).getNote());
+				searchBalanceResult.add(searchResultIncome);
+
+				// 確認用
+				System.out.println(searchResultIncome.getBalanceType());
+				System.out.println(searchResultIncome.getBalanceCode());
+				System.out.println(searchResultIncome.getBalanceDate());
+				System.out.println(searchResultIncome.getIncomeType());
+				System.out.println(searchResultIncome.getAmount());
+				System.out.println(searchResultIncome.getNote());
+			}
+			System.out.println(searchBalanceResult);
+			return searchBalanceResult;
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
 		}
-		System.out.println(searchBalanceResult);
-
-		return searchBalanceResult;
 	}
 
 	// 支出
 	@RequestMapping(value = "/expenditure/detailSearch", method = RequestMethod.GET)
 	public List<DetailSearchForm> expenditureDetailSearch(
-			@RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern = "yy-MM-dd") Date fromDate,
-			@RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = "yy-MM-dd") Date toDate,
+			@RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
+			@RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate,
 			@RequestParam(value = "selectExpenditure", required = false) String selectExpenditure,
+			@RequestParam(value = "selectIncome", required = false) Integer selectIncome,
 			@RequestParam(value = "fromAmount", required = false) Integer fromAmount,
 			@RequestParam(value = "toAmount", required = false) Integer toAmount,
-			@RequestParam(value = "note", required = false) String note) {
+			@RequestParam(value = "note", required = false) String note) throws Exception {
 
-		System.out.println(fromDate);
-		System.out.println(toDate);
-		System.out.println(selectExpenditure);
-		System.out.println(fromAmount);
-		System.out.println(toAmount);
-		System.out.println(note);
+		try {
+			if (fromDate != null) {
+				SimpleDateFormat fromSdf = new SimpleDateFormat("yyyy-MM-dd");
+				String fromStr = fromSdf.format(fromDate);
+				Date fromSql = java.sql.Date.valueOf(fromStr);
+				fromDate = fromSql;
+			}
+			if (toDate != null) {
+				SimpleDateFormat toSdf = new SimpleDateFormat("yyyy-MM-dd");
+				String toStr = toSdf.format(toDate);
+				Date toSql = java.sql.Date.valueOf(toStr);
+				toDate = toSql;
+			}
 
-		// 引数をもとに収入データを検索して、結果をSearchResultExpenditureInfo(Entity)に格納
-		List<SearchResultExpenditure> SearchResultExpenditureInfo = householdService
-				.getDetailSearchExpenditureList(fromDate, toDate, selectExpenditure, fromAmount, toAmount, note);
+			System.out.println(fromDate);
+			System.out.println(toDate);
+			System.out.println(selectExpenditure);
+			System.out.println(fromAmount);
+			System.out.println(toAmount);
+			System.out.println(note);
 
-		// 収入データを格納するformを用意
-		List<DetailSearchForm> searchBalanceResult = new ArrayList<DetailSearchForm>();
+			// 引数をもとに収入データを検索して、結果をSearchResultExpenditureInfo(Entity)に格納
+			List<SearchResultExpenditure> SearchResultExpenditureInfo = householdService.getDetailSearchExpenditureList(
+					fromDate, toDate, selectIncome, selectExpenditure, fromAmount, toAmount, note);
 
-		// searchResultIncomeInfoの数分searchResultIncomeに値を入れ、searchBalanceResultにセットしていく
-		for (int i = 0; i < SearchResultExpenditureInfo.size(); i++) {
+			// 収入データを格納するformを用意
+			List<DetailSearchForm> searchBalanceResult = new ArrayList<DetailSearchForm>();
 
-			// 日付をYYYY-MM-DDの形に整える
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			String date = sdf.format(SearchResultExpenditureInfo.get(i).getExpenditureDate());
+			// searchResultIncomeInfoの数分searchResultIncomeに値を入れ、searchBalanceResultにセットしていく
+			for (int i = 0; i < SearchResultExpenditureInfo.size(); i++) {
 
-			// NoをString型に変換(引数に指定した型をString型に変換する)
-			String No = String.valueOf(SearchResultExpenditureInfo.get(i).getExpenditureNo());
+				// 日付をYYYY-MM-DDの形に整える
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String date = sdf.format(SearchResultExpenditureInfo.get(i).getExpenditureDate());
 
-			DetailSearchForm searchResultExpenditure = new DetailSearchForm();
-			searchResultExpenditure.setBalanceType("支出");
-			searchResultExpenditure.setBalanceCode(No);
-			searchResultExpenditure.setBalanceDate(date);
-			searchResultExpenditure
-					.setExpenditureExpenseItemName(SearchResultExpenditureInfo.get(i).getExpenditureExpenseItemName());
-			searchResultExpenditure.setAmount(SearchResultExpenditureInfo.get(i).getAmount());
-			searchResultExpenditure.setNote(SearchResultExpenditureInfo.get(i).getNote());
-			searchBalanceResult.add(searchResultExpenditure);
+				// NoをString型に変換(引数に指定した型をString型に変換する)
+				String No = String.valueOf(SearchResultExpenditureInfo.get(i).getExpenditureNo());
 
-			// 確認用
-			System.out.println(searchResultExpenditure.getBalanceType());
-			System.out.println(searchResultExpenditure.getBalanceCode());
-			System.out.println(searchResultExpenditure.getBalanceDate());
-			System.out.println(searchResultExpenditure.getExpenditureExpenseItemName());
-			System.out.println(searchResultExpenditure.getAmount());
-			System.out.println(searchResultExpenditure.getNote());
+				DetailSearchForm searchResultExpenditure = new DetailSearchForm();
+				searchResultExpenditure.setBalanceType("支出");
+				searchResultExpenditure.setBalanceCode(No);
+				searchResultExpenditure.setBalanceDate(date);
+				searchResultExpenditure.setExpenditureExpenseItemName(
+						SearchResultExpenditureInfo.get(i).getExpenditureExpenseItemName());
+				searchResultExpenditure.setAmount(SearchResultExpenditureInfo.get(i).getAmount());
+				searchResultExpenditure.setNote(SearchResultExpenditureInfo.get(i).getNote());
+				searchBalanceResult.add(searchResultExpenditure);
+
+				// 確認用
+				System.out.println(searchResultExpenditure.getBalanceType());
+				System.out.println(searchResultExpenditure.getBalanceCode());
+				System.out.println(searchResultExpenditure.getBalanceDate());
+				System.out.println(searchResultExpenditure.getExpenditureExpenseItemName());
+				System.out.println(searchResultExpenditure.getAmount());
+				System.out.println(searchResultExpenditure.getNote());
+			}
+			System.out.println(searchBalanceResult);
+
+			return searchBalanceResult;
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
 		}
-		System.out.println(searchBalanceResult);
-
-		return searchBalanceResult;
 	}
 
 	// 指定なし
 	@RequestMapping(value = "/notSpecified/detailSearch", method = RequestMethod.GET)
 	public List<DetailSearchForm> notSpecifiedDetailSearch(
-			@RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern = "yy-MM-dd") Date fromDate,
-			@RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = "yy-MM-dd") Date toDate,
+			@RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
+			@RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate,
 			@RequestParam(value = "selectIncome", required = false) Integer selectIncome,
 			@RequestParam(value = "selectExpenditure", required = false) String selectExpenditure,
 			@RequestParam(value = "fromAmount", required = false) Integer fromAmount,
 			@RequestParam(value = "toAmount", required = false) Integer toAmount,
-			@RequestParam(value = "note", required = false) String note) {
+			@RequestParam(value = "note", required = false) String note) throws Exception {
 
-		// 引数をもとに収入データを検索して、結果をsearchResultIncomeInfo(Entity)に格納
-		List<SearchResultIncome> searchResultIncomeInfo = householdService.getDetailSearchIncomeList(fromDate, toDate,
-				selectIncome, fromAmount, toAmount, note);
-		// 引数をもとに収入データを検索して、結果をSearchResultExpenditureInfo(Entity)に格納
-		List<SearchResultExpenditure> SearchResultExpenditureInfo = householdService
-				.getDetailSearchExpenditureList(fromDate, toDate, selectExpenditure, fromAmount, toAmount, note);
+		try {
+			if (fromDate != null) {
+				SimpleDateFormat fromSdf = new SimpleDateFormat("yyyy-MM-dd");
+				String fromStr = fromSdf.format(fromDate);
+				Date fromSql = java.sql.Date.valueOf(fromStr);
+				fromDate = fromSql;
+			}
+			if (toDate != null) {
+				SimpleDateFormat toSdf = new SimpleDateFormat("yyyy-MM-dd");
+				String toStr = toSdf.format(toDate);
+				Date toSql = java.sql.Date.valueOf(toStr);
+				toDate = toSql;
+			}
 
-		// 収入データを格納するformを用意
-		List<DetailSearchForm> searchBalanceResult = new ArrayList<DetailSearchForm>();
+			// 収入データを格納するformを用意
+			List<DetailSearchForm> searchBalanceResult = new ArrayList<DetailSearchForm>();
 
-		// searchResultIncomeInfoの数分searchResultIncomeに値を入れ、searchBalanceResultにセットしていく
-		for (int i = 0; i < searchResultIncomeInfo.size(); i++) {
+			// 引数をもとに収入データを検索して、結果をsearchResultIncomeInfo(Entity)に格納
+			if (selectExpenditure == null || selectExpenditure == "") {
+				List<SearchResultIncome> searchResultIncomeInfo = householdService.getDetailSearchIncomeList(fromDate,
+						toDate, selectIncome, selectExpenditure, fromAmount, toAmount, note);
 
-			// 日付をYYYY-MM-DDの形に整える
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			String date = sdf.format(searchResultIncomeInfo.get(i).getIncomeDate());
+				// searchResultIncomeInfoの数分searchResultIncomeに値を入れ、searchBalanceResultにセットしていく
+				for (int i = 0; i < searchResultIncomeInfo.size(); i++) {
 
-			// NoをString型に変換(引数に指定した型をString型に変換する)
-			String No = String.valueOf(searchResultIncomeInfo.get(i).getIncomeNo());
+					// 日付をYYYY-MM-DDの形に整える
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					String date = sdf.format(searchResultIncomeInfo.get(i).getIncomeDate());
 
-			DetailSearchForm searchResultIncome = new DetailSearchForm();
-			searchResultIncome.setBalanceType("収入");
-			searchResultIncome.setBalanceCode(No);
-			searchResultIncome.setBalanceDate(date);
-			searchResultIncome.setIncomeType(searchResultIncomeInfo.get(i).getIncomeType());
-			searchResultIncome.setAmount(searchResultIncomeInfo.get(i).getAmount());
-			searchResultIncome.setNote(searchResultIncomeInfo.get(i).getNote());
-			searchBalanceResult.add(searchResultIncome);
+					// NoをString型に変換(引数に指定した型をString型に変換する)
+					String No = String.valueOf(searchResultIncomeInfo.get(i).getIncomeNo());
 
-			// 確認用
-			System.out.println(searchResultIncome.getBalanceType());
-			System.out.println(searchResultIncome.getBalanceCode());
-			System.out.println(searchResultIncome.getBalanceDate());
-			System.out.println(searchResultIncome.getIncomeType());
-			System.out.println(searchResultIncome.getAmount());
-			System.out.println(searchResultIncome.getNote());
+					DetailSearchForm searchResultIncome = new DetailSearchForm();
+					searchResultIncome.setBalanceType("収入");
+					searchResultIncome.setBalanceCode(No);
+					searchResultIncome.setBalanceDate(date);
+					searchResultIncome.setIncomeType(searchResultIncomeInfo.get(i).getIncomeType());
+					searchResultIncome.setAmount(searchResultIncomeInfo.get(i).getAmount());
+					searchResultIncome.setNote(searchResultIncomeInfo.get(i).getNote());
+					searchBalanceResult.add(searchResultIncome);
+
+					// 確認用
+					System.out.println(searchResultIncome.getBalanceType());
+					System.out.println(searchResultIncome.getBalanceCode());
+					System.out.println(searchResultIncome.getBalanceDate());
+					System.out.println(searchResultIncome.getIncomeType());
+					System.out.println(searchResultIncome.getAmount());
+					System.out.println(searchResultIncome.getNote());
+				}
+			}
+
+			if (selectIncome == null) {
+				// 引数をもとに収入データを検索して、結果をSearchResultExpenditureInfo(Entity)に格納
+				List<SearchResultExpenditure> SearchResultExpenditureInfo = householdService
+						.getDetailSearchExpenditureList(fromDate, toDate, selectIncome, selectExpenditure, fromAmount,
+								toAmount, note);
+
+				for (int i = 0; i < SearchResultExpenditureInfo.size(); i++) {
+
+					// 日付をYYYY-MM-DDの形に整える
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					String date = sdf.format(SearchResultExpenditureInfo.get(i).getExpenditureDate());
+
+					// NoをString型に変換(引数に指定した型をString型に変換する)
+					String No = String.valueOf(SearchResultExpenditureInfo.get(i).getExpenditureNo());
+
+					DetailSearchForm searchResultExpenditure = new DetailSearchForm();
+					searchResultExpenditure.setBalanceType("支出");
+					searchResultExpenditure.setBalanceCode(No);
+					searchResultExpenditure.setBalanceDate(date);
+					searchResultExpenditure.setExpenditureExpenseItemName(
+							SearchResultExpenditureInfo.get(i).getExpenditureExpenseItemName());
+					searchResultExpenditure.setAmount(SearchResultExpenditureInfo.get(i).getAmount());
+					searchResultExpenditure.setNote(SearchResultExpenditureInfo.get(i).getNote());
+					searchBalanceResult.add(searchResultExpenditure);
+
+					// 確認用
+					System.out.println(searchResultExpenditure.getBalanceType());
+					System.out.println(searchResultExpenditure.getBalanceCode());
+					System.out.println(searchResultExpenditure.getBalanceDate());
+					System.out.println(searchResultExpenditure.getExpenditureExpenseItemName());
+					System.out.println(searchResultExpenditure.getAmount());
+					System.out.println(searchResultExpenditure.getNote());
+				}
+			}
+
+			System.out.println(searchBalanceResult);
+
+			return searchBalanceResult;
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
 		}
-
-		for (int i = 0; i < SearchResultExpenditureInfo.size(); i++) {
-
-			// 日付をYYYY-MM-DDの形に整える
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			String date = sdf.format(SearchResultExpenditureInfo.get(i).getExpenditureDate());
-
-			// NoをString型に変換(引数に指定した型をString型に変換する)
-			String No = String.valueOf(SearchResultExpenditureInfo.get(i).getExpenditureNo());
-
-			DetailSearchForm searchResultExpenditure = new DetailSearchForm();
-			searchResultExpenditure.setBalanceType("支出");
-			searchResultExpenditure.setBalanceCode(No);
-			searchResultExpenditure.setBalanceDate(date);
-			searchResultExpenditure
-					.setExpenditureExpenseItemName(SearchResultExpenditureInfo.get(i).getExpenditureExpenseItemName());
-			searchResultExpenditure.setAmount(SearchResultExpenditureInfo.get(i).getAmount());
-			searchResultExpenditure.setNote(SearchResultExpenditureInfo.get(i).getNote());
-			searchBalanceResult.add(searchResultExpenditure);
-
-			// 確認用
-			System.out.println(searchResultExpenditure.getBalanceType());
-			System.out.println(searchResultExpenditure.getBalanceCode());
-			System.out.println(searchResultExpenditure.getBalanceDate());
-			System.out.println(searchResultExpenditure.getExpenditureExpenseItemName());
-			System.out.println(searchResultExpenditure.getAmount());
-			System.out.println(searchResultExpenditure.getNote());
-		}
-		System.out.println(searchBalanceResult);
-
-		return searchBalanceResult;
 	}
 
 	// 収入データと支出データを同時に検索して、同時に結果を返す(通常検索)

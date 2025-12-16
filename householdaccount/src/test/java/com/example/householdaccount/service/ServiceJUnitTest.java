@@ -21,7 +21,6 @@ import com.example.householdaccount.form.ExpenditureEditForm;
 import com.example.householdaccount.form.ExpenditureForm;
 import com.example.householdaccount.form.IncomeEditForm;
 import com.example.householdaccount.form.IncomeForm;
-import com.example.householdaccount.repository.mybatis.ExpenditureRepository;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -30,10 +29,7 @@ import com.example.householdaccount.repository.mybatis.ExpenditureRepository;
 public class ServiceJUnitTest {
 
 	@Autowired
-	HouseholdService householdService;
-
-	@Autowired
-	ExpenditureRepository expenditureRepository;
+	private HouseholdService householdService;
 
 //登録
 	// 収入正常系テスト

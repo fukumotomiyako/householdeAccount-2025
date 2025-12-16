@@ -56,7 +56,8 @@ public class HouseholdService {
 				|| incomeCommand.getSelectIncome() == null) {
 			throw new IllegalArgumentException("値がNULLです");
 
-		} else if (!String.valueOf(incomeCommand.getPrice()).trim().matches("^\\d+$") || !String.valueOf(incomeCommand.getDate()).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+		} else if (!String.valueOf(incomeCommand.getPrice()).trim().matches("^\\d+$")
+				|| !String.valueOf(incomeCommand.getDate()).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
 			throw new IllegalArgumentException("数字のみ入力できます");
 
 		} else if (incomeCommand.getNote() == null || incomeCommand.getNote() == "") {
@@ -100,7 +101,6 @@ public class HouseholdService {
 			incomeRepository.save(income);
 			return income;
 		} catch (Exception e) {
-			System.out.println("システムエラーが発生しました");
 			throw new Exception("システムエラーが発生しました");
 		}
 	}
@@ -113,7 +113,8 @@ public class HouseholdService {
 				|| expenditureCommand.getSelectExpenditure() == "") {
 			throw new IllegalArgumentException("値がNULLです");
 
-		} else if (!String.valueOf(expenditureCommand.getPrice()).trim().matches("^\\d+$")|| !String.valueOf(expenditureCommand.getDate()).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+		} else if (!String.valueOf(expenditureCommand.getPrice()).trim().matches("^\\d+$")
+				|| !String.valueOf(expenditureCommand.getDate()).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
 			throw new IllegalArgumentException("数字のみ入力できます");
 
 		} else if (expenditureCommand.getNote() == null || expenditureCommand.getNote() == "") {
@@ -129,7 +130,7 @@ public class HouseholdService {
 		}
 
 		try {
-			
+
 			String expenditureItemName = expenditureCommand.getSelectExpenditure();
 			ExpenditureItems expenditureItems = expenditureItemRepository
 					.findByExpenditureExpenseItemName(expenditureItemName);
@@ -152,7 +153,7 @@ public class HouseholdService {
 
 			expenditureRepository.save(expenditure);
 			return expenditure;
-			
+
 		} catch (Exception e) {
 			throw new Exception("システムエラーが発生しました");
 		}
@@ -186,7 +187,8 @@ public class HouseholdService {
 				|| incomeEditForm.getIncomeType() == null) {
 			throw new IllegalArgumentException("値がNULLです");
 
-		} else if (!String.valueOf(incomeEditForm.getAmount()).trim().matches("^\\d+$")|| !String.valueOf(incomeEditForm.getBalanceDate()).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+		} else if (!String.valueOf(incomeEditForm.getAmount()).trim().matches("^\\d+$")
+				|| !String.valueOf(incomeEditForm.getBalanceDate()).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
 			throw new IllegalArgumentException("数字のみ入力できます");
 
 		} else if (incomeEditForm.getNote() == null || incomeEditForm.getNote() == "") {
@@ -221,7 +223,8 @@ public class HouseholdService {
 				|| expenditureEditForm.getExpenditureExpenseItemName() == null) {
 			throw new IllegalArgumentException("値がNULLです");
 
-		} else if (!String.valueOf(expenditureEditForm.getAmount()).trim().matches("^\\d+$")|| !String.valueOf(expenditureEditForm.getBalanceDate()).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+		} else if (!String.valueOf(expenditureEditForm.getAmount()).trim().matches("^\\d+$")
+				|| !String.valueOf(expenditureEditForm.getBalanceDate()).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
 			throw new IllegalArgumentException("数字のみ入力できます");
 
 		} else if (expenditureEditForm.getNote() == null || expenditureEditForm.getNote() == "") {
@@ -230,7 +233,8 @@ public class HouseholdService {
 			}
 
 		} else if (expenditureEditForm.getNote() != null) {
-			if (String.valueOf(expenditureEditForm.getAmount()).length() > 8 || expenditureEditForm.getNote().length() > 200) {
+			if (String.valueOf(expenditureEditForm.getAmount()).length() > 8
+					|| expenditureEditForm.getNote().length() > 200) {
 				throw new IllegalArgumentException("不正な桁数です");
 			}
 		}
@@ -297,34 +301,116 @@ public class HouseholdService {
 
 	// 収入検索
 	public List<SearchResultIncome> getDetailSearchIncomeList(Date fromDate, Date toDate, Integer selectIncome,
-			Integer fromAmount, Integer toAmount, String note) {
-		// Specification生成
-		DetailSearchIncomeSpecification<SearchResultIncome> spec = new DetailSearchIncomeSpecification<>();
+			String selectExpenditure, Integer fromAmount, Integer toAmount, String note) throws Exception {
 
-		// 引数をもとに検索を行う
-		List<SearchResultIncome> detailSearchIncomeInfo = detailSearchIncomeRepository.findAll(Specification
-				.where(spec.dateGreaterThanLessThan(fromDate, toDate)).and(spec.incomeTypeMatch(selectIncome))
-				.and(spec.amountGreaterThanLessThan(fromAmount, toAmount)).and(spec.noteLikeContains(note))
-				.and(spec.deleteFlagCheck()));
+		try {
+			if (fromDate == null && toDate == null && selectIncome == null && fromAmount == null && toAmount == null
+					&& (note == null || note == "")) {
+				throw new IllegalArgumentException("値がNULLです");
 
-		return detailSearchIncomeInfo;
+			} 
+//			else if (!String.valueOf(fromAmount).trim().matches("^\\d+$")
+//					|| !String.valueOf(toAmount).trim().matches("^\\d+$")
+//					|| !String.valueOf(fromDate).matches("^\\d{4}-\\d{2}-\\d{2}$")
+//					|| !String.valueOf(toDate).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+//				throw new IllegalArgumentException("数字のみ入力できます");
+//
+//			} 
+			else if (String.valueOf(fromAmount).length() > 8) {
+				throw new IllegalArgumentException("不正な桁数です");
+
+			} 
+			else if (String.valueOf(toAmount).length() > 8) {
+				throw new IllegalArgumentException("不正な桁数です");
+
+			} 
+			else if (note.length() > 200) {
+				throw new IllegalArgumentException("不正な桁数です");
+
+			} 
+			else if (fromAmount != null && toAmount != null) {
+				if (fromAmount > toAmount) {
+					throw new IllegalArgumentException("from<toの形になっていません");
+				}
+
+			} 
+			else if (fromDate != null && toDate != null) {
+				if (fromDate.after(toDate)) {
+					throw new IllegalArgumentException("from<toの形になっていません");
+				}
+			}
+
+			// Specification生成
+			DetailSearchIncomeSpecification<SearchResultIncome> spec = new DetailSearchIncomeSpecification<>();
+
+			// 引数をもとに検索を行う
+			List<SearchResultIncome> detailSearchIncomeInfo = detailSearchIncomeRepository.findAll(Specification
+					.where(spec.dateGreaterThanLessThan(fromDate, toDate)).and(spec.incomeTypeMatch(selectIncome))
+					.and(spec.amountGreaterThanLessThan(fromAmount, toAmount)).and(spec.noteLikeContains(note))
+					.and(spec.deleteFlagCheck()));
+
+			return detailSearchIncomeInfo;
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
+		}
 	}
 
 	// 支出検索
 	public List<SearchResultExpenditure> getDetailSearchExpenditureList(Date fromDate, Date toDate,
-			String selectExpenditure, Integer fromAmount, Integer toAmount, String note) {
+			Integer selectIncome, String selectExpenditure, Integer fromAmount, Integer toAmount, String note)
+			throws Exception {
 
-		// Specification生成
-		DetailSearchExpenditureSpecification<SearchResultExpenditure> spec = new DetailSearchExpenditureSpecification<SearchResultExpenditure>();
+		try {
+			if (fromDate == null && toDate == null && (selectExpenditure == null || selectExpenditure == "")
+					&& fromAmount == null && toAmount == null && (note == null || note == "")) {
+				throw new IllegalArgumentException("値がNULLです");
 
-		// 引数をもとに検索を行う
-		List<SearchResultExpenditure> detailSearchExpenditureInfo = detailSearchExpenditureRepository
-				.findAll(Specification.where(spec.dateGreaterThanLessThan(fromDate, toDate))
-						.and(spec.expenditureMatch(selectExpenditure))
-						.and(spec.amountGreaterThanLessThan(fromAmount, toAmount)).and(spec.noteLikeContains(note))
-						.and(spec.deleteFlagCheck()));
+			}
+//			else if (!String.valueOf(fromAmount).trim().matches("^\\d+$")
+//					|| !String.valueOf(toAmount).trim().matches("^\\d+$")
+//					|| !String.valueOf(fromDate).matches("^\\d{4}-\\d{2}-\\d{2}$")
+//					|| !String.valueOf(toDate).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+//				throw new IllegalArgumentException("数字のみ入力できます");
+//
+//			} 
+			else if (String.valueOf(fromAmount).length() > 8) {
+				throw new IllegalArgumentException("不正な桁数です");
 
-		return detailSearchExpenditureInfo;
+			} 
+			else if (String.valueOf(toAmount).length() > 8) {
+				throw new IllegalArgumentException("不正な桁数です");
+
+			} 
+			else if (note.length() > 200) {
+				throw new IllegalArgumentException("不正な桁数です");
+
+			} 
+			else if (fromAmount != null && toAmount != null) {
+				if (fromAmount > toAmount) {
+					throw new IllegalArgumentException("from<toの形になっていません");
+				}
+
+			} 
+			else if (fromDate != null && toDate != null) {
+				if (fromDate.after(toDate)) {
+					throw new IllegalArgumentException("from<toの形になっていません");
+				}
+			}
+
+			// Specification生成
+			DetailSearchExpenditureSpecification<SearchResultExpenditure> spec = new DetailSearchExpenditureSpecification<SearchResultExpenditure>();
+
+			// 引数をもとに検索を行う
+			List<SearchResultExpenditure> detailSearchExpenditureInfo = detailSearchExpenditureRepository
+					.findAll(Specification.where(spec.dateGreaterThanLessThan(fromDate, toDate))
+							.and(spec.expenditureMatch(selectExpenditure))
+							.and(spec.amountGreaterThanLessThan(fromAmount, toAmount)).and(spec.noteLikeContains(note))
+							.and(spec.deleteFlagCheck()));
+
+			return detailSearchExpenditureInfo;
+		} catch (Exception e) {
+			throw new Exception("システムエラーが発生しました");
+		}
 	}
 
 	// 検索
@@ -362,7 +448,5 @@ public class HouseholdService {
 
 		return searchExpenditureInfoList;
 	}
-	
-	
 
 }
