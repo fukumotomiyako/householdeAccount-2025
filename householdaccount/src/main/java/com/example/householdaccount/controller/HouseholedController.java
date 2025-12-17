@@ -259,13 +259,9 @@ public class HouseholedController {
 				toDate = toSql;
 			}
 
-			System.out.println("ああああああああああああああああああああああああああああああああああ");
-			System.out.println(fromDate);
-			System.out.println(toDate);
-
 			// 引数をもとに収入データを検索して、結果をsearchResultIncomeInfo(Entity)に格納
 			List<SearchResultIncome> searchResultIncomeInfo = householdService.getDetailSearchIncomeList(fromDate,
-					toDate, selectIncome, selectExpenditure, fromAmount, toAmount, note);
+					toDate, selectIncome, fromAmount, toAmount, note);
 
 			// 収入データを格納するformを用意
 			List<DetailSearchForm> searchBalanceResult = new ArrayList<DetailSearchForm>();
@@ -337,8 +333,8 @@ public class HouseholedController {
 			System.out.println(note);
 
 			// 引数をもとに収入データを検索して、結果をSearchResultExpenditureInfo(Entity)に格納
-			List<SearchResultExpenditure> SearchResultExpenditureInfo = householdService.getDetailSearchExpenditureList(
-					fromDate, toDate, selectIncome, selectExpenditure, fromAmount, toAmount, note);
+			List<SearchResultExpenditure> SearchResultExpenditureInfo = householdService
+					.getDetailSearchExpenditureList(fromDate, toDate, selectExpenditure, fromAmount, toAmount, note);
 
 			// 収入データを格納するformを用意
 			List<DetailSearchForm> searchBalanceResult = new ArrayList<DetailSearchForm>();
@@ -391,12 +387,14 @@ public class HouseholedController {
 			@RequestParam(value = "note", required = false) String note) throws Exception {
 
 		try {
+			// 日付のフォーマット整える
 			if (fromDate != null) {
 				SimpleDateFormat fromSdf = new SimpleDateFormat("yyyy-MM-dd");
 				String fromStr = fromSdf.format(fromDate);
 				Date fromSql = java.sql.Date.valueOf(fromStr);
 				fromDate = fromSql;
 			}
+
 			if (toDate != null) {
 				SimpleDateFormat toSdf = new SimpleDateFormat("yyyy-MM-dd");
 				String toStr = toSdf.format(toDate);
@@ -408,9 +406,11 @@ public class HouseholedController {
 			List<DetailSearchForm> searchBalanceResult = new ArrayList<DetailSearchForm>();
 
 			// 引数をもとに収入データを検索して、結果をsearchResultIncomeInfo(Entity)に格納
-			if (selectExpenditure == null || selectExpenditure == "") {
+			if (fromDate != null || toDate != null || selectIncome != null || fromAmount != null || toAmount != null
+					|| note != "") {
+
 				List<SearchResultIncome> searchResultIncomeInfo = householdService.getDetailSearchIncomeList(fromDate,
-						toDate, selectIncome, selectExpenditure, fromAmount, toAmount, note);
+						toDate, selectIncome, fromAmount, toAmount, note);
 
 				// searchResultIncomeInfoの数分searchResultIncomeに値を入れ、searchBalanceResultにセットしていく
 				for (int i = 0; i < searchResultIncomeInfo.size(); i++) {
@@ -441,11 +441,13 @@ public class HouseholedController {
 				}
 			}
 
-			if (selectIncome == null) {
+			if (fromDate != null || toDate != null || selectExpenditure != null || fromAmount != null
+					|| toAmount != null || note != "") {
+
 				// 引数をもとに収入データを検索して、結果をSearchResultExpenditureInfo(Entity)に格納
 				List<SearchResultExpenditure> SearchResultExpenditureInfo = householdService
-						.getDetailSearchExpenditureList(fromDate, toDate, selectIncome, selectExpenditure, fromAmount,
-								toAmount, note);
+						.getDetailSearchExpenditureList(fromDate, toDate, selectExpenditure, fromAmount, toAmount,
+								note);
 
 				for (int i = 0; i < SearchResultExpenditureInfo.size(); i++) {
 

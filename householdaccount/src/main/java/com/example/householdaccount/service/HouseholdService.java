@@ -109,8 +109,7 @@ public class HouseholdService {
 	public Expenditure createExpenditureInfo(ExpenditureForm expenditureCommand) throws Exception {
 
 		if (expenditureCommand.getPrice() == null || expenditureCommand.getDate() == null
-				|| expenditureCommand.getSelectExpenditure() == null
-				|| expenditureCommand.getSelectExpenditure() == "") {
+				|| expenditureCommand.getSelectExpenditure() == null) {
 			throw new IllegalArgumentException("値がNULLです");
 
 		} else if (!String.valueOf(expenditureCommand.getPrice()).trim().matches("^\\d+$")
@@ -301,44 +300,54 @@ public class HouseholdService {
 
 	// 収入検索
 	public List<SearchResultIncome> getDetailSearchIncomeList(Date fromDate, Date toDate, Integer selectIncome,
-			String selectExpenditure, Integer fromAmount, Integer toAmount, String note) throws Exception {
+			Integer fromAmount, Integer toAmount, String note) throws Exception {
 
-		try {
-			if (fromDate == null && toDate == null && selectIncome == null && fromAmount == null && toAmount == null
-					&& (note == null || note == "")) {
-				throw new IllegalArgumentException("値がNULLです");
+		if (fromDate == null && toDate == null && selectIncome == null && fromAmount == null && toAmount == null
+				&& note == "") {
+			throw new IllegalArgumentException("値がNULLです");
 
-			} 
-//			else if (!String.valueOf(fromAmount).trim().matches("^\\d+$")
-//					|| !String.valueOf(toAmount).trim().matches("^\\d+$")
-//					|| !String.valueOf(fromDate).matches("^\\d{4}-\\d{2}-\\d{2}$")
-//					|| !String.valueOf(toDate).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-//				throw new IllegalArgumentException("数字のみ入力できます");
-//
-//			} 
-			else if (String.valueOf(fromAmount).length() > 8) {
-				throw new IllegalArgumentException("不正な桁数です");
-
-			} 
-			else if (String.valueOf(toAmount).length() > 8) {
-				throw new IllegalArgumentException("不正な桁数です");
-
-			} 
-			else if (note.length() > 200) {
-				throw new IllegalArgumentException("不正な桁数です");
-
-			} 
-			else if (fromAmount != null && toAmount != null) {
-				if (fromAmount > toAmount) {
-					throw new IllegalArgumentException("from<toの形になっていません");
-				}
-
-			} 
-			else if (fromDate != null && toDate != null) {
-				if (fromDate.after(toDate)) {
-					throw new IllegalArgumentException("from<toの形になっていません");
-				}
+		} else if (fromAmount != null) {
+			if (!String.valueOf(fromAmount).trim().matches("^[0-9]+$")) {
+				throw new IllegalArgumentException("数字のみ入力できます");
 			}
+
+		} else if (toAmount != null) {
+			if (!String.valueOf(toAmount).trim().matches("^[0-9]+$")) {
+				throw new IllegalArgumentException("数字のみ入力できます");
+			}
+
+		} else if (fromDate != null) {
+			if (!String.valueOf(fromDate).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+				throw new IllegalArgumentException("数字のみ入力できます");
+			}
+
+		} else if (toDate != null) {
+			if (!String.valueOf(toDate).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+				throw new IllegalArgumentException("数字のみ入力できます");
+			}
+
+		} else if (String.valueOf(fromAmount).length() > 8) {
+			throw new IllegalArgumentException("不正な桁数です");
+
+		} else if (String.valueOf(toAmount).length() > 8) {
+			throw new IllegalArgumentException("不正な桁数です");
+
+		} else if (note.length() > 200) {
+			throw new IllegalArgumentException("不正な桁数です");
+
+		}
+		if (fromAmount != null && toAmount != null) {
+			if (fromAmount > toAmount) {
+				throw new IllegalArgumentException("from<toの形になっていません");
+			}
+
+		}
+		if (fromDate != null && toDate != null) {
+			if (fromDate.after(toDate)) {
+				throw new IllegalArgumentException("from<toの形になっていません");
+			}
+		}
+		try {
 
 			// Specification生成
 			DetailSearchIncomeSpecification<SearchResultIncome> spec = new DetailSearchIncomeSpecification<>();
@@ -357,45 +366,55 @@ public class HouseholdService {
 
 	// 支出検索
 	public List<SearchResultExpenditure> getDetailSearchExpenditureList(Date fromDate, Date toDate,
-			Integer selectIncome, String selectExpenditure, Integer fromAmount, Integer toAmount, String note)
-			throws Exception {
+			String selectExpenditure, Integer fromAmount, Integer toAmount, String note) throws Exception {
 
+		if (fromDate == null && toDate == null && (selectExpenditure == null || selectExpenditure == "")
+				&& fromAmount == null && toAmount == null && note == "") {
+			throw new IllegalArgumentException("値がNULLです");
+
+		} else if (fromAmount != null) {
+			if (!String.valueOf(fromAmount).trim().matches("^[0-9]+$")) {
+				throw new IllegalArgumentException("数字のみ入力できます");
+			}
+
+		} else if (toAmount != null) {
+			if (!String.valueOf(toAmount).trim().matches("^[0-9]+$")) {
+				throw new IllegalArgumentException("数字のみ入力できます");
+			}
+
+		} else if (fromDate != null) {
+			if (!String.valueOf(fromDate).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+				throw new IllegalArgumentException("数字のみ入力できます");
+			}
+
+		} else if (toDate != null) {
+			if (!String.valueOf(toDate).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+				throw new IllegalArgumentException("数字のみ入力できます");
+			}
+
+		} else if (String.valueOf(fromAmount).length() > 8) {
+			throw new IllegalArgumentException("不正な桁数です");
+
+		} else if (String.valueOf(toAmount).length() > 8) {
+			throw new IllegalArgumentException("不正な桁数です");
+
+		} else if (note.length() > 200) {
+			throw new IllegalArgumentException("不正な桁数です");
+
+		}
+
+		if (fromAmount != null && toAmount != null) {
+			if (fromAmount > toAmount) {
+				throw new IllegalArgumentException("from<toの形になっていません");
+			}
+
+		}
+		if (fromDate != null && toDate != null) {
+			if (fromDate.after(toDate)) {
+				throw new IllegalArgumentException("from<toの形になっていません");
+			}
+		}
 		try {
-			if (fromDate == null && toDate == null && (selectExpenditure == null || selectExpenditure == "")
-					&& fromAmount == null && toAmount == null && (note == null || note == "")) {
-				throw new IllegalArgumentException("値がNULLです");
-
-			}
-//			else if (!String.valueOf(fromAmount).trim().matches("^\\d+$")
-//					|| !String.valueOf(toAmount).trim().matches("^\\d+$")
-//					|| !String.valueOf(fromDate).matches("^\\d{4}-\\d{2}-\\d{2}$")
-//					|| !String.valueOf(toDate).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-//				throw new IllegalArgumentException("数字のみ入力できます");
-//
-//			} 
-			else if (String.valueOf(fromAmount).length() > 8) {
-				throw new IllegalArgumentException("不正な桁数です");
-
-			} 
-			else if (String.valueOf(toAmount).length() > 8) {
-				throw new IllegalArgumentException("不正な桁数です");
-
-			} 
-			else if (note.length() > 200) {
-				throw new IllegalArgumentException("不正な桁数です");
-
-			} 
-			else if (fromAmount != null && toAmount != null) {
-				if (fromAmount > toAmount) {
-					throw new IllegalArgumentException("from<toの形になっていません");
-				}
-
-			} 
-			else if (fromDate != null && toDate != null) {
-				if (fromDate.after(toDate)) {
-					throw new IllegalArgumentException("from<toの形になっていません");
-				}
-			}
 
 			// Specification生成
 			DetailSearchExpenditureSpecification<SearchResultExpenditure> spec = new DetailSearchExpenditureSpecification<SearchResultExpenditure>();
