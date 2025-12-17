@@ -6,8 +6,8 @@ export default {
   props: ['setNullFlag'],
   data() {
     return {
-      fromAmount: '',
-      toAmount: '', //Atomsから受け取った金額
+      fromAmount: 0,
+      toAmount: 0, //Atomsから受け取った金額
       setFromPriceResult: '', //Atomsから受け取ったエラーメッセージ
       setToPriceResult: '',
       setAmountResult: '', //Moleculesで出るエラーメッセージ

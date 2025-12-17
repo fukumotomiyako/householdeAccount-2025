@@ -5,7 +5,7 @@ export default {
 
   data() {
     return {
-      price: '', //入力された金額
+      price: 0, //入力された金額
       priceResult: '', //エラーメッセージ
       priceValidation: '', //入力チェックの結果
     }
