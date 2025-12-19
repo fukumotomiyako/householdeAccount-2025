@@ -1,6 +1,7 @@
 package com.example.householdaccount.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -349,14 +350,18 @@ public class HouseholdService {
 		}
 		try {
 
-			// Specification生成
-			DetailSearchIncomeSpecification<SearchResultIncome> spec = new DetailSearchIncomeSpecification<>();
+			List<SearchResultIncome> detailSearchIncomeInfo = new ArrayList<SearchResultIncome>();
+			if (fromDate != null || toDate != null || selectIncome != null || fromAmount != null || toAmount != null
+					|| note != "") {
+				// Specification生成
+				DetailSearchIncomeSpecification<SearchResultIncome> spec = new DetailSearchIncomeSpecification<>();
 
-			// 引数をもとに検索を行う
-			List<SearchResultIncome> detailSearchIncomeInfo = detailSearchIncomeRepository.findAll(Specification
-					.where(spec.dateGreaterThanLessThan(fromDate, toDate)).and(spec.incomeTypeMatch(selectIncome))
-					.and(spec.amountGreaterThanLessThan(fromAmount, toAmount)).and(spec.noteLikeContains(note))
-					.and(spec.deleteFlagCheck()));
+				// 引数をもとに検索を行う
+				detailSearchIncomeInfo = detailSearchIncomeRepository.findAll(Specification
+						.where(spec.dateGreaterThanLessThan(fromDate, toDate)).and(spec.incomeTypeMatch(selectIncome))
+						.and(spec.amountGreaterThanLessThan(fromAmount, toAmount)).and(spec.noteLikeContains(note))
+						.and(spec.deleteFlagCheck()));
+			}
 
 			return detailSearchIncomeInfo;
 		} catch (Exception e) {
@@ -416,16 +421,20 @@ public class HouseholdService {
 		}
 		try {
 
-			// Specification生成
-			DetailSearchExpenditureSpecification<SearchResultExpenditure> spec = new DetailSearchExpenditureSpecification<SearchResultExpenditure>();
+			List<SearchResultExpenditure> detailSearchExpenditureInfo = new ArrayList<SearchResultExpenditure>();
+			if (fromDate != null || toDate != null || selectExpenditure != null || fromAmount != null
+					|| toAmount != null || note != "") {
+				// Specification生成
+				DetailSearchExpenditureSpecification<SearchResultExpenditure> spec = new DetailSearchExpenditureSpecification<SearchResultExpenditure>();
 
-			// 引数をもとに検索を行う
-			List<SearchResultExpenditure> detailSearchExpenditureInfo = detailSearchExpenditureRepository
-					.findAll(Specification.where(spec.dateGreaterThanLessThan(fromDate, toDate))
-							.and(spec.expenditureMatch(selectExpenditure))
-							.and(spec.amountGreaterThanLessThan(fromAmount, toAmount)).and(spec.noteLikeContains(note))
-							.and(spec.deleteFlagCheck()));
+				// 引数をもとに検索を行う
+				detailSearchExpenditureInfo = detailSearchExpenditureRepository
+						.findAll(Specification.where(spec.dateGreaterThanLessThan(fromDate, toDate))
+								.and(spec.expenditureMatch(selectExpenditure))
+								.and(spec.amountGreaterThanLessThan(fromAmount, toAmount))
+								.and(spec.noteLikeContains(note)).and(spec.deleteFlagCheck()));
 
+			}
 			return detailSearchExpenditureInfo;
 		} catch (Exception e) {
 			throw new Exception("システムエラーが発生しました");
