@@ -304,7 +304,7 @@ public class HouseholdService {
 			Integer fromAmount, Integer toAmount, String note) throws Exception {
 
 		if (fromDate == null && toDate == null && selectIncome == null && fromAmount == null && toAmount == null
-				&& note == "") {
+				&& (note == ""||note == null)) {
 			throw new IllegalArgumentException("値がNULLです");
 
 		} else if (fromAmount != null) {
@@ -333,9 +333,10 @@ public class HouseholdService {
 		} else if (String.valueOf(toAmount).length() > 8) {
 			throw new IllegalArgumentException("不正な桁数です");
 
-		} else if (note.length() > 200) {
-			throw new IllegalArgumentException("不正な桁数です");
-
+		} else if (note != null) {
+			if (note.length() > 200) {
+				throw new IllegalArgumentException("不正な桁数です");
+			}
 		}
 		if (fromAmount != null && toAmount != null) {
 			if (fromAmount > toAmount) {
@@ -403,9 +404,10 @@ public class HouseholdService {
 		} else if (String.valueOf(toAmount).length() > 8) {
 			throw new IllegalArgumentException("不正な桁数です");
 
-		} else if (note.length() > 200) {
-			throw new IllegalArgumentException("不正な桁数です");
-
+		} else if (note != null) {
+			if (note.length() > 200) {
+				throw new IllegalArgumentException("不正な桁数です");
+			}
 		}
 
 		if (fromAmount != null && toAmount != null) {
