@@ -1952,6 +1952,108 @@ public class ServiceJUnitTest {
 	// 収入
 	@Test
 	void すべて未入力時の収入異常検索() throws Exception {
+		Date fromDate = null;
+		Date toDate = null;
+		Integer selecrIncome = null;
+		Integer fromAmount = null;
+		Integer toAmount = null;
+		String note = null;
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchIncomeList(fromDate, toDate,
+					selecrIncome, fromAmount, toAmount, note);
+		});
+		assertEquals("値がNULLです", exception.getMessage());
+	}
+	
+	@Test
+	void 日付fromがYYYYのみ入力時の収入異常検索() throws Exception{
+		String strDate = "2025";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		Date fromDate = sdf.parse(strDate);
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchIncomeList(fromDate, null,
+					null, null, null, null);
+		});
+		assertEquals("数字のみ入力できます", exception.getMessage());
+	}
+	
+	@Test
+	void 日付toがYYYYのみの入力時の収入異常検索() throws Exception{
+		String strDate = "2025";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		Date toDate = sdf.parse(strDate);
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchIncomeList(null, toDate,
+					null, null, null, null);
+		});
+		assertEquals("数字のみ入力できます", exception.getMessage());
+	}
+	
+	@Test
+	void 日付fromtoの入力時の収入異常検索() throws Exception{
+		String strDateFrom = "2026-01-01";
+		Date sqlDateFrom = java.sql.Date.valueOf(strDateFrom);
+		String strDateTo = "2025-12-31";
+		Date sqlDateTo = java.sql.Date.valueOf(strDateTo);
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchIncomeList(sqlDateFrom, sqlDateTo,
+					null, null, null, null);
+		});
+		assertEquals("from<toの形になっていません", exception.getMessage());
+	}
+	
+	@Test
+	void 金額fromの入力が9桁の収入異常検索() throws Exception{
+		Integer fromAmount = 999999999;
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchIncomeList(null, null,
+					null, fromAmount, null, null);
+		});
+		assertEquals("不正な桁数です", exception.getMessage());
+	}
+	
+	@Test
+	void 金額toの入力が9桁の収入異常検索() throws Exception{
+		Integer toAmount = 999999999;
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchIncomeList(null, null,
+					null, null, toAmount, null);
+		});
+		assertEquals("不正な桁数です", exception.getMessage());
+	}
+	
+	@Test
+	void 金額fromtoの入力時の収入異常検索() throws Exception{
+		Integer fromAmount = 2000;
+		Integer toAmount = 1000;
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchIncomeList(null, null,
+					null, fromAmount, toAmount, null);
+		});
+		assertEquals("from<toの形になっていません", exception.getMessage());
+	}
+	
+	@Test
+	void noteが201文字入力時の収入異常入力() throws Exception{
+		String note = "あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ";
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchIncomeList(null, null,
+					null, null, null, note);
+		});
+		assertEquals("不正な桁数です", exception.getMessage());
+	}
+	
+//支出
+	@Test
+	void すべて未入力時の支出異常検索() throws Exception {
 		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
 			householdService.getDetailSearchExpenditureList(null, null,
 					null, null, null, null);
@@ -1960,7 +2062,7 @@ public class ServiceJUnitTest {
 	}
 	
 	@Test
-	void 日付fromがYYYYのみ入力時の異常検索() throws Exception{
+	void 日付fromがYYYYのみ入力時の支出異常検索() throws Exception{
 		String strDate = "2025";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
 		Date fromDate = sdf.parse(strDate);
@@ -1970,5 +2072,77 @@ public class ServiceJUnitTest {
 					null, null, null, null);
 		});
 		assertEquals("数字のみ入力できます", exception.getMessage());
+	}
+	
+	@Test
+	void 日付toがYYYYのみの入力時の支出異常検索() throws Exception{
+		String strDate = "2025";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		Date toDate = sdf.parse(strDate);
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchExpenditureList(null, toDate,
+					null, null, null, null);
+		});
+		assertEquals("数字のみ入力できます", exception.getMessage());
+	}
+	
+	@Test
+	void 日付fromtoの入力時の支出異常検索() throws Exception{
+		String strDateFrom = "2026-01-01";
+		Date sqlDateFrom = java.sql.Date.valueOf(strDateFrom);
+		String strDateTo = "2025-12-31";
+		Date sqlDateTo = java.sql.Date.valueOf(strDateTo);
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchExpenditureList(sqlDateFrom, sqlDateTo,
+					null, null, null, null);
+		});
+		assertEquals("from<toの形になっていません", exception.getMessage());
+	}
+	
+	@Test
+	void 金額fromの入力が9桁の支出異常検索() throws Exception{
+		Integer fromAmount = 999999999;
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchExpenditureList(null, null,
+					null, fromAmount, null, null);
+		});
+		assertEquals("不正な桁数です", exception.getMessage());
+	}
+	
+	@Test
+	void 金額toの入力が9桁の支出異常検索() throws Exception{
+		Integer toAmount = 999999999;
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchExpenditureList(null, null,
+					null, null, toAmount, null);
+		});
+		assertEquals("不正な桁数です", exception.getMessage());
+	}
+	
+	@Test
+	void 金額fromtoの入力時の支出異常検索() throws Exception{
+		Integer fromAmount = 2000;
+		Integer toAmount = 1000;
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchExpenditureList(null, null,
+					null, fromAmount, toAmount, null);
+		});
+		assertEquals("from<toの形になっていません", exception.getMessage());
+	}
+	
+	@Test
+	void noteが201文字入力時の支出異常入力() throws Exception{
+		String note = "あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ";
+		
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			householdService.getDetailSearchExpenditureList(null, null,
+					null, null, null, note);
+		});
+		assertEquals("不正な桁数です", exception.getMessage());
 	}
 }

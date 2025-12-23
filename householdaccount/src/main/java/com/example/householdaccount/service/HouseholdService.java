@@ -304,51 +304,56 @@ public class HouseholdService {
 			Integer fromAmount, Integer toAmount, String note) throws Exception {
 
 		if (fromDate == null && toDate == null && selectIncome == null && fromAmount == null && toAmount == null
-				&& (note == ""||note == null)) {
+				&& (note == null || note == "")) {
 			throw new IllegalArgumentException("値がNULLです");
+		}
 
-		} else if (fromAmount != null) {
-			if (!String.valueOf(fromAmount).trim().matches("^[0-9]+$")) {
+		if (fromAmount != null) {
+			if (String.valueOf(fromAmount).length() > 8) {
+				throw new IllegalArgumentException("不正な桁数です");
+			} else if (!String.valueOf(fromAmount).trim().matches("^[0-9]+$")) {
 				throw new IllegalArgumentException("数字のみ入力できます");
 			}
+		}
 
-		} else if (toAmount != null) {
+		if (toAmount != null) {
 			if (!String.valueOf(toAmount).trim().matches("^[0-9]+$")) {
 				throw new IllegalArgumentException("数字のみ入力できます");
+			} else if (String.valueOf(toAmount).length() > 8) {
+				throw new IllegalArgumentException("不正な桁数です");
 			}
+		}
 
-		} else if (fromDate != null) {
+		if (fromDate != null) {
 			if (!String.valueOf(fromDate).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
 				throw new IllegalArgumentException("数字のみ入力できます");
 			}
+		}
 
-		} else if (toDate != null) {
+		if (toDate != null) {
 			if (!String.valueOf(toDate).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
 				throw new IllegalArgumentException("数字のみ入力できます");
 			}
+		}
 
-		} else if (String.valueOf(fromAmount).length() > 8) {
-			throw new IllegalArgumentException("不正な桁数です");
-
-		} else if (String.valueOf(toAmount).length() > 8) {
-			throw new IllegalArgumentException("不正な桁数です");
-
-		} else if (note != null) {
+		if (note != null) {
 			if (note.length() > 200) {
 				throw new IllegalArgumentException("不正な桁数です");
 			}
 		}
+
 		if (fromAmount != null && toAmount != null) {
 			if (fromAmount > toAmount) {
 				throw new IllegalArgumentException("from<toの形になっていません");
 			}
-
 		}
+
 		if (fromDate != null && toDate != null) {
 			if (fromDate.after(toDate)) {
 				throw new IllegalArgumentException("from<toの形になっていません");
 			}
 		}
+
 		try {
 
 			List<SearchResultIncome> detailSearchIncomeInfo = new ArrayList<SearchResultIncome>();
@@ -375,36 +380,37 @@ public class HouseholdService {
 			String selectExpenditure, Integer fromAmount, Integer toAmount, String note) throws Exception {
 
 		if (fromDate == null && toDate == null && (selectExpenditure == null || selectExpenditure == "")
-				&& fromAmount == null && toAmount == null && note == "") {
+				&& fromAmount == null && toAmount == null &&( note == "" || note == null )) {
 			throw new IllegalArgumentException("値がNULLです");
+		}
 
-		} else if (fromAmount != null) {
+		if (fromAmount != null) {
 			if (!String.valueOf(fromAmount).trim().matches("^[0-9]+$")) {
 				throw new IllegalArgumentException("数字のみ入力できます");
+			} else if (String.valueOf(fromAmount).length() > 8) {
+				throw new IllegalArgumentException("不正な桁数です");
 			}
+		}
 
-		} else if (toAmount != null) {
+		if (toAmount != null) {
 			if (!String.valueOf(toAmount).trim().matches("^[0-9]+$")) {
 				throw new IllegalArgumentException("数字のみ入力できます");
+			} else if (String.valueOf(toAmount).length() > 8) {
+				throw new IllegalArgumentException("不正な桁数です");
 			}
-
-		} else if (fromDate != null) {
+		}
+		if (fromDate != null) {
 			if (!String.valueOf(fromDate).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
 				throw new IllegalArgumentException("数字のみ入力できます");
 			}
-
-		} else if (toDate != null) {
+		}
+		if (toDate != null) {
 			if (!String.valueOf(toDate).matches("^\\d{4}-\\d{2}-\\d{2}$")) {
 				throw new IllegalArgumentException("数字のみ入力できます");
 			}
+		}
 
-		} else if (String.valueOf(fromAmount).length() > 8) {
-			throw new IllegalArgumentException("不正な桁数です");
-
-		} else if (String.valueOf(toAmount).length() > 8) {
-			throw new IllegalArgumentException("不正な桁数です");
-
-		} else if (note != null) {
+		if (note != null) {
 			if (note.length() > 200) {
 				throw new IllegalArgumentException("不正な桁数です");
 			}

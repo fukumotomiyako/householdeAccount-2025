@@ -17,6 +17,8 @@ import com.example.householdaccount.form.ExpenditureEditForm;
 import com.example.householdaccount.form.ExpenditureForm;
 import com.example.householdaccount.form.IncomeEditForm;
 import com.example.householdaccount.form.IncomeForm;
+import com.example.householdaccount.repository.mybatis.DetailSearchExpenditureRepository;
+import com.example.householdaccount.repository.mybatis.DetailSearchIncomeRepository;
 import com.example.householdaccount.repository.mybatis.ExpenditureRepository;
 import com.example.householdaccount.repository.mybatis.GetExpenditureItemsRepository;
 import com.example.householdaccount.repository.mybatis.IncomeRepository;
@@ -34,6 +36,10 @@ public class ServiceJunitTestMock {
 	private Income income;
 	@Mock
 	private GetExpenditureItemsRepository expenditureItemRepository;
+	@Mock
+	private DetailSearchIncomeRepository detailSearchIncomeRepository;
+	@Mock
+	private DetailSearchExpenditureRepository detailSearchExpenditureRepository;
 
 //登録
 	@Test
@@ -151,6 +157,31 @@ public class ServiceJunitTestMock {
 		
 		Exception exception = assertThrows(Exception.class, () -> {
 			householdService.expenditureDelete(expenditureNo);
+		});
+		assertEquals("システムエラーが発生しました", exception.getMessage());
+	}
+	
+//詳細検索
+	@Test
+	void DB停止時収入検索() throws Exception{
+		String fromStrDate = "2025-12-31";
+		Date fromSqlDate = java.sql.Date.valueOf(fromStrDate);
+		
+		when(detailSearchIncomeRepository.findAll()).thenThrow(new RuntimeException());
+		Exception exception = assertThrows(Exception.class, () -> {
+			householdService.getDetailSearchIncomeList(fromSqlDate,null,null,null,null,null);
+		});
+		assertEquals("システムエラーが発生しました", exception.getMessage());
+	}
+	
+	@Test
+	void DB停止時支出検索() throws Exception{
+		String fromStrDate = "2025-12-31";
+		Date fromSqlDate = java.sql.Date.valueOf(fromStrDate);
+		
+		when(detailSearchExpenditureRepository.findAll()).thenThrow(new RuntimeException());
+		Exception exception = assertThrows(Exception.class, () -> {
+			householdService.getDetailSearchExpenditureList(fromSqlDate,null,null,null,null,null);
 		});
 		assertEquals("システムエラーが発生しました", exception.getMessage());
 	}
